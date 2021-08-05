@@ -1,6 +1,6 @@
 
 import type {Request, Response} from 'express';
-import ApiError from 'lib/ApiError';
+import ApiError from '../lib/ApiError';
 
 export default function (err: Error, req: Request, resp: Response) {
     if(err instanceof ApiError){
