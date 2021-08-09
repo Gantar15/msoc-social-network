@@ -1,21 +1,34 @@
 
-import express from "express";
+import express, { NextFunction } from "express";
 import {ApolloServer} from 'apollo-server-express';
 import cors from 'cors';
 import helmet from "helmet";
+const cookieParser = require('cookie-parser');
 require("dotenv").config();
 import sequelize from './db';
 import typeDefs from "./apolloSchema/TypeDefs";
 import resolvers from "./apolloSchema/Resolvers";
+import ApiError from "./lib/ApiError";
 import errorMiddleware from "./middleware/errorMiddleware";
+import userRoute from './routes/userRoute';
+import authRoute from "./routes/authRoute";
 
 
 const app = express();
 
 app.use(cors());
 app.use(helmet());
+app.use(cookieParser());
+app.use(express.json());
+app.use('/user', userRoute);
+app.use('/auth', authRoute);
+
+//404 error handler
+app.use((_:any, __:any, next: NextFunction)=>{next(ApiError.notFound())});
+
 //Error handling
 app.use(errorMiddleware);
+
 
 const server = new ApolloServer({
     typeDefs,
@@ -23,8 +36,8 @@ const server = new ApolloServer({
 });
 
 async function startServer(){
-    sequelize.sync();
-
+    await sequelize.sync();
+    
     await server.start();
     server.applyMiddleware({app});
 

@@ -1,10 +1,10 @@
 
-import type {Request, Response} from 'express';
-import ApiError from '../lib/ApiError';
+import type {NextFunction, Request, Response} from 'express';
+import ApiError, {Error} from '../lib/ApiError';
 
-export default function (err: Error, req: Request, resp: Response) {
+export default function (err: Error, req: Request, resp: Response, next: NextFunction) {
     if(err instanceof ApiError){
-        return resp.status(err.status).json({messaege: err.message});
+        return resp.status(err.status).json({message: err.message});
     }
 
     return resp.status(500).json({message: 'Непредвиденная ошибка'});
