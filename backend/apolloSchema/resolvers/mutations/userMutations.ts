@@ -90,7 +90,7 @@ export default {
         }
     },
 
-    async follow(_: any, {userId}: {userId: number}, {resp}: IApolloContext){
+    async followUser(_: any, {userId}: {userId: number}, {resp}: IApolloContext){
         try{
             checkAuth(resp);
 
@@ -98,6 +98,7 @@ export default {
             const user = await User.findByPk(userId);
 
             if(!user) throw ApiError.badRequest('Данного пользователя не существует');
+            if(currentUser.id == user.id) throw ApiError.badRequest('Нельзя подписаться на самого себя');
             if(!user.followers.includes(currentUser.id.toString())){
                 await user.update({
                     followers: [...user.followers, currentUser.id.toString()]
@@ -110,7 +111,32 @@ export default {
 
             return false;
         } catch(err){
-            console.log(err)
+            errorHandler(err);
+        }
+    },
+
+    async unfollowUser(_: any, {userId}: {userId: number}, {resp}: IApolloContext){
+        try{
+            checkAuth(resp);
+
+            const currentUser: User = resp.locals.user;
+            const user = await User.findByPk(userId);
+
+            if(!user) throw ApiError.badRequest('Данного пользователя не существует');
+            if(user.followers.includes(currentUser.id.toString())){
+                const followers = user.followers.filter(id => +id != currentUser.id);
+                await user.update({
+                    followers
+                });
+                const followins = currentUser.followins.filter(id => +id != userId);
+                await currentUser.update({
+                    followins
+                });
+                return true;
+            }
+
+            return false;
+        } catch(err){
             errorHandler(err);
         }
     }

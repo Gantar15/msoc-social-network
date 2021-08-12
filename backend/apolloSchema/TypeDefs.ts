@@ -59,6 +59,7 @@ export default gql`
         updateUser(userId: Int!, user: InputUser!): User!
         deleteUser(userId: Int!): User!
         getUser(userId: Int!): User!
-        follow(userId: Int!): Boolean!
+        followUser(userId: Int!): Boolean!
+        unfollowUser(userId: Int!): Boolean!
     }
 `;
