@@ -6,14 +6,16 @@ import { DataTypes, Optional,
 
 interface IToken{
     id?: number,
-    refreshToken: string
+    refreshToken: string,
+    user?: string
 }
 
 
-interface TokenCreationAttributes extends Optional<IToken, "id"> {}
+interface TokenCreationAttributes extends Optional<IToken, "id" | "user"> {}
 class Token extends Model<IToken, TokenCreationAttributes> implements IToken {
     public id!: number;
     public refreshToken!: string;
+    public user!: string;
 }
 Token.init({
     refreshToken: DataTypes.STRING

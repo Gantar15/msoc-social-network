@@ -24,6 +24,7 @@ interface IUser{
     from: string,
     relationship: 1|2|3
 }
+export type {IUser};
 
 interface UserCreationAttributes extends Optional<IUser, "id" | 'activationLink' 
 | 'isActivated' | 'role' 
@@ -65,9 +66,8 @@ export type {User};
         type: DataTypes.STRING(50),
         allowNull: false,
         validate: {
-            len: [3, 50]
-        },
-        unique: true
+            len: [3, 30]
+        }
     },
     email: {
         type: DataTypes.STRING(256),
@@ -111,23 +111,23 @@ export type {User};
     activationLink: DataTypes.STRING,
     desc: {
         type: DataTypes.STRING,
-        defaultValue: '',
+        allowNull: true,
         validate: {
-            len: [6, 256]
+            len: [3, 256]
         }
     },
     city: {
         type: DataTypes.STRING,
-        defaultValue: '',
+        allowNull: true,
         validate: {
             len: [2, 50]
         }
     },
     from: {
         type: DataTypes.STRING,
-        defaultValue: '',
+        allowNull: true,
         validate: {
-            len: [0, 50]
+            len: [2, 50]
         }
     },
     relationship: DataTypes.ENUM('1','2','3')

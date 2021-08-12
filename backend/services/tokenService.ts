@@ -1,7 +1,7 @@
 
 import jwt from 'jsonwebtoken';
 import { IUserDto } from '../lib/UserDto';
-import Token from "../models/Token";
+import type Token from "../models/Token";
 import type User from '../models/User';
 
 
@@ -11,14 +11,9 @@ interface ITokensList{
 }
 export type {ITokensList};
 
-interface INewUserData extends ITokensList{
-    user: IUserDto
-}
-export type {INewUserData};
-
 
 class TokenService{
-    generateTokens(payload: any): ITokensList{
+    generateTokens(payload: IUserDto): ITokensList{
         const refreshToken = jwt.sign(payload, 
             process.env.REFRESH_TOKEN_SECRET_KEY!, {
                 expiresIn: '30d'
@@ -47,24 +42,22 @@ class TokenService{
         return newToken;
     }
 
-    async removeToken(refreshToken: string): Promise<Token | null>{
-        const token = await Token.findOne({where: {refreshToken}});
+    async removeToken(token: Token){
         token?.destroy();
-        return token;
     }
 
-    validateAccessToken(accessToken: string): INewUserData|null{
+    validateAccessToken(accessToken: string): IUserDto|null{
         try{
-            const userData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET_KEY!) as INewUserData;
+            const userData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET_KEY!) as IUserDto;
             return userData;
         } catch(err){
             return null;
         }
     }
 
-    validateRefreshToken(refreshToken: string): INewUserData|null{
+    validateRefreshToken(refreshToken: string): IUserDto|null{
         try{
-            const userData = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET_KEY!) as INewUserData;
+            const userData = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET_KEY!) as IUserDto;
             return userData;
         } catch(err){
             return null;

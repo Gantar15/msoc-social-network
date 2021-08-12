@@ -1,6 +1,6 @@
 
 export default{
-    getName(){
-        return "Vanya";
+    getUser(_: any, args: {id: string}){
+        return args.id;
     }
 };

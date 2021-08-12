@@ -2,13 +2,16 @@
 import bcrypt from 'bcrypt';
 import User from '../models/User';
 import ApiError from '../lib/ApiError';
-import tokenService, {ITokensList, INewUserData} from './tokenService';
+import tokenService, {ITokensList} from './tokenService';
 import mailService from './mailService';
-import UserDto from '../lib/UserDto';
+import UserDto, {IUserDto} from '../lib/UserDto';
 import Token from '../models/Token';
 const uuid = require('uuid');
 
 
+interface INewUserData extends ITokensList{
+    user: IUserDto
+}
 
 async function updateTokens(user: User): Promise<INewUserData>{
     const userDto = new UserDto(user);
@@ -21,7 +24,7 @@ async function updateTokens(user: User): Promise<INewUserData>{
 }
 
 class UserService{
-    async register(name: string, email: string, password: string): Promise<INewUserData>{
+    async register(name: string, email: string, password: string): Promise<User>{
         const existUser = await User.findOne({where: {email}});
         if(existUser) throw ApiError.badRequest('Пользователь с данным email уже существует');
 
@@ -35,8 +38,8 @@ class UserService{
             activationLink
         });
 
-        mailService.sendMail(name, email, process.env.SITE_URL+'/auth/activate/'+activationLink);
-        return await updateTokens(newUser);
+        await mailService.sendMail(name, email, process.env.SITE_URL+'/auth/activate/'+activationLink);
+        return newUser;
     }
 
     async activate(activationLink: string){
@@ -69,7 +72,9 @@ class UserService{
 
     async logout(refreshToken: string): Promise<Token | null>{
         if(!refreshToken) throw ApiError.unauthorizedError();
-        const token = await tokenService.removeToken(refreshToken);
+        const token = await Token.findOne({where: {refreshToken}});
+        if(!token) throw ApiError.unauthorizedError();
+        await tokenService.removeToken(token);
         return token;
     }
 
@@ -80,7 +85,8 @@ class UserService{
             where: {
                 refreshToken
             }
-        }))?.id;
+        }))?.user;
+        if(!userId) throw ApiError.unauthorizedError();
         const user = await User.findByPk(userId);
         const userData = tokenService.validateRefreshToken(refreshToken);
         if(!user || !userData) throw ApiError.unauthorizedError();

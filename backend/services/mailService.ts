@@ -17,8 +17,8 @@ class MailService{
        });
     }
 
-    sendMail(username: string, to: string, link: string){
-        this.transporter.sendMail({
+    async sendMail(username: string, to: string, link: string){
+        await this.transporter.sendMail({
             from: process.env.SMTP_EMAIL,
             to,
             subject: `Активация аккаунта на ${process.env.SITE_URL}`,
