@@ -2,6 +2,7 @@
 import {gql} from 'apollo-server-express';
 
 export default gql`
+    #user
     enum Role{
         user
         admin
@@ -45,9 +46,24 @@ export default gql`
         user: UserDto!
     }
 
+    #post
+    input InputPost{
+        desc: String
+        imgs: [String!]
+    }
+    type Post{
+        userId: Int!
+        desc: String!
+        imgs: [String!]!
+        likes: [Int!]!
+    }
+
+
     #Querys
     type Query{
-        getUser(id: String!): String!
+        getUser(userId: Int!): User!
+        getPost(postId: Int!): Post!
+        getTimelinePosts: [Post!]!
     }
 
     #Mutations
@@ -58,8 +74,12 @@ export default gql`
         refresh: UserData!
         updateUser(userId: Int!, user: InputUser!): User!
         deleteUser(userId: Int!): User!
-        getUser(userId: Int!): User!
         followUser(userId: Int!): Boolean!
         unfollowUser(userId: Int!): Boolean!
+
+        createPost(desc: String!, imgs: [String!]!): Post!
+        updatePost(postId: Int!, post: InputPost!): Post!
+        deletePost(postId: Int!): Post!
+        likePost(postId: Int!): Boolean!
     }
 `;

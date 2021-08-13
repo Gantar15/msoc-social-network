@@ -3,9 +3,11 @@ import { DataTypes, Optional, Model,
     HasOneCreateAssociationMixin,
     HasOneGetAssociationMixin,
     HasOneSetAssociationMixin,
+    HasManyGetAssociationsMixin,
     Association } from "sequelize";
 import sequelize from "../db";
 import Token from './Token';
+import Post from './Post';
 
 interface IUser{
     name: string,
@@ -24,7 +26,6 @@ interface IUser{
     from: string,
     relationship: 1|2|3
 }
-export type {IUser};
 
 interface UserCreationAttributes extends Optional<IUser, "id" | 'activationLink' 
 | 'isActivated' | 'role' 
@@ -54,6 +55,7 @@ class User extends Model<IUser, UserCreationAttributes> implements IUser {
     public createToken!: HasOneCreateAssociationMixin<Token>;
     public getToken!: HasOneGetAssociationMixin<Token>;
     public setToken!: HasOneSetAssociationMixin<Token, number>;
+    public getPosts!: HasManyGetAssociationsMixin<Post>;
 
     public static associations: {
         token: Association<User, Token>;
@@ -137,5 +139,6 @@ export type {User};
 });
 
 User.hasOne(Token, {foreignKey: 'user'});
+User.hasMany(Post, {foreignKey: 'user'});
 
 export default User;

@@ -7,14 +7,25 @@ import userService from '../../../services/userService';
 import mailService from '../../../services/mailService';
 import { checkAuth } from '../../../middlewares/auth-middleware';
 import AuthValidator from '../../../lib/authValidator';
-import type {IUser} from '../../../models/User';
 import bcrypt from 'bcrypt';
 import uuid from 'uuid';
-import Token from '../../../models/Token';
 
+
+interface InputUser{
+    name: string,
+    email: string,
+    password: string,
+    profilePicture: string,
+    coverPicture: string,
+    role: 'user' | 'admin' | 'moderator',
+    desc: string,
+    city: string,
+    from: string,
+    relationship: 1|2|3
+}
 
 export default {
-    async updateUser(_:any, {userId, user: userUpdateData}: {userId: number, user: IUser}, {req, resp}: IApolloContext){
+    async updateUser(_:any, {userId, user: userUpdateData}: {userId: number, user: InputUser}, {req, resp}: IApolloContext){
         try{
             checkAuth(resp);
 
@@ -74,16 +85,6 @@ export default {
                 resp.clearCookie('refreshToken');
             }
             
-            return user;
-        } catch(err){
-            errorHandler(err);
-        }
-    },
-
-    async getUser(_: any, {userId}: {userId: number}){
-        try{
-            const user = await User.findByPk(userId);
-            if(!user) throw ApiError.badRequest('Данного пользователя не существует');
             return user;
         } catch(err){
             errorHandler(err);

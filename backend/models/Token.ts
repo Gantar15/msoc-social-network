@@ -7,7 +7,7 @@ import { DataTypes, Optional,
 interface IToken{
     id?: number,
     refreshToken: string,
-    user?: string
+    user?: number
 }
 
 
@@ -15,7 +15,7 @@ interface TokenCreationAttributes extends Optional<IToken, "id" | "user"> {}
 class Token extends Model<IToken, TokenCreationAttributes> implements IToken {
     public id!: number;
     public refreshToken!: string;
-    public user!: string;
+    public user!: number;
 }
 Token.init({
     refreshToken: DataTypes.STRING
