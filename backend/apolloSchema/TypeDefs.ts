@@ -52,7 +52,7 @@ export default gql`
         imgs: [String!]
     }
     type Post{
-        userId: Int!
+        user: Int!
         desc: String!
         imgs: [String!]!
         likes: [Int!]!
