@@ -12,6 +12,7 @@ export function checkAuth(resp: Response): void{
 export default async function(req: Request, resp: Response, next: NextFunction){
     try{
         const accessToken: string | undefined = req.get('authorization')?.split(' ')[1];
+        
         if(!accessToken){
             throw null;
         }

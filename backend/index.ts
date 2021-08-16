@@ -40,7 +40,7 @@ async function startServer(){
     await sequelize.sync();
     
     await server.start();
-    server.applyMiddleware({app});
+    server.applyMiddleware({app, cors:{origin: process.env.CLIENT_URL}});
 
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => console.log(`Server was started on port ${PORT}`));
