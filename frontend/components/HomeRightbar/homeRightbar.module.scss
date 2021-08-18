@@ -1,0 +1,11 @@
+
+@import '../../public/styles/variables.scss';
+
+.homeRightbar{
+    margin-left: 20px;
+    border-radius: 10px;
+    background: $contrastBackgroundColor;
+    box-shadow: $boxShadow;
+    padding: 20px;
+    min-width: 200px;
+}

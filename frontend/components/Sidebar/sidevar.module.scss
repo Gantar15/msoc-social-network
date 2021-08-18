@@ -44,14 +44,10 @@
 
             &:hover{
                 background: $gradient;
-                color: #ffffff;
+                color: $contrastBackgroundColor;
 
                 span{
-                    color: #ffffff;
-                }
-
-                .navItemCounter{
-                    border: 1px solid #ffffff;
+                    color: $contrastBackgroundColor;
                 }
             }
 
@@ -67,7 +63,7 @@
             }
 
             &Counter{
-                color: #ffffff;
+                color: $contrastBackgroundColor;
                 position: absolute;
                 right: $padding;
                 top: 50%;
@@ -81,6 +77,7 @@
                 border-radius: 5px;
                 padding: 2px;
                 min-width: 15px;
+                border: 1px solid $contrastBackgroundColor;
             }
 
             &:nth-of-type(n+2){

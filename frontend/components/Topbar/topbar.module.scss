@@ -6,14 +6,14 @@
     display: flex;
     justify-content: space-between;
     background-color: $contrastBackgroundColor;
-    height: 66px;
     width: 100%;
     align-items: center;
     position: sticky;
     top: 20px;
-    padding: 0 15px;
+    padding: 15px;
     border-radius: 10px;
     box-shadow: $boxShadow;
+    z-index: 1;
 
     &Left{
         margin-right: 40px;
@@ -78,13 +78,13 @@
                     &Counter{
                         position: absolute;
                         top: 0;
-                        color: #ffff;
+                        color: $contrastBackgroundColor;
                         font-weight: bold;
                         top: -2px;
                         right: -2px;
                         min-width: 14px;
                         padding: 2px;
-                        border: 1px solid #ffff;
+                        border: 1px solid $contrastBackgroundColor;
                         font-size: 8px;
                         border-radius: 5px;
                         background: $gradient;

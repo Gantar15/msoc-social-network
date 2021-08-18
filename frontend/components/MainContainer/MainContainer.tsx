@@ -26,7 +26,9 @@ const MainContainer: FC<IProps> = ({children, title}) => {
                 <Sidebar/>
                 <section className={styles.mainContentBlock}>
                     <Topbar/>
-                    {children}
+                    <section className={styles.pageContent}>
+                        {children}
+                    </section>
                 </section>
             </div>
         </>

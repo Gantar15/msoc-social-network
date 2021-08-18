@@ -29,7 +29,6 @@ const Sidebar: FC = () => {
                 <A href="/" className={styles.navItem}>
                     <CallToActionIcon className={styles.navIcon}/>
                     <span>Новости</span>
-                    <p className={styles.navItemCounter}>2341</p>
                 </A>
                 <A href="/messages" className={styles.navItem}>
                     <QuestionAnswerIcon className={styles.navIcon}/>
