@@ -1,0 +1,116 @@
+
+@import '../../public/styles/variables.scss';
+
+.topbar{
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    background-color: $contrastBackgroundColor;
+    height: 66px;
+    width: 60%;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    padding: 0 15px;
+    border-radius: 10px;
+    box-shadow: $boxShadow;
+
+    &Left{
+        .search{
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 40px;
+            background-color: $inputColor;
+            border-radius: 10px;   
+
+            input{
+                outline: none;
+                border: none;
+                border-radius: 0 20px 20px 0;
+                background-color: $inputColor;
+                padding: 3px 10px 3px 5px;
+                color: $mainFontColor;
+                font-size: 14px;
+                font-weight: bold;
+                width: 100%;
+                height: 30px;
+
+                &::placeholder{
+                    color: $placeholderFontColor;
+                }
+            }
+            &Icon{
+                font-size: 23px !important;
+                height: 30px;      
+                cursor: pointer;
+                margin-left: 10px;
+                color: $placeholderFontColor;
+            }
+        }
+    }
+
+    &Right{
+        .userActivities{
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            .topbarIcons{
+                margin-right: 27px;
+                display: flex;
+                align-items: center;
+                
+                .topbarIcon{
+                    margin-left: 10px;
+                    cursor: pointer;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    color: $contrastInonsColor;
+
+                    .topbarIconCounter{
+                        position: absolute;
+                        top: 0;
+                        color: #ffff;
+                        font-weight: bold;
+                        top: -2px;
+                        right: -2px;
+                        width: 14px;
+                        height: 14px;
+                        font-size: 8px;
+                        border-radius: 5px;
+                        background: $gradient;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+
+            .userIconBlock{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                color: $contrastFontColor;
+                cursor: pointer;
+
+                .userIcon{
+                    object-fit: cover;
+                    cursor: pointer;
+                    border-radius: 10px;
+                }
+                .username{
+                    font-size: 15px;
+                    font-weight: bold;
+                    margin-left: 9px;
+                }
+                .downArrow{
+                    font-size: 25px;
+                    margin-top: 3px;
+                    margin-left: -1px;
+                }
+            }
+        }
+    }
+}

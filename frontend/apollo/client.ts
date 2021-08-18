@@ -1,7 +1,8 @@
 
-import {InMemoryCache, ApolloClient, HttpLink, from} from '@apollo/client';
+import {ApolloClient, HttpLink, from} from '@apollo/client';
 import { onError } from "@apollo/client/link/error";
-import {isBrowser} from './utils/ssrUtils';
+import {isBrowser} from '../utils/ssrUtils';
+import cache from './cache';
 
 
 const API_URL = 'http://localhost:7700';
@@ -88,14 +89,11 @@ const errorLink = onError(
     if (networkError) {
       console.log(`[Network error]: ${networkError}`);
     }
-    
-    // if(response)
-    //   response.errors = undefined;
   }
 );
 
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: cache,
   link: from([errorLink, tokenLink])
 });
 

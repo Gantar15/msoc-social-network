@@ -14,6 +14,7 @@ import authRoute from './routes/authRoute';
 
 const app = express();
 
+app.use(express.static('files'));
 app.use(cors({
   origin: process.env.CLIENT_URL,
   credentials: true
