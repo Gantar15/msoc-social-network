@@ -7,19 +7,23 @@
     justify-content: space-between;
     background-color: $contrastBackgroundColor;
     height: 66px;
-    width: 60%;
+    width: 100%;
     align-items: center;
     position: sticky;
-    top: 0;
+    top: 20px;
     padding: 0 15px;
     border-radius: 10px;
     box-shadow: $boxShadow;
 
     &Left{
+        margin-right: 40px;
+        width: 100%;
+
         .search{
             display: flex;
             align-items: center;
             width: 100%;
+            max-width: 400px;
             height: 40px;
             background-color: $inputColor;
             border-radius: 10px;   
@@ -51,6 +55,8 @@
     }
 
     &Right{
+        width: 100%;
+        
         .userActivities{
             display: flex;
             align-items: center;
@@ -69,15 +75,16 @@
                     align-items: center;
                     color: $contrastInonsColor;
 
-                    .topbarIconCounter{
+                    &Counter{
                         position: absolute;
                         top: 0;
                         color: #ffff;
                         font-weight: bold;
                         top: -2px;
                         right: -2px;
-                        width: 14px;
-                        height: 14px;
+                        min-width: 14px;
+                        padding: 2px;
+                        border: 1px solid #ffff;
                         font-size: 8px;
                         border-radius: 5px;
                         background: $gradient;

@@ -1,0 +1,91 @@
+
+@import '../../public/styles/variables.scss';
+
+.sidebar{
+    width: 330px;
+    min-width: 230px;
+    box-shadow: $boxShadow;
+    background-color: $contrastBackgroundColor;
+    border-radius: 15px;
+    padding: 0 20px;
+    padding-bottom: 20px;
+
+    .logoBlock{
+        display: flex;
+        align-items: center;
+        border-bottom: 2px solid #f0f2fa;
+        padding: 15px 0;
+
+        span{
+            font-weight: 500;
+            font-size: 20px;
+            color: $contrastFontColor;
+            margin-left: 10px;
+            font-family: Roboto;
+        }
+    }
+
+    .navBlock{
+        margin-top: 23px;
+        display: flex;
+        flex-direction: column;
+
+        .navItem{
+            $padding: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            color: $placeholderFontColor;
+            position: relative;
+            border-radius: 10px;
+            padding: $padding;
+            padding-right: 40px;
+
+            &:hover{
+                background: $gradient;
+                color: #ffffff;
+
+                span{
+                    color: #ffffff;
+                }
+
+                .navItemCounter{
+                    border: 1px solid #ffffff;
+                }
+            }
+
+            .navIcon{
+                font-size: 20px;
+            }
+
+            span{
+                margin-left: 13px;
+                color: $mainFontColor;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            &Counter{
+                color: #ffffff;
+                position: absolute;
+                right: $padding;
+                top: 50%;
+                transform: translateY(-50%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: $gradient;
+                font-weight: bold;
+                font-size: 8px;
+                border-radius: 5px;
+                padding: 2px;
+                min-width: 15px;
+            }
+
+            &:nth-of-type(n+2){
+                margin-top: 10px;
+            }
+        }
+    }
+}

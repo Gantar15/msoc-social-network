@@ -1,5 +1,7 @@
 import { FC } from "react";
 import Head from 'next/head';
+import Topbar from '../../components/Topbar/Topbar';
+import Sidebar from '../../components/Sidebar/Sidebar';
 import styles from './mainContsiner.module.scss';
 
 
@@ -21,7 +23,11 @@ const MainContainer: FC<IProps> = ({children, title}) => {
                 <title>{title}</title>
             </Head>
             <div className={styles.mainContainer}>
-                {children}
+                <Sidebar/>
+                <section className={styles.mainContentBlock}>
+                    <Topbar/>
+                    {children}
+                </section>
             </div>
         </>
     );
