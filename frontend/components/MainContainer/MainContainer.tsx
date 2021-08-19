@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactElement } from "react";
 import Head from 'next/head';
 import Topbar from '../../components/Topbar/Topbar';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -6,7 +6,7 @@ import styles from './mainContsiner.module.scss';
 
 
 interface IProps{
-    children: any;
+    children: ReactElement | ReactElement[];
     title: string;
 }
 

@@ -16,15 +16,24 @@ const SharePost: FC = () => {
                 <A href="/profile">
                     <Image className={styles.shareUserLogo} width="40" height="40" src="/imgs/default_user_logo.jpg"/>
                 </A>
-                <input placeholder="Что нового, Гнида ?"></input>
-                <button>Добавить</button>
+                <textarea placeholder="Что нового, Гнида ?"></textarea>
             </div>
             <div className={styles.shareBottom}>
-                <div className={styles.shareOptins}>
-                    <PhotoLibraryIcon className={styles.optionIcon}/>
-                    <MovieIcon className={styles.optionIcon}/>
-                    <SentimentSatisfiedIcon className={styles.optionIcon}/>
+                <div className={styles.shareOptions}>
+                    <div className={styles.shareOption}>
+                        <PhotoLibraryIcon className={styles.optionIcon}/>
+                        <span>Фото</span>
+                    </div>
+                    <div className={styles.shareOption}>
+                        <MovieIcon className={styles.optionIcon}/>
+                        <span>Видео</span>
+                    </div>
+                    <div className={styles.shareOption}>
+                        <SentimentSatisfiedIcon className={styles.optionIcon}/>
+                        <span>Эмоции</span>
+                    </div>
                 </div>
+                <button>Добавить</button>
             </div>
         </section>
     );

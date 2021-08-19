@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { FC } from "react";
+import { FC, ReactElement } from "react";
 
 
+type elementContent = ReactElement | ReactElement[];
 interface IProps{
-    value?: any;
+    value?: elementContent;
     href: string;
     className?: string;
-    children?: any;
+    children?: elementContent;
 }
 
 const A: FC<IProps> = ({value, href, className, children}) => {

@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import MainContainer from '../components/MainContainer/MainContainer';
 import SharePost from '../components/SharePost/SharePost';
 import HomeRightbar from '../components/HomeRightbar/HomeRightbar';
+import Post from '../components/Post/Post';
 
 import styles from '../public/styles/home.module.scss';
 
@@ -12,6 +13,9 @@ const Home: NextPage = () => {
       <section className={styles.homepage}>
         <section className={styles.news}>
           <SharePost/>
+          <section className={styles.posts}>
+            <Post/>
+          </section>
         </section>
         <HomeRightbar/>
       </section>

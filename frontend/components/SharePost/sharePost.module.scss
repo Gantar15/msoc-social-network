@@ -11,25 +11,29 @@
 
     .shareTop{
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
-        padding-bottom: 10px;
+        padding-bottom: 15px;
         border-bottom: 2px solid #f0f2fa;
 
         .shareUserLogo{
             border-radius: 10px;
             object-fit: cover;
         }
-        input{
+        textarea{
             margin-left: 10px;
             border: none;
             outline: none;
-            color: $mainFontColor;
             font-size: 16px;
             width: 100%;
-            margin-right: 20px;
             resize: vertical;
             overflow: auto;
+            border: 2px solid #f0f2fa;
+            padding: 5px;
+            border-radius: 10px;
+            min-height: 40px;
+            color: $mainFontColor;
+            font-weight: bold;
 
             &::-webkit-scrollbar {
                 height: 0;
@@ -38,10 +42,50 @@
 
             &::placeholder{
                 color: $placeholderFontColor;
-                font-size: 15px;
-                font-weight: bold;
+                font-size: 16px;
             }
         }
+    }
+
+    .shareBottom{
+        width: 100%;
+        padding-top: 15px;
+        display: flex;
+        justify-content: space-between;
+
+        .shareOptions{
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+
+            .shareOption{
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+
+                &:hover{
+                    .optionIcon{
+                        color: $mainFontColor;
+                    }
+                }
+
+                .optionIcon{
+                    transition: color .2s;
+                    color: $placeholderFontColor;
+                }
+                span{
+                    color: $mainFontColor;
+                    font-size: 14px;
+                    font-weight: 500;
+                    margin-left: 5px;
+                }
+
+                &:nth-of-type(n+2){
+                    margin-left: 15px;
+                }
+            }
+        }
+        
         button{
             border: none;
             outline: none;
@@ -52,27 +96,6 @@
             font-weight: bold;
             font-size: 13px;
             cursor: pointer;
-        }
-    }
-
-    .shareBottom{
-        width: 100%;
-        padding-top: 10px;
-        display: flex;
-        justify-content: center;
-
-        .shareOptins{
-            display: flex;
-            align-items: center;
-
-            .optionIcon{
-                color: $mainFontColor;
-                cursor: pointer;
-
-                &:nth-of-type(n+2){
-                    margin-left: 10px;
-                }
-            }
         }
     }
 }

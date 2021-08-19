@@ -33,8 +33,8 @@
                 border: none;
                 border-radius: 0 20px 20px 0;
                 background-color: $inputColor;
-                padding: 3px 10px 3px 5px;
                 color: $mainFontColor;
+                padding: 3px 10px 3px 5px;
                 font-size: 14px;
                 font-weight: bold;
                 width: 100%;
@@ -81,9 +81,9 @@
                         color: $contrastBackgroundColor;
                         font-weight: bold;
                         top: -2px;
-                        right: -2px;
-                        min-width: 14px;
-                        padding: 2px;
+                        left: 10px;
+                        min-width: 17px;
+                        padding: 2px 3px;
                         border: 1px solid $contrastBackgroundColor;
                         font-size: 8px;
                         border-radius: 5px;

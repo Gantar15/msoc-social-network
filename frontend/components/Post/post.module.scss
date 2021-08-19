@@ -1,0 +1,188 @@
+
+@import '../../public/styles/variables.scss';
+
+.post{
+    background-color: $contrastBackgroundColor;
+    box-shadow: $boxShadow;
+    border-radius: 10px;
+
+    &>header{
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+        padding-bottom: 0;
+
+        .authorBlock{
+            display: flex;
+            align-items: center;
+
+            .authorImageBlock{
+                border-radius: 10px;
+                height: 45px;
+                
+                .authorImage{
+                    object-fit: cover;
+                    border-radius: 10px;
+                }
+            }
+            .nameBlock{
+                display: flex;
+                flex-direction: column;
+                margin-left: 13px;
+
+                span{
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: $contrastFontColor;
+                }
+                time{
+                    margin-top: 3px;
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: $placeholderFontColor;
+                }
+            }
+        }
+        .postOptions{
+            cursor: pointer;
+            color: $placeholderFontColor;
+            font-size: 27px;
+            transition: color .2s;
+
+            &:hover{
+                color: $contrastFontColor;
+            }
+        }
+    }
+
+    &>section{
+        margin-top: 15px;
+
+        .descriptionBlock{
+            padding: 0 20px;
+
+            p{
+                font-size: 14px;
+                color: $contrastInonsColor;
+                max-height: 120px;
+                overflow: hidden;
+            }
+            .more{
+                display: none;
+                cursor: pointer;
+                color: $logoColorDark;
+                font-size: 15px;
+                font-weight: bold;
+
+                &[data-active]{
+                    display: block;
+                }
+            }
+        }
+        .postMainContent{
+            padding: 0 15px;
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+
+            &Item{
+                cursor: pointer;
+                flex-grow: 1;
+                min-width: 200px;
+                border-radius: 10px;
+                margin-top: 10px;
+                margin-left: 10px;
+                position: relative;
+                transform: translate(-5px, -5px);
+                
+                .image{
+                    object-fit: cover;
+                    border-radius: 10px;
+                }
+
+                .backdropBlock{
+                    z-index: 1;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    border-radius: 10px;
+                    background-color: $placeholderFontColor;
+                    opacity: 0;
+                    transition: opacity .2s;
+
+                    .icon{
+                        font-size: 35px;
+                        color: #ffffff;
+                        transition: font-size .2s;
+                    }
+                }
+                &[data-image-item]:hover{
+                    .backdropBlock{
+                        background-color: $placeholderFontColor;
+                        opacity: 0.4;
+
+                        .icon{
+                            font-size: 75px;
+                            color: #ffffff;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &>footer{
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+
+        .options{
+            width: 70%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .option{
+                display: flex;
+                align-items: center;
+
+                &:hover, &[data-active]{
+                    div .icon{
+                        color: $logoColorDark;
+                    }
+                    .counter{
+                        color: $logoColorDark;
+                    }
+                }
+
+                div{
+                    cursor: pointer;
+                    border-radius: 10px;
+                    background-color: $inputColor;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    .icon{
+                        margin: 7px;
+                        font-size: 20px;
+                        color: $contrastInonsColor;
+                        transition: color .2s;
+                    }
+                }
+                .counter{
+                    color: $contrastInonsColor;
+                    font-size: 14px;
+                    font-weight: bold;
+                    margin-left: 7px;
+                    transition: color .2s;
+                }
+            }
+        }
+    }
+}
