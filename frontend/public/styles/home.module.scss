@@ -4,12 +4,14 @@
     justify-content: space-between;
 
     .news{
+        flex: 7;
         width: 100%;
         display: flex;
         flex-direction: column;
 
         .posts{
             margin-top: 20px;
+            padding-bottom: 35px;
             display: flex;
             flex-direction: column;
         }

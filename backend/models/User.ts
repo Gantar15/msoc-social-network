@@ -14,7 +14,6 @@ interface IUser{
     email: string,
     password: string,
     profilePicture: string,
-    coverPicture: string,
     followers: string[],
     followins: string[],
     role: 'user' | 'admin' | 'moderator',
@@ -29,8 +28,7 @@ interface IUser{
 
 interface UserCreationAttributes extends Optional<IUser, "id" | 'activationLink' 
 | 'isActivated' | 'role' 
-| 'followins' | 'followers' 
-| 'coverPicture' | 'profilePicture'
+| 'followins' | 'followers' | 'profilePicture'
 | 'desc' | 'city' | 'from' | 'relationship'> {}
 class User extends Model<IUser, UserCreationAttributes> implements IUser {
     public id!: number;
@@ -38,7 +36,6 @@ class User extends Model<IUser, UserCreationAttributes> implements IUser {
     public email!: string;
     public password!: string;
     public profilePicture!: string;
-    public coverPicture!: string;
     public followers!: string[];
     public followins!: string[];
     public role!: 'user' | 'admin' | 'moderator';
@@ -87,10 +84,6 @@ export type {User};
         }
     },
     profilePicture: {
-        type: DataTypes.STRING,
-        defaultValue: ''
-    },
-    coverPicture: {
         type: DataTypes.STRING,
         defaultValue: ''
     },

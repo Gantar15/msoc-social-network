@@ -1,5 +1,5 @@
 
-import {FC, useRef} from 'react';
+import {FC, useRef, memo, useState} from 'react';
 import Image from 'next/image';
 import ShareIcon from '@material-ui/icons/Share';
 import MessageIcon from '@material-ui/icons/Message';
@@ -8,32 +8,71 @@ import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import A from '../A/A';
+import moment from 'moment';
+import 'moment/locale/ru';
 import styles from './post.module.scss';
 
 
-const Post: FC = () => {
+interface IPost{
+    id: number;
+    user: {
+        id: number,
+        name: string,
+        profilePicture: string
+    };
+    desc: string;
+    imgs: string[];
+    likes: number[];
+    dislikes: number[];
+    commentsCount: number;
+    createdAt: string;
+    shareCount: number;
+}
+
+const Post: FC<{post: IPost}> = ({post}) => {
     const descriptionRef = useRef<HTMLParagraphElement>(null);
     const showMoreRef = useRef<HTMLDivElement>(null);
+    const [like, setLike] = useState(post.likes.length);
+    const [dislike, setDislike] = useState(post.dislikes.length);
+    const [isLiked, setIsLiked] = useState(post.likes.some(userId => userId == 1));
+    const [isDisliked, setIsDisliked] = useState(post.dislikes.some(userId => userId == 1));
 
     const showMoreHandler = () => {
         if(descriptionRef.current && showMoreRef.current){
-            descriptionRef.current.style.maxHeight = descriptionRef.current?.scrollHeight+'px';
+            descriptionRef.current.style.webkitLineClamp = 'unset';
             showMoreRef.current.style.display = 'none';
         }
     };
+
+    function formateTime(date: string){
+        moment.locale('ru');
+        return moment(date).fromNow();
+    }
+    function likeHandler(){
+        setLike(like => isLiked ? like-1 : like+1);
+        setDislike(dislike => isDisliked ? dislike-1 : dislike);
+        setIsLiked(isLiked => !isLiked);
+        setIsDisliked(false);
+    }
+    function dislikeHandler(){
+        setDislike(dislike => isDisliked ? dislike-1 : dislike+1);
+        setLike(like => isLiked ? like-1 : like);
+        setIsDisliked(isDisliked => !isDisliked);
+        setIsLiked(false);
+    }
 
     return (
         <section className={styles.post}>
             <header>
                 <div className={styles.authorBlock}>
-                    <A href="/user/3540" className={styles.authorImageBlock}>
-                        <Image width="45" height="45" className={styles.authorImage} src="/imgs/photo1.jpg"/>
+                    <A href="/profile/3540" className={styles.authorImageBlock}>
+                        <Image width="45" height="45" className={styles.authorImage} src={post.user.profilePicture}/>
                     </A>
                     <div className={styles.nameBlock}>
-                        <A href="/user/3540">
-                            <span>Владилен Минин</span>
+                        <A href="/profile/3540">
+                            <span>{post.user.name}</span>
                         </A>
-                        <time>3 часа назад</time>
+                        <time>{formateTime(post.createdAt)}</time>
                     </div>
                 </div>
                 <MoreHorizIcon className={styles.postOptions}/>
@@ -41,31 +80,25 @@ const Post: FC = () => {
             <section>
                 <div className={styles.descriptionBlock}>
                     <p ref={descriptionRef}>
-                        Лишь тщательные исследования конкурентов, которые представляют собой яркий пример континентально-европейского типа политической культуры, будут в равной степени предоставлены сами себе. В целом, конечно, синтетическое тестирование позволяет оценить значение прогресса профессионального сообщества. Учитывая ключевые сценарии поведения, дальнейшее развитие различных форм деятельности напрямую зависит от форм воздействия. Безусловно, базовый вектор развития играет определяющее значение для соответствующих условий активизации. Современные технологии достигли такого уровня, что курс на социально-ориентированный национальный проект создаёт необходимость включения в производственный план целого ряда внеочередных мероприятий с учётом комплекса стандартных подходов. Идейные соображения высшего порядка, а также граница обучения кадров, в своём классическом представлении, допускает внедрение существующих финансовых и административных условий. Элементы политического процесса, превозмогая сложившуюся непростую экономическую ситуацию, призваны к ответу. Ясность нашей позиции очевидна: базовый вектор развития не оставляет шанса для новых принципов формирования материально-технической и кадровой базы. Идейные соображения высшего порядка, а также перспективное планирование способствует подготовке и реализации поэтапного и последовательного развития общества. Банальные, но неопровержимые выводы, а также стремящиеся вытеснить традиционное производство, нанотехнологии формируют глобальную экономическую сеть и при этом - разоблачены.
+                        {post.desc}
                     </p>
                     <div ref={showMoreRef} onClick={showMoreHandler} className={styles.more} data-active>
                         Читать дальше
                     </div>
                 </div>
                 <div className={styles.postMainContent}>
-                    <div className={styles.postMainContentItem} data-image-item>
-                        <div className={styles.backdropBlock}>
-                            <FullscreenIcon className={styles.icon}/>
-                        </div>
-                        <Image className={styles.image} width="100" height="100" layout="responsive" src="/imgs/post1.jpg"/>
-                    </div>
-                    <div className={styles.postMainContentItem} data-image-item>
-                        <div className={styles.backdropBlock}>
-                            <FullscreenIcon className={styles.icon}/>
-                        </div>
-                        <Image className={styles.image} width="100" height="100" layout="responsive" src="/imgs/post1-2.jpg"/>
-                    </div>
-                    <div className={styles.postMainContentItem} data-image-item>
-                        <div className={styles.backdropBlock}>
-                            <FullscreenIcon className={styles.icon}/>
-                        </div>
-                        <Image className={styles.image} width="100" height="100" layout="responsive" src="/imgs/post1-3.jpg"/>
-                    </div>
+                    {
+                        post.imgs.map((img, index) => {
+                            return (
+                                <div key={index} className={styles.postMainContentItem} data-image-item>
+                                    <div className={styles.backdropBlock}>
+                                        <FullscreenIcon className={styles.icon}/>
+                                    </div>
+                                    <Image className={styles.image} width="100" height="100" layout="responsive" src={img}/>
+                                </div>
+                            );
+                        })
+                    }
                 </div>
             </section>
             <footer>
@@ -75,23 +108,23 @@ const Post: FC = () => {
                             <ShareIcon className={styles.icon}/>
                         </div>
                         <span className={styles.counter}>
-                            3
+                            {post.shareCount}
                         </span>
                     </li>
-                    <li className={styles.option} data-active>
-                        <div>
+                    <li className={`${styles.option} ${styles.like} ${isLiked ? styles.active+' '+styles.click : ''}`}>
+                        <div onClick={likeHandler}>
                             <ThumbUpAltIcon className={styles.icon}/>
                         </div>
                         <span className={styles.counter}>
-                            67
+                            {like}
                         </span>
                     </li>
-                    <li className={styles.option}>
-                        <div>
+                    <li className={`${styles.option} ${styles.dislike} ${isDisliked ? styles.active+' '+styles.click : ''}`}>
+                        <div onClick={dislikeHandler}>
                             <ThumbDownAltIcon className={styles.icon}/>
                         </div>
                         <span className={styles.counter}>
-                            0
+                            {dislike}
                         </span>
                     </li>
                     <li className={styles.option}>
@@ -99,7 +132,7 @@ const Post: FC = () => {
                             <MessageIcon className={styles.icon}/>
                         </div>
                         <span className={styles.counter}>
-                            8
+                            {post.commentsCount}
                         </span>
                     </li>
                 </ul>
@@ -108,4 +141,4 @@ const Post: FC = () => {
     );
 };
 
-export default Post;
+export default memo(Post);

@@ -13,7 +13,6 @@ export default gql`
         email: String
         password: String
         profilePicture: String
-        coverPicture: String
         desc: String
         city: String
         from: String
@@ -23,7 +22,6 @@ export default gql`
         name: String!
         email: String!
         profilePicture: String
-        coverPicture: String
         followers: [String]
         followins: [String]
         role: Role

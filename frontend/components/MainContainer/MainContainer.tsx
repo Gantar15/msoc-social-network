@@ -8,9 +8,10 @@ import styles from './mainContsiner.module.scss';
 interface IProps{
     children: ReactElement | ReactElement[];
     title: string;
+    activePage: number;
 }
 
-const MainContainer: FC<IProps> = ({children, title}) => {
+const MainContainer: FC<IProps> = ({children, title, activePage}) => {
     return (
         <>
             <Head>
@@ -23,7 +24,7 @@ const MainContainer: FC<IProps> = ({children, title}) => {
                 <title>{title}</title>
             </Head>
             <div className={styles.mainContainer}>
-                <Sidebar/>
+                <Sidebar activePage={activePage}/>
                 <section className={styles.mainContentBlock}>
                     <Topbar/>
                     <section className={styles.pageContent}>

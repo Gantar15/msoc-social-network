@@ -10,11 +10,13 @@
     padding: 0 20px;
     padding-bottom: 20px;
     height: max-content;
+    position: sticky;
+    top: 0px;
 
     .logoBlock{
         display: flex;
         align-items: center;
-        border-bottom: 2px solid #f0f2fa;
+        border-bottom: 2px solid $border;
         padding: 15px 0;
 
         span{
@@ -43,7 +45,7 @@
             padding: $padding;
             padding-right: 40px;
 
-            &:hover{
+            &:hover, &.active{
                 background: $gradient;
                 color: $contrastBackgroundColor;
 

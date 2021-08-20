@@ -16,7 +16,6 @@ interface InputUser{
     email: string,
     password: string,
     profilePicture: string,
-    coverPicture: string,
     role: 'user' | 'admin' | 'moderator',
     desc: string,
     city: string,

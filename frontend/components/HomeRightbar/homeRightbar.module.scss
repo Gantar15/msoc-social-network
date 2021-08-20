@@ -2,11 +2,68 @@
 @import '../../public/styles/variables.scss';
 
 .homeRightbar{
+    flex: 3;
+    max-width: 330px;
     margin-left: 20px;
     border-radius: 10px;
     background: $contrastBackgroundColor;
     box-shadow: $boxShadow;
-    padding: 20px;
     min-width: 200px;
     height: max-content;
+    position: sticky;
+    top: 100px;
+
+    ul{
+        border-radius: 10px;
+
+        li{
+            padding: 0 20px;
+
+            &:first-child{
+                border-radius: 10px 10px 0 0;
+            }
+            &:last-child{
+                border-radius: 0 0 10px 10px;
+            }
+            &.active > div, &:hover > div{
+                border-bottom-color: transparent !important;
+            }
+            &:hover, &.active{
+                background: $gradient;
+                
+                span{
+                    color: $contrastBackgroundColor;
+                }
+                .counter{
+                    color: $inputColor;
+                }
+            }
+            &:nth-last-of-type(n+2){
+                &>div{
+                    border-bottom: 2px solid $border;
+                }
+            }
+
+            &>div{
+                padding: 15px 0;
+                width: 100%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                span{
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: $contrastFontColor;
+                }
+                .counter{
+                    font-weight: bold;
+                    font-size: 12px;
+                    color: $placeholderFontColor;
+                    height: fit-content;
+                }
+            }
+        }
+    }
 }
