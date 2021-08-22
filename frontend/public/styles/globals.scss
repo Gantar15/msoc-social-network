@@ -93,6 +93,11 @@ p, ul{
   margin: 0;
 }
 
+button, textarea, input{
+  border: none;
+  outline: none;
+}
+
 ul{
   list-style-type: none;
 }

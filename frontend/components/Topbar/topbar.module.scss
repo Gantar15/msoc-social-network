@@ -13,7 +13,7 @@
     padding: 15px;
     border-radius: 10px;
     box-shadow: $boxShadow;
-    z-index: 1;
+    z-index: 10;
 
     &Left{
         margin-right: 40px;
@@ -29,8 +29,6 @@
             border-radius: 10px;   
 
             input{
-                outline: none;
-                border: none;
                 border-radius: 0 20px 20px 0;
                 background-color: $inputColor;
                 color: $mainFontColor;

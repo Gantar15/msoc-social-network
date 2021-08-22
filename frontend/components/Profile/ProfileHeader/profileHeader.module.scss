@@ -2,9 +2,155 @@
 @import '../../../public/styles/variables.scss';
 
 .profileHeader{
+    margin-top: 100px;
     background-color: $contrastBackgroundColor;
     box-shadow: $boxShadow;
-    border-radius: 10px;
+    border-radius: 15px 10px 10px 15px;
     width: 100%;
-    height: 80px;
+    color: $contrastFontColor;
+    display: flex;
+    position: relative;
+
+    .profileOptions{
+        position: absolute;
+        top: -50px;
+        right: 0;
+        display: flex;
+
+        .option{
+            cursor: pointer;
+            display: flex;
+            box-shadow: $boxShadow;
+            align-items: center;
+            background-color: $contrastBackgroundColor;
+            border-radius: 7px;
+            padding: 10px;
+            transition: all .3s;
+            
+            &:hover{
+                transform: translate(2px, -2px);
+
+                span{
+                    color: $mainFontColor;
+                }
+                .icon{
+                    color: $logoColorMiddle;
+                }
+            }
+            &:nth-of-type(n+2){
+                margin-left: 15px;
+            }
+            span{
+                font-size: 13px;
+                font-weight: bold;
+                color: $placeholderFontColor;
+                transition: color .2s;
+            }
+            .icon{
+                color: $placeholderFontColor;
+                font-size: 18px;
+                margin-left: 5px;
+                transition: color .2s;
+            }
+        }
+    }
+    .userIconBlock{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .avatarBlock{
+            position: absolute;
+            top: -100px;
+            left: 30px;
+
+            &>div{
+                min-width: 160px;
+                width: 160px;
+                position: relative;
+
+                .networkStatus{
+                    background-color: $greenOnline;
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    position: absolute;
+                    bottom: -4px;
+                    right: -4px;
+                    z-index: 1;
+                    border: 3px solid $contrastBackgroundColor;
+                }
+                .avatar{
+                    object-fit: cover;
+                    border-radius: 15px;
+                }
+            }
+        }
+        .nameBlock{
+            box-sizing: content-box;
+            margin-top: 40px;
+            width: 160px;
+            padding: 30px;
+            padding-right: 0;
+            display: flex;
+            flex-direction: column;
+
+            .name{
+                font-weight: bold;
+                font-size: 18px;
+            }
+            button{
+                margin-top: 10px;
+                cursor: pointer;
+                border-radius: 10px;
+                background: $gradient;
+                font-weight: 500;
+                padding: 11px 20px;
+                font-size: 13px;
+                color: $contrastBackgroundColor;
+            }
+        }
+    }
+
+    .userInfoBlock{
+        width: 100%;
+        display: flex;
+        background-color: $inputColor;
+        margin: 30px;
+        margin-left: 35px;
+        margin-right: 35px;
+        border-radius: 15px;
+
+        .userInfoItem{
+            padding: 20px 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+
+            &:nth-of-type(n+2) > div{
+                border-left: 2px solid #dfe1eb;
+            }
+            &>div{
+                padding: 0 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                width: 100%;
+
+                .infoName{
+                    display: block;
+                    font-weight: bold;
+                    color: $placeholderFontColor;
+                    font-size: 13px;
+                }
+                .info{
+                    display: block;
+                    margin-top: 10px;
+                    font-size: 16px;
+                    color: $contrastFontColor;
+                }
+            }
+        }
+    }
 }
