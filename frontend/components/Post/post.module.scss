@@ -170,18 +170,28 @@
                         color: $logoColorDark;
                     }
                 }
-                &>div:hover{
-                    .icon{
-                        color: $logoColorDark;
-                    }
-                    &+.counter{
-                        color: $logoColorDark;
-                    }
-                }
                 & > div:hover{
                     border: 3px solid $inputColor;
 
                     @keyframes active {
+                        0%{
+                            transform: translateZ(0);
+                        }
+                        30%{
+                            transform: translateZ(25px);
+                        }
+                        100%{
+                            transform: translateZ(0);
+                        }
+                    }
+
+                    .icon{
+                        animation: active .5s ease;                        
+                    }
+                }
+
+                &.like.click > div, &.dislike.click > div{
+                    @keyframes click {
                         0%{
                             transform:  translateY(0) rotateX(0);
                         }
@@ -194,25 +204,7 @@
                     }
 
                     .icon{
-                        animation: active .6s ease;
-                    }
-                }
-
-                &.like.click > div, &.dislike.click > div{
-                    @keyframes click {
-                        0%{
-                            transform: translateZ(0);
-                        }
-                        30%{
-                            transform: translateZ(15px);
-                        }
-                        100%{
-                            transform: translateZ(0);
-                        }
-                    }
-
-                    .icon{
-                        animation: click .5s ease;
+                        animation: click .6s ease;
                     }
                 }
 
