@@ -71,7 +71,7 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                             Отношения:
                         </span>
                         <span className={styles.info}>
-                            Одиночка (в активном поиске)
+                            Отношения (в омуте)
                         </span>
                     </div>
                 </div>

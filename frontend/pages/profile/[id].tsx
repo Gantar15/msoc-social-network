@@ -1,9 +1,15 @@
 
 import { NextPage } from "next";
 import { useRouter } from 'next/router'
+import Image from 'next/image';
 import MainContainer from "../../components/MainContainer/MainContainer";
 import ProfileHeader from "../../components/Profile/ProfileHeader/ProfileHeader";
 import Post from '../../components/Post/Post';
+import SharePost from '../../components/SharePost/SharePost';
+import A from '../../components/A/A';
+import SubjectIcon from '@material-ui/icons/Subject';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 import styles from '../../public/styles/profile.module.scss';
 
@@ -49,28 +55,135 @@ const Profile: NextPage = () => {
                 <ProfileHeader userId={1}/>
                 <section className={styles.mainContent}>
                     <section>
-                        <header className={styles.filters}>
-                            <div className={styles.filter + ' ' + styles.active}>
-                                <span>Самые новые</span>
-                                <div></div>
+                        <SharePost/>
+                        <div className={styles.postsBlock}>
+                            <header className={styles.filters}>
+                                <div className={styles.filter + ' ' + styles.active}>
+                                    <span>Самые новые</span>
+                                    <div></div>
+                                </div>
+                                <div className={styles.filter}>
+                                    <span>Самые популярные</span>
+                                    <div></div>
+                                </div>
+                                <div className={styles.postsCounter}>
+                                    <SubjectIcon className={styles.icon}/>
+                                    <span>76</span>
+                                </div>
+                            </header>
+                            <div className={styles.posts}>
+                                {fakePosts.map(post => {
+                                    return (
+                                        <Post key={post.id} post={post}/>
+                                    )
+                                })}
                             </div>
-                            <div className={styles.filter}>
-                                <span>Самые популярные</span>
-                                <div></div>
-                            </div>
-                        </header>
-                        <div className={styles.posts}>
-                            {fakePosts.map(post => {
-                                return (
-                                    <Post key={post.id} post={post}/>
-                                )
-                            })}
                         </div>
                     </section>
+
                     <section>
-                        <div className={styles.friendsInformation}>
+                        <div className={styles.subscribers}>
+                            <header className={styles.titleBlock}>
+                                <h2 className={styles.title}>Подписчики</h2>
+                                <div className={styles.indicator}>
+                                    <div>
+                                        <span>121</span> 
+                                        <PeopleAltIcon className={styles.icon}/>
+                                    </div>
+                                </div>
+                            </header>
+                            <section className={styles.users}>
+                                <div className={styles.user}>
+                                    <div className={styles.userInfo}>
+                                        <A href="/profile/361">
+                                            <div className={styles.avatar}>
+                                                <Image className={styles.img} src="/imgs/photo1.jpg" width="10" height="10" layout="responsive"/>
+                                                <div className={styles.networkStatus + ' ' + styles.online}></div>
+                                            </div>
+                                        </A>
+                                        <A href="/profile/361">
+                                            <span className={styles.name}>Григорий</span>
+                                        </A>
+                                    </div>
+                                    <button className={styles.unsubscribe}>
+                                        Отписаться
+                                    </button>
+                                </div>
+                                <div className={styles.user}>
+                                    <div className={styles.userInfo}>
+                                        <A href="/profile/361">
+                                            <div className={styles.avatar}>
+                                                <Image className={styles.img} src="/imgs/post1-2.jpg" width="10" height="10" layout="responsive"/>
+                                                <div className={styles.networkStatus + ' ' + styles.offline}></div>
+                                            </div>
+                                        </A>
+                                        <A href="/profile/361">
+                                            <span className={styles.name}>Инакентий Валерьевич</span>
+                                        </A>
+                                    </div>
+                                    <button className={styles.subscribe}>
+                                            Подписаться
+                                    </button>
+                                </div>
+                            </section>
+                            <div className={styles.more}>
+                                <div>
+                                    <span>Смотреть все</span>
+                                    <KeyboardArrowRightIcon className={styles.icon}/>
+                                </div>
+                            </div>
                         </div>
-                        <div className={styles.friendsBlock}>
+
+                        <div className={styles.subscriptions}>
+                            <header className={styles.titleBlock}>
+                                <h2 className={styles.title}>Подписки</h2>
+                                <div className={styles.indicator}>
+                                    <div>
+                                        <span>453</span> 
+                                        <PeopleAltIcon className={styles.icon}/>
+                                    </div>
+                                </div>
+                            </header>
+                            <section className={styles.users}>
+                                <div className={styles.user}>
+                                    <div className={styles.userInfo}>
+                                        <A href="/profile/361">
+                                            <div className={styles.avatar}>
+                                                <Image className={styles.img} src="/imgs/photo1.jpg" width="10" height="10" layout="responsive"/>
+                                                <div className={styles.networkStatus + ' ' + styles.online}></div>
+                                            </div>
+                                        </A>
+                                        <A href="/profile/361">
+                                            <span className={styles.name}>Григорий</span>
+                                        </A>
+                                    </div>
+                                    <button className={styles.unsubscribe}>
+                                        Отписаться
+                                    </button>
+                                </div>
+                                <div className={styles.user}>
+                                    <div className={styles.userInfo}>
+                                        <A href="/profile/361">
+                                            <div className={styles.avatar}>
+                                                <Image className={styles.img} src="/imgs/post1-2.jpg" width="10" height="10" layout="responsive"/>
+                                                <div className={styles.networkStatus + ' ' + styles.offline}></div>
+                                            </div>
+                                        </A>
+                                        <A href="/profile/361">
+                                            <span className={styles.name}>Инакентий Валерьевич</span>
+                                        </A>
+                                    </div>
+                                    <button className={styles.subscribe}>
+                                            Подписаться
+                                    </button>
+                                </div>
+                            </section>
+                            <div className={styles.more}>
+                                <div>
+                                    <span>Смотреть все</span>
+                                    <KeyboardArrowRightIcon className={styles.icon}/>
+                                </div>
+                            </div>
                         </div>
                     </section>
                 </section>
