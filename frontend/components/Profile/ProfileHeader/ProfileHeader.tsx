@@ -39,8 +39,8 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                 </div>
                 <div className={styles.nameBlock}>
                     <span className={styles.name}>Павловский Егор Николаевич</span>
-                    <button className={styles.subscribe}>
-                        Подписаться
+                    <button className={styles.unsubscribe}>
+                        Отписаться
                     </button>
                 </div>
             </div>
@@ -71,7 +71,7 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                             Отношения:
                         </span>
                         <span className={styles.info}>
-                            Отношения (в омуте)
+                            Отношения (хочу шаверму очень сильно)
                         </span>
                     </div>
                 </div>

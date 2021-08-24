@@ -16,15 +16,15 @@
     .logoBlock{
         display: flex;
         align-items: center;
+        justify-content: center;
         border-bottom: 2px solid $border;
         padding: 15px 0;
 
         span{
-            font-weight: 500;
-            font-size: 20px;
-            color: $contrastFontColor;
-            margin-left: 10px;
-            font-family: Roboto;
+            font-weight: 600;
+            font-size: 25px;
+            color: $contrastInonsColor;
+            margin-left: 5px;
         }
     }
 

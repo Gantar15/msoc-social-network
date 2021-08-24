@@ -25,8 +25,8 @@ const Sidebar: FC<IProps> = ({activePage}) => {
         <aside className={styles.sidebar}>
             <A href="/">
                 <section className={styles.logoBlock}>
-                    <Image className={styles.logoImage} width="35" height="35" src="/imgs/main_logo.png"></Image>
-                    <span>Msoc</span>
+                    <Image className={styles.logoImage} width="25" height="25" src="/imgs/main_logo.png"></Image>
+                    <span>msoc</span>
                 </section>
             </A>
             <nav className={styles.navBlock}>

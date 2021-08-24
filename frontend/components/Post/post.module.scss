@@ -5,6 +5,7 @@
     background-color: $contrastBackgroundColor;
     box-shadow: $boxShadow;
     border-radius: 10px;
+    min-width: 460px;
 
     &:nth-of-type(n+2){
         margin-top: 20px;

@@ -1,0 +1,198 @@
+
+@import './variables.scss';
+
+.login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100vw - 20px);
+    
+    .loginLeft{
+        flex: 50;
+        width: 50%;
+        height: 100%;
+        background: url('/imgs/login_back.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+    .loginRight{
+        flex: 56;
+        display: flex;
+        justify-content: flex-start;
+
+        .loginBlock{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 520px;
+            padding: 60px 80px;
+
+            .logoBlock{
+                display: flex;
+                align-items: center;
+
+                span{
+                    font-weight: 600;
+                    font-size: 22px;
+                    color: $contrastInonsColor;
+                    margin-left: 5px;
+                }
+            }
+            .greeting{
+                display: block;
+                font-size: 33px;
+                font-weight: 900;
+                margin: 0;
+                color: $contrastInonsColor;
+                margin-top: 50px;
+            }
+
+            .formBlock{
+                display: flex;
+                flex-direction: column;
+                margin-top: 50px;
+                width: 100%;
+
+                .title{
+                    font-size: 15px;
+                    color: $placeholderFontColor;
+                }
+                .form{
+                    margin-top: 13px;
+                    display: flex;
+                    flex-direction: column;
+
+                    &>div:nth-of-type(n+2){
+                        margin-top: 10px;
+                    }
+
+                    .repeatPassword{
+                        width: 100%;
+                        position: relative;
+
+                        .root{
+                            padding-right: 50px;
+                        }
+
+                        .showPass{
+                            cursor: pointer;
+                            position: absolute;
+                            top: 50%;
+                            right: 15px;
+                            transform: translateY(-50%);
+
+                            .icon{
+                                font-size: 20px;
+                                color: $contrastInonsColor;
+                            }
+                        }
+                    }
+                    .root{
+                        width: 100%;
+                        border: 1px solid $placeholderFontColor;
+                        border-radius: 10px;
+                        padding: 10px 20px;
+                        font-family: Roboto;
+
+                        &::before{
+                            display: none;
+                        }
+                        &::after{
+                            bottom: -1px;
+                            left: 6px;
+                            width: calc(100% - 12px);
+                            border-bottom: 2px solid $logoColorMiddle;
+                        }
+                    }
+                }
+
+                &>button{
+                    width: 100%;
+                    margin-top: 15px;
+                    cursor: pointer;
+                    border-radius: 10px;
+                    font-weight: bold;
+                    padding: 15px 20px;
+                    font-size: 13px;
+                    color: $contrastBackgroundColor;
+                    background: $gradient;
+                }
+            }
+            
+            .social{
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+
+                .or{
+                    margin-top: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+
+                    div{
+                        width: 100%;
+                        height: 2px;
+                        background-color: #e7eaf7;
+                    }
+                    span{
+                        font-size: 15px;
+                        font-weight: bold;
+                        color: $placeholderFontColor;
+                        margin: 0 20px;
+                    }
+                }
+
+                .socialBlock{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    cursor: pointer;
+                    margin-top: 15px;
+
+                    &>div{
+                        width: 40px;
+                        height: 40px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border: 2px solid #e7eaf7;
+                        border-radius: 50%;
+                        transition: all .2s;
+                        
+                        .icon{
+                            color: $placeholderFontColor;
+                            filter: opacity(0.4);
+                            transition: all .2s;
+                        }
+                        &:hover{
+                            border-color: #daddeb;
+                            
+                            .icon{
+                                filter: opacity(0.6);
+                            }
+                        }
+                        &:nth-child(n+2){
+                            margin-left: 20px;
+                        }
+                    }
+                }
+            }
+
+            footer{
+                margin-top: 80px;
+                font-size: 14px;
+                color: $placeholderFontColor;
+
+                .signin{
+                    font-weight: bold;
+                    color: #788291;
+                }
+            }
+        }
+    }
+}

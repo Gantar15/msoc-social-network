@@ -103,11 +103,18 @@
                 margin-top: 10px;
                 cursor: pointer;
                 border-radius: 10px;
-                background: $gradient;
                 font-weight: bold;
                 padding: 11px 20px;
                 font-size: 13px;
                 color: $contrastBackgroundColor;
+
+                &.subscribe{
+                    background: $gradient;
+                }
+                &.unsubscribe{
+                    background-color: $inputColor;
+                    color: $mainFontColor;
+                }
             }
         }
     }
