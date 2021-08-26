@@ -64,6 +64,7 @@ async function logout(){
       `,
     }),
   });
+  location.href = '/login';
 }
 
 const errorLink = onError(
@@ -77,13 +78,14 @@ const errorLink = onError(
             operation.setContext({
               headers: {
                 ...oldHeaders,
-                authorization: accessToken,
+                authorization: `Bearer ${accessToken}`,
               },
             });
             return forward(operation);
           }).catch(err => {
             logout();
           });
+          break;
       }
     }
     if (networkError) {

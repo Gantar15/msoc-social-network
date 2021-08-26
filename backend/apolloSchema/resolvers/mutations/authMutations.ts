@@ -58,8 +58,6 @@ export default {
     async refresh(_:any, __: any, context: IApolloContext){
         const {req, resp} = context;
         try{
-            checkAuth(resp);
-
             const {refreshToken} = req.cookies;
             const userData = await userService.refresh(refreshToken);
             setCookieToken(resp, userData.refreshToken);

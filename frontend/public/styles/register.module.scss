@@ -77,6 +77,8 @@
                         }
 
                         .showPass{
+                            display: flex;
+                            align-items: center;
                             cursor: pointer;
                             position: absolute;
                             top: 50%;
