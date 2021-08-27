@@ -2,6 +2,7 @@
 import {Router} from 'express';
 import type {Request, Response} from 'express';
 import userService from '../services/userService';
+import tokenService from '../services/tokenService';
 const router = Router();
 
 
@@ -11,6 +12,16 @@ router.get('/activate/:link', async (req: Request, resp: Response) => {
         const activationLink: string = req.params.link;
         await userService.activate(activationLink);
         resp.redirect(process.env.CLIENT_URL!);
+    } catch(err){
+        resp.status(400).end(err.message);
+    }
+});
+
+router.get('/refreshTokenValidate', async (req: Request, resp: Response) => {
+    try{
+        const refreshToken: string = req.cookies.refreshToken;
+        tokenService.validateRefreshToken(refreshToken);
+        resp.json(true);
     } catch(err){
         resp.status(400).end(err.message);
     }

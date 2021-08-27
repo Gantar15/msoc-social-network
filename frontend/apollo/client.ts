@@ -2,6 +2,8 @@
 import {ApolloClient, HttpLink, from} from '@apollo/client';
 import { onError } from "@apollo/client/link/error";
 import {isBrowser} from '../utils/ssrUtils';
+import refreahToken from '../utils/refresh';
+import logout from '../utils/logout';
 import cache from './cache';
 
 
@@ -20,61 +22,18 @@ const tokenLink = new HttpLink({
   credentials: 'include'
 });
 
-async function getNewToken(){
-  const fetchResult = await fetch(API_URL+'/graphql', {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    credentials: 'include',
-    body: JSON.stringify({
-      query: `
-        mutation RefreshToken{
-          refresh{
-            accessToken
-            refreshToken
-          }
-        }
-      `,
-    }),
-  });
-  const res = await fetchResult.json();
-  if(res.errors){
-    throw res.errors;
-  }
-
-  localStorage.setItem('accessToken', res.accessToken);
-  return res.accessToken;
-}
-
-async function logout(){
-  await fetch(API_URL+'/graphql', {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    credentials: 'include',
-    body: JSON.stringify({
-      query: `
-        mutation Logout{
-          logout
-        }
-      `,
-    }),
-  });
-  location.href = '/login';
-}
-
 const errorLink = onError(
-  ({ graphQLErrors, networkError, operation, forward, response }) => {
-    if (graphQLErrors && isBrowser()) {
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    if (graphQLErrors) {
       const err = graphQLErrors[0];
       switch (err.extensions?.code) {
         case 'UNAUTHENTICATED':
           const oldHeaders = operation.getContext().headers;
-          getNewToken().then(accessToken => {
+          console.log(oldHeaders)
+          refreahToken(API_URL+'/graphql', oldHeaders).then(result => {
+            if('errors' in result) throw '';
+            const accessToken = result.data.refresh.accessToken;
+            localStorage.setItem('accessToken', accessToken);
             operation.setContext({
               headers: {
                 ...oldHeaders,
@@ -83,7 +42,7 @@ const errorLink = onError(
             });
             return forward(operation);
           }).catch(err => {
-            logout();
+            logout(API_URL+'/graphql', oldHeaders);
           });
           break;
       }

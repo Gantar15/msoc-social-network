@@ -1,12 +1,12 @@
-import type { NextPage } from 'next';
+import type { NextPage, GetServerSideProps } from 'next';
 import { useEffect } from 'react';
 import MainContainer from '../components/MainContainer/MainContainer';
 import SharePost from '../components/SharePost/SharePost';
 import HomeRightbar from '../components/HomeRightbar/HomeRightbar';
 import Post from '../components/Post/Post';
-import { useRefresh } from '../apollo/mutations/refresh';
 
 import styles from '../public/styles/home.module.scss';
+import validateRefreshToken from '../utils/validateRefreshToken';
 
 
 const fakePosts: {
@@ -42,16 +42,6 @@ const fakePosts: {
 ];
 
 const Home: NextPage = () => {
-  const {refresh, data: refreshData} = useRefresh();
-
-  useEffect(() => {
-    refresh();
-  }, []);
-  useEffect(() => {
-    if(refreshData)
-      console.log(refreshData.refresh.user)
-  }, [refreshData]);
-
   return (
     <MainContainer activePage={2} title="Home">
       <section className={styles.homepage}>
@@ -72,3 +62,21 @@ const Home: NextPage = () => {
 }
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async ({req}) => {
+  const API_URL = 'http://localhost:7700';
+  const result = await validateRefreshToken(API_URL+'/auth/refreshTokenValidate', req.cookies.refreshToken);
+  if(result?.errors?.length){
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {
+    }
+  };
+};

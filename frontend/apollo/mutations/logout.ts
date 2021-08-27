@@ -19,7 +19,7 @@ export const useLogout = () => {
         if(logoutData?.logout){
             localStorage.removeItem('accessToken');
             setAuthUser(null);
-            router.push('login');
+            router.push('/login');
         }
     }, [logoutData]);
 

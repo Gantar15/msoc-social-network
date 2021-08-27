@@ -44,8 +44,6 @@ export default {
     async logout(_:any, __: any, context: IApolloContext){
         const {req, resp} = context;
         try{
-            checkAuth(resp);
-
             const {refreshToken} = req.cookies;
             await userService.logout(refreshToken);
             resp.clearCookie('refreshToken');
