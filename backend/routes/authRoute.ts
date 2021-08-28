@@ -20,10 +20,13 @@ router.get('/activate/:link', async (req: Request, resp: Response) => {
 router.get('/refreshTokenValidate', async (req: Request, resp: Response) => {
     try{
         const refreshToken: string = req.cookies.refreshToken;
-        tokenService.validateRefreshToken(refreshToken);
-        resp.json(true);
+        const result = tokenService.validateRefreshToken(refreshToken);
+        if(result){
+            resp.json(true);
+        }
+        else throw result;
     } catch(err){
-        resp.status(400).end(err.message);
+        resp.status(400).json(err);
     }
 });
 

@@ -8,8 +8,10 @@ import User from "../../../models/User";
 
 
 export default {
-    async getPost(_:any, {postId}: {postId: number}){
+    async getPost(_:any, {postId}: {postId: number}, {resp}: IApolloContext){
         try{
+            checkAuth(resp);
+
             const post = await Post.findByPk(postId);
             if(!post) throw ApiError.badRequest('Данного поста не существует');
             return post;

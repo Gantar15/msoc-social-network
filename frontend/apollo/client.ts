@@ -2,7 +2,7 @@
 import {ApolloClient, HttpLink, from} from '@apollo/client';
 import { onError } from "@apollo/client/link/error";
 import {isBrowser} from '../utils/ssrUtils';
-import refreahToken from '../utils/refresh';
+import refreshTokens from '../utils/refresh';
 import logout from '../utils/logout';
 import cache from './cache';
 
@@ -19,37 +19,44 @@ const tokenLink = new HttpLink({
   headers: {
     authorization: `Bearer ${token}`
   },
-  credentials: 'include'
+  credentials: 'include',
+  fetch: async (uri, options) => {
+    const resp = await fetch(uri, options);
+    const cloneResp = resp.clone();
+    const data = await cloneResp.json();
+
+    if(data.errors && data.errors[0].extensions.code === "UNAUTHENTICATED"){
+      refreshTokens(API_URL+'/graphql').then(result => {
+        console.log(result)
+        if('errors' in result) throw '';
+
+        const accessToken = result.data.refresh.accessToken;
+        localStorage.setItem('accessToken', accessToken);
+        //@ts-ignore
+        options.headers.authorization = `Bearer ${accessToken}`;
+
+        return fetch(uri, options);
+      }).catch(err => {
+        console.log(err)
+        // logout(API_URL+'/graphql');
+        // location.href = '/login';
+      });
+    }
+
+    return Promise.resolve(resp);
+  }
 });
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
-      const err = graphQLErrors[0];
-      switch (err.extensions?.code) {
-        case 'UNAUTHENTICATED':
-          const oldHeaders = operation.getContext().headers;
-          console.log(oldHeaders)
-          refreahToken(API_URL+'/graphql', oldHeaders).then(result => {
-            if('errors' in result) throw '';
-            const accessToken = result.data.refresh.accessToken;
-            localStorage.setItem('accessToken', accessToken);
-            operation.setContext({
-              headers: {
-                ...oldHeaders,
-                authorization: `Bearer ${accessToken}`,
-              },
-            });
-            return forward(operation);
-          }).catch(err => {
-            logout(API_URL+'/graphql', oldHeaders);
-          });
-          break;
-      }
+      console.log(`[GraphQL errors]: ${graphQLErrors.reduce((txt, err) => txt + err.path+' '+err.message, '')}`);
     }
     if (networkError) {
       console.log(`[Network error]: ${networkError}`);
     }
+
+    return forward(operation);
   }
 );
 

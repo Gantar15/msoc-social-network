@@ -1,10 +1,9 @@
 
-export default async function (apiUrl: string, refreshToken: string){
+export default async function (apiUrl: string){
     await fetch(apiUrl, {
       method: 'POST',
       headers: { 
-        'Content-Type': 'application/json',
-        'Cookie': `refreshToken=${refreshToken}`
+        'Content-Type': 'application/json'
       },
       credentials: 'include',
       body: JSON.stringify({

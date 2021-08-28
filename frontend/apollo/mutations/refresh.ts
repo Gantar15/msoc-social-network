@@ -20,15 +20,15 @@ const refresh = gql`
 
 export const useRefresh = () => {
     const {logout} = useLogout();
-    const [mutate, {data: refreshData}] = useMutation(refresh, {
+    const [mutate, {data: refreshData, error: refreshError}] = useMutation(refresh, {
         onError: err => logout()
     });
     useEffect(() => {
-        if(refreshData?.logout){
+        if(refreshData?.refresh){
             localStorage.setItem('accessToken', refreshData.refresh.accessToken);
             setAuthUser(refreshData.refresh.user);
         }
     }, [refreshData]);
 
-    return {refresh: mutate, data: refreshData};
+    return {refresh: mutate, data: refreshData, error: refreshError};
 };

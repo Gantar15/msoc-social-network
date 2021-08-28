@@ -6,12 +6,11 @@ interface IErrors{
   errors: any[]
 }
 
-export default async function (apiUrl: string, refreshToken: string): Promise<{data: {refresh: IUserData}} | IErrors> {
+export default async function refreahTokens(apiUrl: string): Promise<{data: {refresh: IUserData}} | IErrors> {
     const fetchResult = await fetch(apiUrl, {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'Cookie': `refreshToken=${refreshToken}`
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify({

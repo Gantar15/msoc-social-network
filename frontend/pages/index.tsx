@@ -4,6 +4,7 @@ import MainContainer from '../components/MainContainer/MainContainer';
 import SharePost from '../components/SharePost/SharePost';
 import HomeRightbar from '../components/HomeRightbar/HomeRightbar';
 import Post from '../components/Post/Post';
+import {useRefresh} from '../apollo/mutations/refresh';
 
 import styles from '../public/styles/home.module.scss';
 import validateRefreshToken from '../utils/validateRefreshToken';
@@ -42,6 +43,12 @@ const fakePosts: {
 ];
 
 const Home: NextPage = () => {
+  const {refresh} = useRefresh();
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
   return (
     <MainContainer activePage={2} title="Home">
       <section className={styles.homepage}>
@@ -59,14 +66,13 @@ const Home: NextPage = () => {
       </section>
     </MainContainer>
   );
-}
-
+};
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({req}) => {
   const API_URL = 'http://localhost:7700';
   const result = await validateRefreshToken(API_URL+'/auth/refreshTokenValidate', req.cookies.refreshToken);
-  if(result?.errors?.length){
+  if(!result){
     return {
       redirect: {
         destination: '/login',

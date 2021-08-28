@@ -1,5 +1,5 @@
 
-import type {NextPage} from 'next';
+import type {GetServerSideProps, NextPage} from 'next';
 import { useRouter } from 'next/router';
 import {useRef, useState, useEffect} from 'react';
 import Image from 'next/image';
@@ -8,6 +8,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { useLogin } from '../apollo/mutations/login';
 import A from '../components/A/A';
+import validateRefreshToken from '../utils/validateRefreshToken';
 
 import scss from '../public/styles/login.module.scss';
 
@@ -138,3 +139,21 @@ const Login: NextPage = () => {
 };
 
 export default Login;
+
+export const getServerSideProps: GetServerSideProps = async ({req}) => {
+    const API_URL = 'http://localhost:7700';
+    const result = await validateRefreshToken(API_URL+'/auth/refreshTokenValidate', req.cookies.refreshToken);
+    if(result){
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false
+        }
+      };
+    }
+  
+    return {
+      props: {
+      }
+    };
+};

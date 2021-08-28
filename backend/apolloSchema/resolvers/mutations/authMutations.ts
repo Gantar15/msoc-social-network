@@ -4,7 +4,6 @@ import type {IApolloContext} from '../../../types/IApolloContext';
 import AuthValidator from '../../../lib/authValidator';
 import userService from '../../../services/userService';
 import errorHandler from '../../../lib/errorHandler';
-import { checkAuth } from '../../../middlewares/auth-middleware';
 
 
 function setCookieToken(resp: Response, refreshToken: string){
