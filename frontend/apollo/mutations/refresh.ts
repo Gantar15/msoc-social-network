@@ -20,7 +20,7 @@ const refresh = gql`
 
 export const useRefresh = () => {
     const {logout} = useLogout();
-    const [mutate, {data: refreshData, error: refreshError}] = useMutation(refresh, {
+    const [mutate, {data: refreshData, error: refreshError, loading: refreshLoading}] = useMutation(refresh, {
         onError: err => logout()
     });
     useEffect(() => {
@@ -30,5 +30,5 @@ export const useRefresh = () => {
         }
     }, [refreshData]);
 
-    return {refresh: mutate, data: refreshData, error: refreshError};
+    return {refresh: mutate, data: refreshData, error: refreshError, loading: refreshLoading};
 };

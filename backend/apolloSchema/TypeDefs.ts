@@ -1,7 +1,9 @@
-
 import {gql} from 'apollo-server-express';
 
 export default gql`
+
+    scalar Upload
+
     #user
     enum Role{
         user
@@ -51,8 +53,9 @@ export default gql`
     }
     type Post{
         user: Int!
-        desc: String!
-        imgs: [String!]!
+        desc: String
+        imgs: [String!]
+        videos: [String!]
         likes: [Int!]!
     }
 
@@ -75,7 +78,7 @@ export default gql`
         followUser(userId: Int!): Boolean!
         unfollowUser(userId: Int!): Boolean!
 
-        createPost(desc: String!, imgs: [String!]!): Post!
+        createPost(desc: String, imgs: [Upload!], videos: [Upload!]): Post!
         updatePost(postId: Int!, post: InputPost!): Post!
         deletePost(postId: Int!): Post!
         likePost(postId: Int!): Boolean!

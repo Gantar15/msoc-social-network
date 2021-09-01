@@ -9,6 +9,7 @@ interface IPost{
     user?: string;
     desc: string;
     imgs: string[];
+    videos: string[];
     likes: number[];
 }
 
@@ -19,17 +20,19 @@ class Post extends Model<IPost, TokenCreationAttributes> implements IPost {
     public user!: string;
     public desc!: string;
     public imgs!: string[];
+    public videos!: string[];
     public likes!: number[];
 }
 Post.init({
     desc: {
         type: DataTypes.STRING,
-        validate: {
-            len: [1, 2500]
-        },
         allowNull: true
     },
     imgs: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: []
+    },
+    videos: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: []
     },

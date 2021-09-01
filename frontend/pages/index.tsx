@@ -46,7 +46,7 @@ const Home: NextPage = () => {
   const {refresh} = useRefresh();
 
   useEffect(() => {
-    refresh();
+      refresh();
   }, []);
 
   return (

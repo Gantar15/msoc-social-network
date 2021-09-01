@@ -1,6 +1,7 @@
 
 import express, { Request, Response } from "express";
 import {ApolloServer} from 'apollo-server-express';
+import {graphqlUploadExpress} from 'graphql-upload';
 import cors from 'cors';
 import helmet from "helmet";
 const cookieParser = require('cookie-parser');
@@ -23,6 +24,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 app.use(authMiddleware);
+app.use(graphqlUploadExpress({ maxFileSize: 3000000, maxFiles: 10 }));
 
 app.use('/auth/', authRoute);
 
@@ -41,6 +43,7 @@ async function startServer(){
     await sequelize.sync();
     
     await server.start();
+
     server.applyMiddleware({app, cors:{origin: process.env.CLIENT_URL}});
 
     const PORT = process.env.PORT || 5000;
