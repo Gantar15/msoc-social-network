@@ -24,7 +24,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 app.use(authMiddleware);
-app.use(graphqlUploadExpress({ maxFileSize: 3000000, maxFiles: 10 }));
+app.use(graphqlUploadExpress());
 
 app.use('/auth/', authRoute);
 

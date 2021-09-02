@@ -4,11 +4,10 @@ import Post from '../../../models/Post';
 import type {IApolloContext} from '../../../types/IApolloContext';
 import { checkAuth } from '../../../middlewares/auth-middleware';
 import type {FileUpload} from 'graphql-upload';
-import {join} from 'path';
+import {join, parse} from 'path';
 import fs from 'fs';
 import {Readable} from 'stream';
 import {v4 as uuidv4} from 'uuid';
-import fileType from 'file-type';
 
 
 interface InputPost{
@@ -28,22 +27,22 @@ export default {
                     imgsPath = await Promise.all(imgs.map(async (image) => {
                         const imageUploadObj = await image;
                         const imgStream: Readable = imageUploadObj.createReadStream();
-                        const fileExt = (await fileType.fromStream(imgStream))!.ext;
-                        const filename = uuidv4();
+                        const fileExt = parse(imageUploadObj.filename).ext;
+                        const filename = uuidv4() + fileExt;
                         const imgPath = join(__dirname, '..', '..', '..', 'files', 'posts_imgs', filename);
                         await imgStream.pipe(fs.createWriteStream(imgPath));
-                        return imgPath;
+                        return `${process.env.SITE_URL}/posts_imgs/${filename}`;
                     }));
                 }
                 if(videos){
                     videosPath = await Promise.all(videos.map(async (video) => {
                         const videoUploadObj = await video;
                         const videoStream: Readable = videoUploadObj.createReadStream();
-                        const fileExt = (await fileType.fromStream(videoStream))!.ext;
-                        const filename = uuidv4() + '.' + fileExt;
+                        const fileExt = parse(videoUploadObj.filename).ext;
+                        const filename = uuidv4() + fileExt;
                         const videoPath = join(__dirname, '..', '..', '..', 'files', 'posts_videos', filename);
                         await videoStream.pipe(fs.createWriteStream(videoPath));
-                        return videoPath;
+                        return `${process.env.SITE_URL}/posts_videos/${filename}`;
                     }));
                 }
             } catch(err){

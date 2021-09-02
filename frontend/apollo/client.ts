@@ -40,7 +40,6 @@ const uploadLink = createUploadLink({
     const data = await cloneResp.json();
 
     if(data.errors && data.errors[0].extensions.code === "UNAUTHENTICATED"){
-      console.log(data.errors[0].extensions.code)
       try{
         const result = await refreshTokens(API_URL+'/graphql');
           if('errors' in result) throw result.errors[0].message;
