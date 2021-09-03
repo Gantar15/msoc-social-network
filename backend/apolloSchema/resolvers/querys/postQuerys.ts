@@ -20,18 +20,34 @@ export default {
         }
     },
     
-    async getTimelinePosts(_: any, __: any, {resp}: IApolloContext){
+    async getTimelinePosts(_: any, {limit, offset}: {limit: number, offset: number}, {resp}: IApolloContext){
         try{
             checkAuth(resp);
 
-            const currenntUser: User = resp.locals.user;
-            const userPosts = await resp.locals.user.getPosts();
-            const friedPosts = await Promise.all(currenntUser.followins.map(async (friendId) => {
-                const friend = await User.findByPk(friendId);
-                return friend?.getPosts();
-            }));
+            // const currentUser: User = resp.locals.user;
+            // const userPosts = await resp.locals.user.getPosts();
+            // const friedPosts = await Promise.all(currentUser.followins.map(async (friendId) => {
+            //     const friend = await User.findByPk(friendId);
+            //     return friend?.getPosts();
+            // }));
 
-            return [...userPosts, ...friedPosts];
+            // return [...userPosts, ...friedPosts];
+
+            const posts = await resp.locals.user.findAll({
+                include: {
+                    model: User,
+                    required: true,
+                    include: {
+                        required: true,
+                        model: Post
+                    }
+                },
+                order: [[Post, 'createdAt', 'ASC']],
+                limit,
+                offset
+            });
+            
+            return posts;
         } catch(err){
             errorHandler(err);
         }

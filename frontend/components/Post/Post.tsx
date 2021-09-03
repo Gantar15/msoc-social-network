@@ -10,24 +10,10 @@ import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import A from '../A/A';
 import moment from 'moment';
 import 'moment/locale/ru';
+import type {IPost} from '../../models/post';
+
 import styles from './post.module.scss';
 
-
-interface IPost{
-    id: number;
-    user: {
-        id: number,
-        name: string,
-        profilePicture: string
-    };
-    desc: string;
-    imgs: string[];
-    likes: number[];
-    dislikes: number[];
-    commentsCount: number;
-    createdAt: string;
-    shareCount: number;
-}
 
 const Post: FC<{post: IPost}> = ({post}) => {
     const descriptionRef = useRef<HTMLParagraphElement>(null);
@@ -132,7 +118,7 @@ const Post: FC<{post: IPost}> = ({post}) => {
                             <MessageIcon className={styles.icon}/>
                         </div>
                         <span className={styles.counter}>
-                            {post.commentsCount}
+                            {post.comments.length}
                         </span>
                     </li>
                 </ul>

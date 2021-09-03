@@ -4,6 +4,7 @@ import type {IApolloContext} from '../../../types/IApolloContext';
 import AuthValidator from '../../../lib/authValidator';
 import userService from '../../../services/userService';
 import errorHandler from '../../../lib/errorHandler';
+import ApiError from '../../../lib/ApiError';
 
 
 function setCookieToken(resp: Response, refreshToken: string){
@@ -14,9 +15,11 @@ function setCookieToken(resp: Response, refreshToken: string){
 }
 
 export default {
-    async register(_:any, args: {name: string, email: string, password: string}, context: IApolloContext){
-        const {name, email, password} = args;
+    async register(_:any, args: {name: string, email: string, password: string, repeatPassword: string}){
+        const {name, email, password, repeatPassword} = args;
         try{
+            if(password !== repeatPassword) throw ApiError.badRequest('Пароли не совпадают');
+            
             AuthValidator.nameValidator(name);
             AuthValidator.passwordValidate(password);
             AuthValidator.emailValidate(email);

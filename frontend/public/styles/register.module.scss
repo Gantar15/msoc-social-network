@@ -116,10 +116,14 @@
                     cursor: pointer;
                     border-radius: 10px;
                     font-weight: bold;
-                    padding: 15px 20px;
+                    padding: 0 20px;
+                    min-height: 45px;
                     font-size: 13px;
                     color: $contrastBackgroundColor;
                     background: $gradient;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
             }
             

@@ -11,6 +11,9 @@ interface IPost{
     imgs: string[];
     videos: string[];
     likes: number[];
+    dislikes: number[];
+    shareCount: number;
+    comments: number[];
 }
 
 
@@ -22,6 +25,9 @@ class Post extends Model<IPost, TokenCreationAttributes> implements IPost {
     public imgs!: string[];
     public videos!: string[];
     public likes!: number[];
+    public dislikes!: number[];
+    public shareCount!: number;
+    public comments!: number[];
 }
 Post.init({
     desc: {
@@ -37,6 +43,18 @@ Post.init({
         defaultValue: []
     },
     likes: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: []
+    },
+    dislikes: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: []
+    },
+    shareCount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    comments: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         defaultValue: []
     }

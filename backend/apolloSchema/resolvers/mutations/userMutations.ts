@@ -99,12 +99,12 @@ export default {
 
             if(!user) throw ApiError.badRequest('Данного пользователя не существует');
             if(currentUser.id == user.id) throw ApiError.badRequest('Нельзя подписаться на самого себя');
-            if(!user.followers.includes(currentUser.id.toString())){
+            if(!user.followers.includes(currentUser.id)){
                 await user.update({
-                    followers: [...user.followers, currentUser.id.toString()]
+                    followers: [...user.followers, currentUser.id]
                 });
                 await currentUser.update({
-                    followins: [...currentUser.followins, user.id.toString()]
+                    followins: [...currentUser.followins, user.id]
                 });
                 return true;
             }
@@ -123,7 +123,7 @@ export default {
             const user = await User.findByPk(userId);
 
             if(!user) throw ApiError.badRequest('Данного пользователя не существует');
-            if(user.followers.includes(currentUser.id.toString())){
+            if(user.followers.includes(currentUser.id)){
                 const followers = user.followers.filter(id => +id != currentUser.id);
                 await user.update({
                     followers

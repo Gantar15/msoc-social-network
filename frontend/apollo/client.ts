@@ -9,6 +9,7 @@ import {createUploadLink} from 'apollo-upload-client';
 
 
 const API_URL = 'http://localhost:7700';
+const CLIENT_URL = 'http://localhost:3000';
 
 
 let token: string | null = '';

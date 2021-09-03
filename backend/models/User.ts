@@ -14,8 +14,9 @@ interface IUser{
     email: string,
     password: string,
     profilePicture: string,
-    followers: string[],
-    followins: string[],
+    followers?: number[],
+    followins?: number[],
+    posts?: number[];
     role: 'user' | 'admin' | 'moderator',
     id?: number,
     isActivated: boolean,
@@ -27,8 +28,7 @@ interface IUser{
 }
 
 interface UserCreationAttributes extends Optional<IUser, "id" | 'activationLink' 
-| 'isActivated' | 'role' 
-| 'followins' | 'followers' | 'profilePicture'
+| 'isActivated' | 'role' | 'profilePicture'
 | 'desc' | 'city' | 'from' | 'relationship'> {}
 class User extends Model<IUser, UserCreationAttributes> implements IUser {
     public id!: number;
@@ -36,8 +36,9 @@ class User extends Model<IUser, UserCreationAttributes> implements IUser {
     public email!: string;
     public password!: string;
     public profilePicture!: string;
-    public followers!: string[];
-    public followins!: string[];
+    public followers!: number[];
+    public followins!: number[];
+    public posts!: number[];
     public role!: 'user' | 'admin' | 'moderator';
     public isActivated!: boolean;
     public activationLink!: string;
@@ -87,14 +88,6 @@ export type {User};
         type: DataTypes.STRING,
         defaultValue: ''
     },
-    followers: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        defaultValue: []
-    },
-    followins: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        defaultValue: []
-    },
     role: {
         type: DataTypes.ENUM('user', 'admin', 'moderator'),
         defaultValue: 'user'
@@ -132,6 +125,8 @@ export type {User};
 });
 
 User.hasOne(Token, {foreignKey: 'user'});
-User.hasMany(Post, {foreignKey: 'user'});
+User.hasMany(Post, {foreignKey: 'user', as: 'Post'});
+User.hasMany(User, {foreignKey: 'followers', as: 'Followers'});
+User.hasMany(User, {foreignKey: 'followins', as: 'Followins'});
 
 export default User;

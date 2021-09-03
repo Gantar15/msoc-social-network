@@ -6,6 +6,8 @@ import Input from '@material-ui/core/Input';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import A from '../components/A/A';
+import { useRegister } from '../apollo/mutations/register';
+import { useRouter } from 'next/router';
 
 import scss from '../public/styles/register.module.scss';
 
@@ -13,15 +15,35 @@ import scss from '../public/styles/register.module.scss';
 const Login: NextPage = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const loginRef = useRef<HTMLDivElement>(null);
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+    const {register, data, error, setError, loading} = useRegister(email, password, repeatPassword, name);
+    const router = useRouter();
 
     const showPassHandler = () => {
         setIsPasswordVisible(isVisible => !isVisible);
+    };
+    const registerHandler = () => {
+        if(!loading){
+            register();
+        }
     };
 
     useEffect(() => {
         if(loginRef.current)
             loginRef.current.style.height = loginRef.current.scrollHeight + 'px';
-    }, [])
+    }, []);
+    useEffect(() => {
+        if(data){
+            router.push('/login');
+        }
+    }, [data]);
+    useEffect(() => {
+        if(error)
+            setTimeout(() => setError(null), 5500)
+    }, [error]);
 
     return (
         <main className={scss.login} ref={loginRef}>
@@ -39,15 +61,21 @@ const Login: NextPage = () => {
                         <span className={scss.title}>
                             Зарегестрируйтесь, чтобы продолжить
                         </span>
+                        {error ?
+                            (<div className={scss.error}>
+                                {error.message}
+                            </div>)
+                            : false
+                        }
                         <div className={scss.form}>
-                            <Input className={scss.email} autoFocus={true} placeholder={'имя'} classes={{
+                            <Input onChange={({target}) => setName(target.value)} className={scss.name} autoFocus={true} placeholder={'имя'} classes={{
                                 root: scss.root
                             }}/>
-                            <Input className={scss.email} placeholder={'почта'} classes={{
+                            <Input onChange={({target}) => setEmail(target.value)} className={scss.email} placeholder={'почта'} classes={{
                                 root: scss.root
                             }}/>
                             <div className={scss.password}>
-                                <Input placeholder={'пароль'} classes={{
+                                <Input onChange={({target}) => setPassword(target.value)} placeholder={'пароль'} classes={{
                                     root: scss.root
                                 }}
                                 inputProps={{
@@ -55,7 +83,7 @@ const Login: NextPage = () => {
                                 }}/>
                             </div>
                             <div className={scss.repeatPassword}>
-                                <Input placeholder={'повторите пароль'} classes={{
+                                <Input onChange={({target}) => setRepeatPassword(target.value)} placeholder={'повторите пароль'} classes={{
                                     root: scss.root
                                 }}
                                 inputProps={{
@@ -69,8 +97,10 @@ const Login: NextPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <button>
-                            Создать
+                        <button onClick={registerHandler}>
+                            {
+                                loading ? (<Image src="/imgs/loading.gif" width="30" height="30"/>) : 'Создать'
+                            }
                         </button>
                     </section>
                     <div className={scss.social}>

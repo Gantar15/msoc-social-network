@@ -73,8 +73,8 @@ class UserService{
     async logout(refreshToken: string): Promise<Token | null>{
         if(!refreshToken) throw ApiError.unauthorizedError();
         const token = await Token.findOne({where: {refreshToken}});
-        if(!token) throw ApiError.unauthorizedError();
-        await tokenService.removeToken(token);
+        if(token)
+            await tokenService.removeToken(token);
         return token;
     }
 

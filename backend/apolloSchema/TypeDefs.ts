@@ -69,7 +69,7 @@ export default gql`
 
     #Mutations
     type Mutation {
-        register(name: String!, password: String!, email: String!): User!
+        register(name: String!, password: String!, repeatPassword: String!, email: String!): User!
         login(email: String!, password: String!): UserData!
         logout: String!
         refresh: UserData!
