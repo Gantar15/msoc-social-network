@@ -37,7 +37,8 @@ export default {
     
             const {password, email, 
                 from, city, 
-                desc, name } = userUpdateData;
+                desc, name,
+                relationship } = userUpdateData;
             if(password){
                 AuthValidator.passwordValidate(password);
                 const salt: string = await bcrypt.genSalt(18);
@@ -59,6 +60,7 @@ export default {
             from && AuthValidator.lengthValidate(from, [2, 50], 'Длина названия места вашего рождения должна быть 2-50 символов');
             city && AuthValidator.lengthValidate(city, [2, 50], 'Длина названия города должна быть 2-50 символов');
             desc && AuthValidator.lengthValidate(desc, [2, 50], 'Длина описания должна быть 3-50 символов');
+            if(!relationship || ![1,2,3].some(variant => variant == relationship)) throw ApiError.badRequest('Неверный статус отношений');
             name && AuthValidator.nameValidator(name);
 
             return user;

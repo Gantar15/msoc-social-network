@@ -5,11 +5,22 @@ import type {IGetAllPosts} from '../queries/getAllPosts';
 const addPost = gql`
     mutation addPost($desc: String, $imgs: [Upload!], $videos: [Upload!]){
         createPost(desc: $desc, imgs: $imgs, videos: $videos){
-            user, 
-            desc, 
-            imgs, 
-            videos, 
-            likes
+            user{
+                id, 
+                name,
+                isActivated,
+                email,
+                profilePicture
+            },
+            desc,
+            imgs,
+            videos,
+            likes,
+            id,
+            dislikes,
+            comments,
+            createdAt,
+            shareCount
         }
     }
 `;
@@ -35,15 +46,16 @@ const useAddPost = () => {
         update: (cache, data) => {
             const oldPostsResponse = cache.readQuery<IGetAllPosts>({query: getAllPosts});
             const newPost = data?.data?.createPost;
-            console.log(newPost, oldPostsResponse)
 
             if(oldPostsResponse && newPost){
                 cache.writeQuery({
                     query: getAllPosts,
-                    data: [
-                        ...oldPostsResponse.getTimelinePosts,
-                        newPost
-                    ]
+                    data: {
+                        getTimelinePosts: [
+                            ...oldPostsResponse.getTimelinePosts,
+                            newPost
+                        ]
+                    }
                 });
             }
         }

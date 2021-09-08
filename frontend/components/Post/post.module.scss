@@ -67,6 +67,7 @@
             padding: 0 20px;
 
             p{
+                width: 100%;
                 font-size: 14px;
                 color: $contrastInonsColor;
                 text-overflow: ellipsis;
@@ -74,6 +75,8 @@
                 -webkit-line-clamp: 5;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
+                white-space: break-spaces;
+                word-break: break-all;
             }
             .more{
                 display: none;

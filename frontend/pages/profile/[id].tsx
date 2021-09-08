@@ -1,7 +1,5 @@
-
-import { NextPage } from "next";
-import { useRouter } from 'next/router'
-import Image from 'next/image';
+import type { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import MainContainer from "../../components/MainContainer/MainContainer";
 import ProfileHeader from "../../components/Profile/ProfileHeader/ProfileHeader";
 import Post from '../../components/Post/Post';
@@ -9,25 +7,13 @@ import SubjectIcon from '@material-ui/icons/Subject';
 import SharePost from '../../components/SharePost/SharePost';
 import A from '../../components/A/A';
 import ProfileUserRightbar from "../../components/Profile/ProfileUserRightbar/ProfileUserRightbar";
+import type {IPost} from '../../models/post';
+import validateRefreshToken from '../../utils/validateRefreshToken';
 
 import styles from '../../public/styles/profile.module.scss';
 
 
-const fakePosts: {
-    id: number;
-    user: {
-      id: number;
-      name: string;
-      profilePicture: string;
-    };
-    desc: string;
-    imgs: string[];
-    likes: number[];
-    dislikes: number[];
-    commentsCount: number;
-    createdAt: string;
-    shareCount: number;
-  }[] = [
+const fakePosts: IPost[] = [
     {
       id: 1,
       user: {
@@ -40,7 +26,7 @@ const fakePosts: {
       imgs: ['/imgs/post1.jpg', '/imgs/post1-2.jpg', '/imgs/post1-3.jpg'],
       likes: [1, 2, 3, 4, 5, 9, 111, 1366, 233, 523],
       dislikes: [11, 34, 67, 33],
-      commentsCount: 17,
+      comments: [17],
       shareCount: 7
     },
   ];
@@ -93,3 +79,21 @@ const Profile: NextPage = () => {
 };
 
 export default Profile;
+
+export const getServerSideProps: GetServerSideProps = async ({req}) => {
+    const API_URL = 'http://localhost:7700';
+    const result = await validateRefreshToken(API_URL+'/auth/refreshTokenValidate', req.cookies.refreshToken);
+    if(!result){
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false
+        }
+      };
+    }
+  
+    return {
+      props: {
+      }
+    };
+};

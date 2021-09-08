@@ -1,27 +1,31 @@
 import { gql } from "@apollo/client";
+import type {IPost} from '../../models/post';
 
 
 const getAllPosts = gql`
     query {
         getTimelinePosts{
-            user,
+            user{
+                id, 
+                name,
+                profilePicture
+            },
             desc,
             imgs,
             videos,
             likes,
+            id,
+            dislikes,
+            comments,
+            createdAt,
+            shareCount
         }
     }
 `;
 export default getAllPosts;
 
-interface IGetAllPosts_post{
-    user: number,
-    desc: string,
-    imgs: string[],
-    videos: string[],
-    likes: number[],
-}
+
 interface IGetAllPosts{
-    getTimelinePosts: IGetAllPosts_post[];
+    getTimelinePosts: IPost[];
 }
-export type {IGetAllPosts, IGetAllPosts_post};
+export type {IGetAllPosts};

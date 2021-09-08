@@ -1,6 +1,5 @@
 
 import {FC, memo} from 'react';
-import Image from 'next/image';
 import EditIcon from '@material-ui/icons/Edit';
 import SettingsIcon from '@material-ui/icons/Settings';
 import GavelIcon from '@material-ui/icons/Gavel';
@@ -34,7 +33,7 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                 <div className={styles.avatarBlock}>
                     <div>
                         <div className={styles.networkStatus}></div>
-                        <Image className={styles.avatar} width="120" height="120" layout="responsive" src="/imgs/default_user_logo.jpg"/>
+                        <img className={styles.avatar} src="/imgs/default_user_logo.jpg"/>
                     </div>
                 </div>
                 <div className={styles.nameBlock}>

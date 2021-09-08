@@ -52,11 +52,16 @@ export default gql`
         imgs: [String!]
     }
     type Post{
-        user: Int!
         desc: String
         imgs: [String!]
         videos: [String!]
         likes: [Int!]!
+        user: User!
+        id: Int!
+        dislikes: [Int!]!
+        comments: [Int!]
+        createdAt: String!
+        shareCount: Int!
     }
 
 

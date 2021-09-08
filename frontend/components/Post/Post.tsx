@@ -8,6 +8,7 @@ import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import A from '../A/A';
+import PreloadVideo from '../PreloadVideo/PreloadVideo';
 import moment from 'moment';
 import 'moment/locale/ru';
 import type {IPost} from '../../models/post';
@@ -32,7 +33,7 @@ const Post: FC<{post: IPost}> = ({post}) => {
 
     function formateTime(date: string){
         moment.locale('ru');
-        return moment(date).fromNow();
+        return moment(new Date(+date)).fromNow();
     }
     function likeHandler(){
         setLike(like => isLiked ? like-1 : like+1);
@@ -52,7 +53,11 @@ const Post: FC<{post: IPost}> = ({post}) => {
             <header>
                 <div className={styles.authorBlock}>
                     <A href="/profile/3540" className={styles.authorImageBlock}>
-                        <Image width="45" height="45" className={styles.authorImage} src={post.user.profilePicture}/>
+                        {
+                            post.user.profilePicture ? 
+                            <Image width="45" height="45" className={styles.authorImage} src={post.user.profilePicture}/>
+                            : <Image width="45" height="45" className={styles.authorImage} src={'/imgs/default_user_logo.jpg'}/>
+                        }
                     </A>
                     <div className={styles.nameBlock}>
                         <A href="/profile/3540">
@@ -68,9 +73,13 @@ const Post: FC<{post: IPost}> = ({post}) => {
                     <p ref={descriptionRef}>
                         {post.desc}
                     </p>
-                    <div ref={showMoreRef} onClick={showMoreHandler} className={styles.more} data-active>
-                        Читать дальше
-                    </div>
+                    {
+                        post.desc ?
+                        (<div ref={showMoreRef} onClick={showMoreHandler} className={styles.more} data-active>
+                            Читать дальше
+                        </div>)
+                        : null
+                    }
                 </div>
                 <div className={styles.postMainContent}>
                     {
@@ -82,6 +91,13 @@ const Post: FC<{post: IPost}> = ({post}) => {
                                     </div>
                                     <Image className={styles.image} width="100" height="100" layout="responsive" src={img}/>
                                 </div>
+                            );
+                        })
+                    }
+                    {
+                        post.videos.map((video, index) => {
+                            return (
+                                <PreloadVideo key={index} src={video}/>
                             );
                         })
                     }

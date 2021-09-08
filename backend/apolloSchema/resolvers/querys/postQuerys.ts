@@ -5,6 +5,7 @@ import ApiError from "../../../lib/ApiError";
 import { IApolloContext } from "../../../types/IApolloContext";
 import { checkAuth } from "../../../middlewares/auth-middleware";
 import User from "../../../models/User";
+import { Op } from "sequelize";
 
 
 export default {
@@ -15,7 +16,7 @@ export default {
             const post = await Post.findByPk(postId);
             if(!post) throw ApiError.badRequest('Данного поста не существует');
             return post;
-        } catch(err){
+        } catch(err: any){
             errorHandler(err);
         }
     },
@@ -24,31 +25,35 @@ export default {
         try{
             checkAuth(resp);
 
-            // const currentUser: User = resp.locals.user;
-            // const userPosts = await resp.locals.user.getPosts();
-            // const friedPosts = await Promise.all(currentUser.followins.map(async (friendId) => {
-            //     const friend = await User.findByPk(friendId);
-            //     return friend?.getPosts();
-            // }));
+            const userId = resp.locals.user.id;
+            let followinsId = [];
+            if(resp.locals.user.followins)
+                followinsId = resp.locals.user.followins.map((followin: number) => followin);
 
-            // return [...userPosts, ...friedPosts];
-
-            const posts = await resp.locals.user.findAll({
-                include: {
-                    model: User,
-                    required: true,
-                    include: {
-                        required: true,
-                        model: Post
+            const posts = await Post.findAll({
+                where: {
+                    'user': {
+                        [Op.in]: [userId, ...followinsId]
                     }
                 },
-                order: [[Post, 'createdAt', 'ASC']],
+                order: [['createdAt', 'DESC']],
                 limit,
                 offset
             });
-            
-            return posts;
-        } catch(err){
+
+            const extPosts = await Promise.all(posts.map(async (post: any) => {
+                const userData = await User.findByPk(post.user);
+                return {
+                    ...post.dataValues,
+                    user: {
+                        id: userData?.id,
+                        name: userData?.name,
+                        profilePicture: userData?.profilePicture
+                    }
+                };
+            }));
+            return extPosts;
+        } catch(err: any){
             errorHandler(err);
         }
     }

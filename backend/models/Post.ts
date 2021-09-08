@@ -31,7 +31,7 @@ class Post extends Model<IPost, TokenCreationAttributes> implements IPost {
 }
 Post.init({
     desc: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true
     },
     imgs: {

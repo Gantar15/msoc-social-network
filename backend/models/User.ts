@@ -61,7 +61,7 @@ class User extends Model<IUser, UserCreationAttributes> implements IUser {
 }
 export type {User};
 
- User.init({
+User.init({
     name: {
         type: DataTypes.STRING(50),
         allowNull: false,
@@ -124,9 +124,19 @@ export type {User};
     sequelize
 });
 
+
 User.hasOne(Token, {foreignKey: 'user'});
 User.hasMany(Post, {foreignKey: 'user', as: 'Post'});
-User.hasMany(User, {foreignKey: 'followers', as: 'Followers'});
-User.hasMany(User, {foreignKey: 'followins', as: 'Followins'});
+
+User.hasMany(User, {foreignKey: {
+    name: 'followers',
+    defaultValue: []
+}, as: 'Followers'});
+
+User.hasMany(User, {foreignKey: {
+    name: 'followins',
+    defaultValue: []
+}, as: 'Followins'});
+
 
 export default User;

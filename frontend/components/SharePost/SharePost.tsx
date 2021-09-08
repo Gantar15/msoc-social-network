@@ -68,6 +68,10 @@ const SharePost: FC = () => {
                 return setError('Нельзя прикрепить больше десяти файлов');
 
             addPost(desc, imgs, videos);
+
+            descRef.current!.value = '';
+            photoRef.current!.value = '';
+            videoRef.current!.value = '';
         }
     };
 

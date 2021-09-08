@@ -13,5 +13,6 @@ interface IPost{
     comments: number[];
     createdAt: string;
     shareCount: number;
+    videos: string[];
 }
 export type {IPost};

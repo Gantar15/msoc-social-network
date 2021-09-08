@@ -8,6 +8,7 @@ import {join, parse} from 'path';
 import fs from 'fs';
 import {Readable} from 'stream';
 import {v4 as uuidv4} from 'uuid';
+import User from '../../../models/User';
 
 
 interface InputPost{
@@ -48,15 +49,18 @@ export default {
             } catch(err){
                 console.log(err)
             }
-            if(desc && (desc.length < 1 || desc.length > 2500))
-                throw ApiError.badRequest('Длина описания должна быть до 2500 символов');
             const newPost = await resp.locals.user.createPost({
                 videos: videosPath,
                 desc,
                 imgs: imgsPath,
             });
-            return newPost;
-        } catch(err){
+            const user: any = await User.findByPk(newPost.user);
+
+            return {
+                ...newPost.dataValues,
+                user: user!.dataValues
+            };
+        } catch(err: any){
             errorHandler(err);
         }
     },
@@ -76,7 +80,7 @@ export default {
 
             await post.update(updatePostData);
             return post;
-        } catch(err){
+        } catch(err: any){
             errorHandler(err);
         }
     },
@@ -93,7 +97,7 @@ export default {
 
             await post.destroy();
             return post;
-        } catch(err){
+        } catch(err: any){
             errorHandler(err);
         }
     },
@@ -117,7 +121,7 @@ export default {
             }
 
             return true;
-        } catch(err){
+        } catch(err: any){
             errorHandler(err);
         }
     }
