@@ -1,5 +1,5 @@
 
-import {FC} from 'react';
+import {FC, memo} from 'react';
 
 import styles from './homeRightbar.module.scss';
 
@@ -37,4 +37,4 @@ const HomeRightbar: FC = () => {
     );
 };
 
-export default HomeRightbar; 
+export default memo(HomeRightbar); 

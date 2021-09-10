@@ -2,9 +2,9 @@ import { gql } from "@apollo/client";
 import type {IPost} from '../../models/post';
 
 
-const getAllPosts = gql`
-    query getAllPosts($limit: Int!, $offset: Int!){
-        getTimelinePosts(limit: $limit, offset: $offset){
+const getUserPosts = gql`
+    query getUserPosts($userId: Int!, $limit: Int!, $offset: Int!){
+        getUserPosts(userId: $userId, limit: $limit, offset: $offset){
             user{
                 id, 
                 name,
@@ -22,10 +22,10 @@ const getAllPosts = gql`
         }
     }
 `;
-export default getAllPosts;
+export default getUserPosts;
 
 
-interface IGetAllPosts{
-    getTimelinePosts: IPost[];
+interface IGetUserPosts{
+    getUserPosts: IPost[];
 }
-export type {IGetAllPosts};
+export type {IGetUserPosts};

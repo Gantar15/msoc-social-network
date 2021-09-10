@@ -69,7 +69,8 @@ export default gql`
     type Query{
         getUser(userId: Int!): User!
         getPost(postId: Int!): Post!
-        getTimelinePosts: [Post!]!
+        getUserPosts(userId: Int!, limit: Int!, offset: Int!): [Post!]!
+        getTimelinePosts(limit: Int!, offset: Int!): [Post!]!
     }
 
     #Mutations
@@ -87,5 +88,6 @@ export default gql`
         updatePost(postId: Int!, post: InputPost!): Post!
         deletePost(postId: Int!): Post!
         likePost(postId: Int!): Boolean!
+        dislikePost(postId: Int!): Boolean!
     }
 `;

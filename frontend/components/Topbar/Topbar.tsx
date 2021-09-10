@@ -1,5 +1,5 @@
 
-import { FC, useEffect } from 'react';
+import { FC, useEffect, memo } from 'react';
 import {Search, Notifications} from '@material-ui/icons';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useLazyQuery, useQuery } from '@apollo/client';
@@ -55,4 +55,4 @@ const Topbar: FC = () => {
     );
 };
 
-export default Topbar;
+export default memo(Topbar);

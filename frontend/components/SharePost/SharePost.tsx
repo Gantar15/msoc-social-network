@@ -1,4 +1,4 @@
-import {FC, useEffect, useState, useRef} from 'react';
+import {FC, useEffect, useState, useRef, memo} from 'react';
 import A from '../A/A';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import MovieIcon from '@material-ui/icons/Movie';
@@ -126,4 +126,4 @@ const SharePost: FC = () => {
     );
 };
 
-export default SharePost;
+export default memo(SharePost);

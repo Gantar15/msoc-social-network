@@ -1,5 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import getAllPosts from "../queries/getAllPosts";
+import getUserPosts, { IGetUserPosts } from "../queries/getUserPosts";
 import type {IGetAllPosts} from '../queries/getAllPosts';
 
 const addPost = gql`
@@ -44,19 +45,36 @@ const useAddPost = () => {
             desc, imgs, videos
         },
         update: (cache, data) => {
-            const oldPostsResponse = cache.readQuery<IGetAllPosts>({query: getAllPosts});
             const newPost = data?.data?.createPost;
-
-            if(oldPostsResponse && newPost){
+            const oldAllPostsResponse = cache.readQuery<IGetAllPosts>({query: getAllPosts});
+            
+            if(oldAllPostsResponse && newPost){
                 cache.writeQuery({
                     query: getAllPosts,
                     data: {
                         getTimelinePosts: [
-                            ...oldPostsResponse.getTimelinePosts,
-                            newPost
+                            newPost,
+                            ...oldAllPostsResponse.getTimelinePosts
                         ]
                     }
                 });
+            }
+            if(newPost){
+                const oldUserPostsResponse = cache.readQuery<IGetUserPosts>({query: getUserPosts, variables: {
+                    userId: newPost?.user
+                }});
+                console.log(oldUserPostsResponse)
+                if(oldUserPostsResponse){
+                    cache.writeQuery({
+                        query: getUserPosts,
+                        data: {
+                            getUserPosts: [
+                                newPost,
+                                ...oldUserPostsResponse.getUserPosts
+                            ]
+                        }
+                    });
+                }
             }
         }
     })};

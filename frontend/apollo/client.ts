@@ -1,5 +1,5 @@
 
-import {ApolloClient, HttpLink, from} from '@apollo/client';
+import {ApolloClient, from} from '@apollo/client';
 import { onError } from "@apollo/client/link/error";
 import {isBrowser} from '../utils/ssrUtils';
 import refreshTokens from '../utils/refresh';
@@ -62,6 +62,7 @@ const uploadLink = createUploadLink({
 });
 
 const client = new ApolloClient({
+  ssrMode: !isBrowser(),
   cache: cache,
   link: from([errorLink, uploadLink])
 });

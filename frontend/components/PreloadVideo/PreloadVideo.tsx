@@ -19,23 +19,29 @@ const PreloadVideo: FC<IProps> = ({src}) => {
         this.currentTime = 1;
     }
     const seekendHandler = function(this: any) {
-        const context = canvasRef.current!.getContext('2d');
-        context!.drawImage(videoRef.current!, 0, 0, 300, 300);
-        const dataURL = canvasRef.current!.toDataURL('image/png');
-    
-        imageRef.current!.setAttribute('src', dataURL);
+        if(canvasRef.current){
+            canvasRef.current.width = 1920;
+            canvasRef.current.height = 1080;
+            const context = canvasRef.current!.getContext('2d');
+            context!.drawImage(videoRef.current!, 0, 0, 1920, 1080);
+            const dataURL = canvasRef.current!.toDataURL('image/png');
+        
+            imageRef.current!.setAttribute('src', dataURL);
+        }
     };
     useEffect(() => {
-        videoRef.current!.addEventListener('loadeddata', loadeddataHandler);
-        videoRef.current!.addEventListener('seeked', seekendHandler);
+        if(videoRef.current){
+            videoRef.current.addEventListener('loadeddata', loadeddataHandler);
+            videoRef.current.addEventListener('seeked', seekendHandler);
 
-        return () => {
-            if(videoRef.current){
-                videoRef.current.removeEventListener('loadeddata', loadeddataHandler);
-                videoRef.current.removeEventListener('seeked', seekendHandler);
-            }
-        };
-    }, []);
+            return () => {
+                if(videoRef.current){
+                    videoRef.current.removeEventListener('loadeddata', loadeddataHandler);
+                    videoRef.current.removeEventListener('seeked', seekendHandler);
+                }
+            };
+        }
+    }, [videoRef.current]);
 
     return (
         <div className={styles.postMainContentItem} data-video-item>

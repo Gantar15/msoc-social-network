@@ -1,5 +1,5 @@
 
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import Image from 'next/image';
 import A from '../../../components/A/A';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -68,4 +68,4 @@ const ProfileUserRightbar: FC<IProps> = ({count, title}) => {
     );
 };
 
-export default ProfileUserRightbar;
+export default memo(ProfileUserRightbar);

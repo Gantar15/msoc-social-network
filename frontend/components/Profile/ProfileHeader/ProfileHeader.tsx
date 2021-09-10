@@ -3,16 +3,26 @@ import {FC, memo} from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import SettingsIcon from '@material-ui/icons/Settings';
 import GavelIcon from '@material-ui/icons/Gavel';
-import A from '../../A/A';
+import { useQuery } from '@apollo/client';
+import { IAuthUser, IUser } from '../../../models/user';
+import getAuthUser from '../../../apollo/queries/getAuthUser';
+import getUser from '../../../apollo/queries/getUser';
 
 import styles from './profileHeader.module.scss';
 
 
 interface IProps{
-    userId: number;
+    userId: number | undefined;
 }
 
 const ProfileHeader: FC<IProps> = ({userId}) => {
+    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+    let {data: userData} = useQuery<{getUser: IUser}>(getUser, {
+        variables: {
+            userId: +userId!
+        }
+    });
+    
     return (
         <header className={styles.profileHeader}>
             <div className={styles.profileOptions}>
@@ -37,10 +47,14 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                     </div>
                 </div>
                 <div className={styles.nameBlock}>
-                    <span className={styles.name}>Павловский Егор Николаевич</span>
-                    <button className={styles.unsubscribe}>
-                        Отписаться
-                    </button>
+                    <span className={styles.name}>{userData?.getUser.name}</span>
+                    {
+                        userData?.getUser && authUser?.getAuthUser && userData?.getUser.id != authUser?.getAuthUser.id ?
+                        (<button className={styles.unsubscribe}>
+                            Отписаться
+                        </button>)
+                        : null
+                    }
                 </div>
             </div>
             <div className={styles.userInfoBlock}>
@@ -50,7 +64,9 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                             Город:
                         </span>
                         <span className={styles.info}>
-                            Львов
+                            {
+                                userData?.getUser.city ?? '...'
+                            }
                         </span>
                     </div>
                 </div>
@@ -60,7 +76,9 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                             Родина:
                         </span>
                         <span className={styles.info}>
-                            Казахстан ул.Эйбой д.112 к.23
+                            {
+                                userData?.getUser.city ?? '...'
+                            }
                         </span>
                     </div>
                 </div>
@@ -70,7 +88,9 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                             Отношения:
                         </span>
                         <span className={styles.info}>
-                            Отношения (хочу шаверму очень сильно)
+                            {
+                                userData?.getUser.relationship ?? '...'
+                            }
                         </span>
                     </div>
                 </div>

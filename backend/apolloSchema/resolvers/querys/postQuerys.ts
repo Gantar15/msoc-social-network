@@ -56,5 +56,39 @@ export default {
         } catch(err: any){
             errorHandler(err);
         }
+    },
+
+    async getUserPosts(_: any, {userId, limit, offset}: {userId: number, limit: number, offset: number}, {resp}: IApolloContext){
+        try{
+            checkAuth(resp);
+
+            const userData = await User.findByPk(userId);
+            if(!userData){
+                throw ApiError.badRequest('Указанного пользователя не существует');
+            }
+
+            const posts = await Post.findAll({
+                where: {
+                    'user': userId
+                },
+                order: [['createdAt', 'DESC']],
+                limit,
+                offset
+            });
+
+            const extPosts = await Promise.all(posts.map(async (post: any) => {
+                return {
+                    ...post.dataValues,
+                    user: {
+                        id: userData?.id,
+                        name: userData?.name,
+                        profilePicture: userData?.profilePicture
+                    }
+                };
+            }));
+            return extPosts;
+        } catch(err: any){
+            errorHandler(err);
+        }
     }
 };

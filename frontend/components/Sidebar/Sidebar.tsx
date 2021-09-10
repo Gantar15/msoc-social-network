@@ -1,5 +1,5 @@
 
-import {FC, useState} from 'react';
+import {FC, memo} from 'react';
 import Image from 'next/image';
 import A from '../A/A';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -61,4 +61,4 @@ const Sidebar: FC<IProps> = ({activePage}) => {
     );
 };
 
-export default Sidebar;
+export default memo(Sidebar);

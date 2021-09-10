@@ -74,6 +74,7 @@
                 display: -webkit-box;
                 -webkit-line-clamp: 5;
                 -webkit-box-orient: vertical;
+                line-height: 17px;
                 overflow: hidden;
                 white-space: break-spaces;
                 word-break: break-all;
@@ -99,7 +100,7 @@
 
             &Item{
                 cursor: pointer;
-                flex-grow: 1;
+                flex: 1;
                 min-width: 200px;
                 border-radius: 10px;
                 margin-top: 10px;

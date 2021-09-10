@@ -1,5 +1,5 @@
 
-import {FC, useRef, memo, useState} from 'react';
+import {FC, useRef, memo, useState, useEffect} from 'react';
 import Image from 'next/image';
 import ShareIcon from '@material-ui/icons/Share';
 import MessageIcon from '@material-ui/icons/Message';
@@ -7,11 +7,13 @@ import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import type {IPost} from '../../models/post';
+import useLikePost from '../../apollo/mutations/likePost';
+import useDislikePost from '../../apollo/mutations/dislikePost';
 import A from '../A/A';
 import PreloadVideo from '../PreloadVideo/PreloadVideo';
 import moment from 'moment';
 import 'moment/locale/ru';
-import type {IPost} from '../../models/post';
 
 import styles from './post.module.scss';
 
@@ -23,6 +25,8 @@ const Post: FC<{post: IPost}> = ({post}) => {
     const [dislike, setDislike] = useState(post.dislikes.length);
     const [isLiked, setIsLiked] = useState(post.likes.some(userId => userId == 1));
     const [isDisliked, setIsDisliked] = useState(post.dislikes.some(userId => userId == 1));
+    const {likePost} = useLikePost(post.id);
+    const {dislikePost} = useDislikePost(post.id);
 
     const showMoreHandler = () => {
         if(descriptionRef.current && showMoreRef.current){
@@ -31,17 +35,35 @@ const Post: FC<{post: IPost}> = ({post}) => {
         }
     };
 
+    useEffect(() => {
+        if(descriptionRef?.current && showMoreRef?.current){
+            descriptionRef.current.style.webkitLineClamp = 'unset';
+            Math.ceil(
+                descriptionRef.current.offsetHeight / Number.parseInt(
+                    getComputedStyle(descriptionRef!.current!).lineHeight
+                )
+            ) <= 5 ? 
+            showMoreRef.current.style.display = 'none' 
+            : null;
+            descriptionRef.current.style.webkitLineClamp = '';
+        }
+    }, [descriptionRef.current, showMoreRef.current]);
+
     function formateTime(date: string){
         moment.locale('ru');
         return moment(new Date(+date)).fromNow();
     }
     function likeHandler(){
+        likePost();
+
         setLike(like => isLiked ? like-1 : like+1);
         setDislike(dislike => isDisliked ? dislike-1 : dislike);
         setIsLiked(isLiked => !isLiked);
         setIsDisliked(false);
     }
     function dislikeHandler(){
+        dislikePost();
+
         setDislike(dislike => isDisliked ? dislike-1 : dislike+1);
         setLike(like => isLiked ? like-1 : like);
         setIsDisliked(isDisliked => !isDisliked);
@@ -81,27 +103,31 @@ const Post: FC<{post: IPost}> = ({post}) => {
                         : null
                     }
                 </div>
-                <div className={styles.postMainContent}>
-                    {
-                        post.imgs.map((img, index) => {
-                            return (
-                                <div key={index} className={styles.postMainContentItem} data-image-item>
-                                    <div className={styles.backdropBlock}>
-                                        <FullscreenIcon className={styles.icon}/>
+                {
+                    post.imgs.length + post.videos.length != 0 ?
+                    (<div className={styles.postMainContent}>
+                        {
+                            post.imgs.map((img, index) => {
+                                return (
+                                    <div key={index} className={styles.postMainContentItem} data-image-item>
+                                        <div className={styles.backdropBlock}>
+                                            <FullscreenIcon className={styles.icon}/>
+                                        </div>
+                                        <Image className={styles.image} width="100" height="100" layout="responsive" src={img}/>
                                     </div>
-                                    <Image className={styles.image} width="100" height="100" layout="responsive" src={img}/>
-                                </div>
-                            );
-                        })
-                    }
-                    {
-                        post.videos.map((video, index) => {
-                            return (
-                                <PreloadVideo key={index} src={video}/>
-                            );
-                        })
-                    }
-                </div>
+                                );
+                            })
+                        }
+                        {
+                            post.videos.map((video, index) => {
+                                return (
+                                    <PreloadVideo key={index} src={video}/>
+                                );
+                            })
+                        }
+                    </div>)
+                   : null 
+                }
             </section>
             <footer>
                 <ul className={styles.options}>

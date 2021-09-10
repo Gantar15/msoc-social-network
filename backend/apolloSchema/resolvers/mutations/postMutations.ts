@@ -109,14 +109,48 @@ export default {
             const post = await Post.findByPk(postId);
             if(!post) throw ApiError.badRequest('Пост не найден');
 
-            const userId = resp.locals.user.id;
-            if(post.likes.includes(userId)){
+            const authUserId = resp.locals.user.id;
+            if(post.likes.includes(authUserId)){
                 await post.update({
-                    likes: post.likes.filter(userId => userId != resp.locals.user.id)
+                    likes: post.likes.filter(user => user != authUserId)
                 });
             } 
             else{
-                post.likes = [...post.likes, userId];
+                if(post.dislikes.includes(authUserId)){
+                    await post.update({
+                        dislikes: post.dislikes.filter(user => user != authUserId)
+                    });
+                }
+                post.likes = [...post.likes, authUserId];
+                await post.save();
+            }
+
+            return true;
+        } catch(err: any){
+            errorHandler(err);
+        }
+    },
+
+    async dislikePost(_: any, {postId}: {postId: number}, {resp}: IApolloContext){
+        try{
+            checkAuth(resp);
+
+            const post = await Post.findByPk(postId);
+            if(!post) throw ApiError.badRequest('Пост не найден');
+
+            const authUserId = resp.locals.user.id;
+            if(post.dislikes.includes(authUserId)){
+                await post.update({
+                    dislikes: post.dislikes.filter(user => user != authUserId)
+                });
+            }
+            else{
+                if(post.likes.includes(authUserId)){
+                    await post.update({
+                        likes: post.likes.filter(user => user != authUserId)
+                    });
+                } 
+                post.dislikes = [...post.dislikes, authUserId];
                 await post.save();
             }
 
