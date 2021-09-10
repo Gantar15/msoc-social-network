@@ -21,14 +21,14 @@ import styles from '../../public/styles/profile.module.scss';
 
 const Profile: NextPage = () => {
     const router = useRouter();
-    const profileUserId = router.query.id;
+    const profileUserId: number = +router.query.id!; 
 
     const {refresh} = useRefresh();
     const postsLimit = 20;
     const [postsOffset, setPostsOffset] = useState(0);
     const {data: posts, loading: postsLoading, error: postsError} = useQuery<IGetUserPosts>(getUserPosts, {
         variables: {
-            userId: +profileUserId!,
+            userId: profileUserId,
             limit: postsLimit,
             offset: postsOffset
         }
@@ -51,7 +51,7 @@ const Profile: NextPage = () => {
     return (
         <MainContainer activePage={1} title="Profile">
             <main className={styles.profile}>
-                <ProfileHeader userId={+profileUserId!}/>
+                <ProfileHeader userId={profileUserId}/>
                 <section className={styles.mainContent}>
                     <section>
                         <SharePost/>

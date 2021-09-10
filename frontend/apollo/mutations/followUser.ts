@@ -15,3 +15,4 @@ const useFollowUser = (userId: number) => {
 
     return {followUser: follow};
 };
+export default useFollowUser;

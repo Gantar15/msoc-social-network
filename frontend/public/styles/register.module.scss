@@ -6,7 +6,28 @@
     align-items: center;
     justify-content: center;
     width: calc(100vw - 20px);
+    min-height: 100vh;
     
+    @media all and (max-width: 780px) {
+        .loginLeft{
+            display: none;
+        }
+
+        .loginRight{
+            justify-content: center !important;
+
+            div.logoBlock{
+                margin-left: -5px;
+            }
+            div.loginBlock{
+                align-items: center;
+
+                .greeting{
+                    text-align: center;
+                }
+            }
+        }
+    }
     .loginLeft{
         flex: 50;
         width: 50%;

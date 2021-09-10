@@ -32,8 +32,17 @@ const Login: NextPage = () => {
     };
 
     useEffect(() => {
-        if(loginRef.current)
-            loginRef.current.style.height = loginRef.current.scrollHeight + 'px';
+        const loginResizeHandler = () => {
+            loginRef!.current!.style.height = loginRef!.current!.scrollHeight + 'px';
+        };
+        if(loginRef.current){
+            window.addEventListener('resize', loginResizeHandler);
+            loginRef!.current!.style.height = loginRef!.current!.scrollHeight + 'px';
+        }
+
+        return () => {
+            window.removeEventListener('resize', loginResizeHandler);
+        };
     }, []);
     useEffect(() => {
         if(data){

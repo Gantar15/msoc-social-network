@@ -4,6 +4,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import SettingsIcon from '@material-ui/icons/Settings';
 import GavelIcon from '@material-ui/icons/Gavel';
 import { useQuery } from '@apollo/client';
+import useUnfollowUser from '../../../apollo/mutations/unfollowUser';
+import useFollowUser from '../../../apollo/mutations/followUser';
 import { IAuthUser, IUser } from '../../../models/user';
 import getAuthUser from '../../../apollo/queries/getAuthUser';
 import getUser from '../../../apollo/queries/getUser';
@@ -12,16 +14,18 @@ import styles from './profileHeader.module.scss';
 
 
 interface IProps{
-    userId: number | undefined;
+    userId: number;
 }
 
 const ProfileHeader: FC<IProps> = ({userId}) => {
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     let {data: userData} = useQuery<{getUser: IUser}>(getUser, {
         variables: {
-            userId: +userId!
+            userId: userId
         }
     });
+    const {followUser} = useFollowUser(userId);
+    const {unfollowUser} = useUnfollowUser(userId);
     
     return (
         <header className={styles.profileHeader}>

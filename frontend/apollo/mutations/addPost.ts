@@ -63,7 +63,6 @@ const useAddPost = () => {
                 const oldUserPostsResponse = cache.readQuery<IGetUserPosts>({query: getUserPosts, variables: {
                     userId: newPost?.user
                 }});
-                console.log(oldUserPostsResponse)
                 if(oldUserPostsResponse){
                     cache.writeQuery({
                         query: getUserPosts,
