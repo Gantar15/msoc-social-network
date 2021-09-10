@@ -15,7 +15,7 @@ interface IUser{
     followers: string[],
     followins: string[],
     role: 'user' | 'admin' | 'moderator',
-    id?: number,
+    id: number,
     isActivated: boolean,
     activationLink: string,
     desc: string,

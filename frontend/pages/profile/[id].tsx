@@ -15,6 +15,10 @@ import type {IGetUserPosts} from '../../apollo/queries/getUserPosts';
 import { IAuthUser, IUser } from '../../models/user';
 import getAuthUser from '../../apollo/queries/getAuthUser';
 import getUser from '../../apollo/queries/getUser';
+import getFollowers, {getFollowers_Query} from '../../apollo/queries/getFollowers';
+import getFollowins, {getFollowins_Query} from '../../apollo/queries/getFollowins';
+import getFollowersCount, {getFollowersCount_Query} from '../../apollo/queries/getFollowersCount';
+import getFollowinsCount, {getFollowinsCount_Query} from '../../apollo/queries/getFollowinsCount';
 
 import styles from '../../public/styles/profile.module.scss';
 
@@ -34,19 +38,38 @@ const Profile: NextPage = () => {
         }
     });
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
-    let [getUserQuery, {data: authUserData}] = useLazyQuery<{getUser: IUser}>(getUser);
+    const [followersCountExecute, {data: followersCount}] = useLazyQuery<getFollowersCount_Query>(getFollowersCount);
+    const [followinsCountExecute, {data: followinsCount}] = useLazyQuery<getFollowinsCount_Query>(getFollowinsCount);
+    const [getFollowersExecute, {data: followersData}] = useLazyQuery<getFollowers_Query>(getFollowers);
+    const [getFollowinsExecute, {data: followinsData}] = useLazyQuery<getFollowins_Query>(getFollowins);
 
     useEffect(() => {
         refresh();
     }, []);
     useEffect(() => {
-        if(authUser?.getAuthUser)
-            getUserQuery({
+        if(authUser?.getAuthUser){
+            followersCountExecute({
                 variables: {
                     userId: authUser.getAuthUser.id
                 }
             });
-    }, [authUser]); 
+            followinsCountExecute({
+                variables: {
+                    userId: authUser.getAuthUser.id
+                }
+            });
+            getFollowersExecute({variables: {
+                userId: authUser.getAuthUser.id,
+                offset: 0,
+                limit: 5
+            }});
+            getFollowinsExecute({variables: {
+                userId: authUser.getAuthUser.id,
+                offset: 0,
+                limit: 5
+            }});
+        }
+    }, [authUser]);
 
     return (
         <MainContainer activePage={1} title="Profile">
@@ -85,16 +108,23 @@ const Profile: NextPage = () => {
                     </section>
 
                     <section>
-                        <ProfileUserRightbar title={'Подписчики'} count={657}/>
+                        {
+                            followersCount ?
+                                'Загрузка...' 
+                                :<ProfileUserRightbar title={'Подписчики'} users={[]} count={2}/>
+                        }
 
-                        <ProfileUserRightbar title={'Подписки'} count={132}/>
+                        {
+                            followinsCount ?
+                                'Загрузка...' 
+                                :<ProfileUserRightbar title={'Подписки'} users={[]} count={6}/>
+                        }
                     </section>
                 </section>
             </main>
         </MainContainer>
     );
-};
-
+};  
 export default Profile;
 
 export const getServerSideProps: GetServerSideProps = async ({req}) => {

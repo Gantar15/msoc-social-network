@@ -1,0 +1,51 @@
+
+@import '/public/styles/variables.scss';
+
+.userMicroInf{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:nth-of-type(n+2){
+        margin-top: 13px;
+    }
+    .userInfo{
+        display: flex;
+        align-items: center;
+
+        .avatar{
+            min-width: 40px;
+            height: 40px;
+            position: relative;
+
+            .networkStatus{
+                position: absolute;
+                box-sizing: content-box;
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                border: 2px solid $contrastBackgroundColor;
+                bottom: -3px;
+                right: -3px;
+                
+                &.online{
+                    background-color: $greenOnline;
+                }
+                &.offline{
+                    background-color: $placeholderFontColor;
+                }
+            }
+            .img{
+                border-radius: 7px;
+            }
+        }
+        .name{
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: $mainFontColor;
+            padding-left: 10px;
+        }
+    }
+}

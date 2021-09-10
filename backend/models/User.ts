@@ -118,7 +118,15 @@ User.init({
             len: [2, 50]
         }
     },
-    relationship: DataTypes.ENUM('1','2','3')
+    relationship: DataTypes.ENUM('1','2','3'),
+    followers: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: []
+    },
+    followins: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: []
+    }
 },{
     tableName: 'Users',
     sequelize
@@ -127,16 +135,6 @@ User.init({
 
 User.hasOne(Token, {foreignKey: 'user'});
 User.hasMany(Post, {foreignKey: 'user', as: 'Post'});
-
-User.hasMany(User, {foreignKey: {
-    name: 'followers',
-    defaultValue: []
-}, as: 'Followers'});
-
-User.hasMany(User, {foreignKey: {
-    name: 'followins',
-    defaultValue: []
-}, as: 'Followins'});
 
 
 export default User;

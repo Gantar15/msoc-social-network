@@ -68,9 +68,16 @@ export default gql`
     #Querys
     type Query{
         getUser(userId: Int!): User!
+
         getPost(postId: Int!): Post!
         getUserPosts(userId: Int!, limit: Int!, offset: Int!): [Post!]!
+        getUserPostsCount(userId: Int!): Int!
         getTimelinePosts(limit: Int!, offset: Int!): [Post!]!
+
+        getFollowers(userId: Int!, limit: Int!, offset: Int!): [User!]!
+        getFollowins(userId: Int!, limit: Int!, offset: Int!): [User!]!
+        getFollowersCount(userId: Int!): Int!
+        getFollowinsCount(userId: Int!): Int!
     }
 
     #Mutations
