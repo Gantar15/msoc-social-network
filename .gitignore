@@ -4,3 +4,8 @@ backend/files/posts_videos/
 backend/files/user_icons/
 
 frontend/node_modules
+# next.js
+frontend/.next/
+frontend/out/
+# production
+frontend/build
