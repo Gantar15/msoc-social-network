@@ -26,19 +26,25 @@ const ProfileUserRightbar: FC<IProps> = ({count, title, users}) => {
                     </div>
                 </div>
             </header>
-            <section className={styles.users}>
-                {
-                    users.map(user => {
-                        <UserMicroInf key={user.id} user={user}/>
-                    })
-                }
-            </section>
-            <div className={styles.more}>
-                <div>
-                    <span>Смотреть все</span>
-                    <KeyboardArrowRightIcon className={styles.icon}/>
-                </div>
-            </div>
+            {
+                count ? (
+                    <>
+                        <section className={styles.users}>
+                            {
+                                users.map(user => {
+                                    <UserMicroInf key={user.id} user={user}/>
+                                })
+                            }
+                        </section>
+                        <div className={styles.more}>
+                            <div>
+                                <span>Смотреть все</span>
+                                <KeyboardArrowRightIcon className={styles.icon}/>
+                            </div>
+                        </div>
+                    </>
+                ) : null
+            }
         </div>
     );
 };

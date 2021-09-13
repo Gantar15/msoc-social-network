@@ -70,9 +70,11 @@ export default gql`
         getUser(userId: Int!): User!
 
         getPost(postId: Int!): Post!
+        
         getUserPosts(userId: Int!, limit: Int!, offset: Int!): [Post!]!
         getUserPostsCount(userId: Int!): Int!
         getTimelinePosts(limit: Int!, offset: Int!): [Post!]!
+        getTimelinePostsCount: Int!
 
         getFollowers(userId: Int!, limit: Int!, offset: Int!): [User!]!
         getFollowins(userId: Int!, limit: Int!, offset: Int!): [User!]!

@@ -29,10 +29,10 @@ const Home: NextPage<IProps> = () => {
       offset: postsOffset
     }
   });
-  
+
   useEffect(() => {
     getPosts()
-      refresh();
+    refresh();
   }, []);
 
   return (

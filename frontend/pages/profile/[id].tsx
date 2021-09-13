@@ -15,6 +15,7 @@ import type {IGetUserPosts} from '../../apollo/queries/getUserPosts';
 import { IAuthUser, IUser } from '../../models/user';
 import getAuthUser from '../../apollo/queries/getAuthUser';
 import getUser from '../../apollo/queries/getUser';
+import getUserPostsCount, {userPostsCount_Query} from '../../apollo/queries/getUserPostsCount';
 import getFollowers, {getFollowers_Query} from '../../apollo/queries/getFollowers';
 import getFollowins, {getFollowins_Query} from '../../apollo/queries/getFollowins';
 import getFollowersCount, {getFollowersCount_Query} from '../../apollo/queries/getFollowersCount';
@@ -42,6 +43,7 @@ const Profile: NextPage = () => {
     const [followinsCountExecute, {data: followinsCount}] = useLazyQuery<getFollowinsCount_Query>(getFollowinsCount);
     const [getFollowersExecute, {data: followersData}] = useLazyQuery<getFollowers_Query>(getFollowers);
     const [getFollowinsExecute, {data: followinsData}] = useLazyQuery<getFollowins_Query>(getFollowins);
+    const [userPostsCountExecute, {data: userPostsCount}] = useLazyQuery<userPostsCount_Query>(getUserPostsCount);
 
     useEffect(() => {
         refresh();
@@ -68,6 +70,9 @@ const Profile: NextPage = () => {
                 offset: 0,
                 limit: 5
             }});
+            userPostsCountExecute({variables: {
+                userId: authUser.getAuthUser.id
+            }});
         }
     }, [authUser]);
 
@@ -90,7 +95,9 @@ const Profile: NextPage = () => {
                                 </div>
                                 <div className={styles.postsCounter}>
                                     <SubjectIcon className={styles.icon}/>
-                                    <span>76</span>
+                                    <span>{
+                                        userPostsCount?.getUserPostsCount 
+                                    }</span>
                                 </div>
                             </header>
                             <div className={styles.posts}>
@@ -109,15 +116,15 @@ const Profile: NextPage = () => {
 
                     <section>
                         {
-                            followersCount ?
-                                'Загрузка...' 
-                                :<ProfileUserRightbar title={'Подписчики'} users={[]} count={2}/>
+                            !followersCount ?
+                                'Загрузка...'
+                                : !followersData ? null : <ProfileUserRightbar title={'Подписчики'} users={followersData.getFollowers} count={followersCount.getFollowersCount}/>
                         }
 
                         {
-                            followinsCount ?
-                                'Загрузка...' 
-                                :<ProfileUserRightbar title={'Подписки'} users={[]} count={6}/>
+                            !followinsCount ?
+                                'Загрузка...'
+                                : !followinsData ? null : <ProfileUserRightbar title={'Подписки'} users={followinsData.getFollowins} count={followinsCount.getFollowinsCount}/>
                         }
                     </section>
                 </section>
