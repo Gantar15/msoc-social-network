@@ -4,7 +4,7 @@ import { IUser } from '../../models/user';
 const getFollowers = gql`
     query getFollowers($userId: Int!, $limit: Int!, $offset: Int!){
         getFollowers(userId: $userId, limit: $limit, offset: $offset){
-            name
+            name, id
         }
     }
 `;

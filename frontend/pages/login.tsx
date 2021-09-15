@@ -19,7 +19,7 @@ const Login: NextPage = () => {
     const loginRef = useRef<HTMLDivElement>(null);
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    const {login, data, error, setError, loading} = useLogin(email, password);
+    const {login, data, error, setError, loading} = useLogin();
     const router = useRouter();
 
     const showPassHandler = () => {
@@ -30,7 +30,7 @@ const Login: NextPage = () => {
     };
     const loginHandler = () => {
         if(!loading){
-            login();
+            login(email, password, isRemember);
         }
     };
 

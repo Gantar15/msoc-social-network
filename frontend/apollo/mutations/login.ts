@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import setAuthUser from "./setAuthUser";
 
 const login = gql`
-    mutation login($email: String!, $password: String!){
-        login(email: $email, password: $password){
+    mutation login($email: String!, $password: String!, $isSession: Boolean!){
+        login(email: $email, password: $password, isSession: $isSession){
             accessToken,
             user{
                 name,
@@ -17,12 +17,9 @@ const login = gql`
     }
 `;
 
-export const useLogin = (email: string, password: string) => {
+export const useLogin = () => {
     let [error, setError] = useState<any>();
     const [mutate, {data: loginData, loading}] = useMutation(login, {
-        variables: {
-            email, password
-        },
         onError: err => setError(err)
     });
     useEffect(() => {
@@ -32,5 +29,7 @@ export const useLogin = (email: string, password: string) => {
         }
     }, [loginData]);
 
-    return {login: mutate, data: loginData, loading, error, setError};
+    return {login: (email: string, password: string, isSession: boolean) => mutate({variables: {
+        email, password, isSession
+    }}), data: loginData, loading, error, setError};
 };

@@ -6,6 +6,7 @@ import { useLazyQuery, useQuery } from '@apollo/client';
 import getUser from '../../apollo/queries/getUser';
 import getAuthUser from '../../apollo/queries/getAuthUser';
 import type { IAuthUser, IUser } from '../../models/user';
+import { useLogout } from '../../apollo/mutations/logout';
 
 import styles from './topbar.module.scss';
 
@@ -13,6 +14,7 @@ import styles from './topbar.module.scss';
 const Topbar: FC = () => {
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     let [getUserQuery, {data: authUserData}] = useLazyQuery<{getUser: IUser}>(getUser);
+    const {logout} = useLogout();
 
     useEffect(() => {
         if(authUser?.getAuthUser)
@@ -39,7 +41,7 @@ const Topbar: FC = () => {
                             <div className={styles.topbarIconCounter}>3</div>
                         </div>
                     </div>
-                    <div className={styles.userIconBlock}>
+                    <div className={styles.userIconBlock} onClick={() => logout()}>
                         <img width="40" height="40" src={
                             authUserData?.getUser.profilePicture ? authUserData.getUser.profilePicture
                             : '/imgs/default_user_logo.jpg'

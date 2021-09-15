@@ -3,7 +3,9 @@ import {FC, memo} from 'react';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import UserMicroInf from '../../UserMicroInf/UserMicroInf';
-import type {IUser} from '../../../models/user';
+import { IAuthUser, IUser } from '../../../models/user';
+import { useQuery } from '@apollo/client';
+import getAuthUser from '../../../apollo/queries/getAuthUser';
 
 import styles from './profileUserRightbar.module.scss';
 
@@ -15,6 +17,8 @@ interface IProps{
 }
 
 const ProfileUserRightbar: FC<IProps> = ({count, title, users}) => {
+    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+
     return (
         <div className={styles.profileUserRightbar}>
             <header className={styles.titleBlock}>
@@ -32,7 +36,11 @@ const ProfileUserRightbar: FC<IProps> = ({count, title, users}) => {
                         <section className={styles.users}>
                             {
                                 users.map(user => {
-                                    <UserMicroInf key={user.id} user={user}/>
+                                    return (
+                                        authUser?.getAuthUser ?
+                                        <UserMicroInf key={user.id} user={user} isAuthUser={authUser.getAuthUser.id == user.id}/>
+                                        : null
+                                    );
                                 })
                             }
                         </section>

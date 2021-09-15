@@ -13,6 +13,9 @@ function setCookieToken(resp: Response, refreshToken: string){
         httpOnly: true
     });
 }
+function setSessionToken(resp: Response, refreshToken: string){
+    resp.setHeader('Set-Cookie', `refreshToken=${refreshToken}; HttpOnly`);
+}
 
 export default {
     async register(_:any, args: {name: string, email: string, password: string, repeatPassword: string}){
@@ -26,19 +29,24 @@ export default {
 
             const newUser = await userService.register(name, email, password);
             return newUser;
-        } catch(err){
+        } catch(err: any){
             errorHandler(err);
         }
     },
 
-    async login(_:any, args: {email: string, password: string}, context: IApolloContext){
+    async login(_:any, args: {email: string, password: string, isSession: boolean}, context: IApolloContext){
         const {resp} = context;
-        const {email, password} = args;
+        const {email, password, isSession} = args;
         try{
             const userData = await userService.login(email, password);
-            setCookieToken(resp, userData.refreshToken);
+            if(!isSession){
+                setSessionToken(resp, userData.refreshToken);
+            }
+            else{
+                setCookieToken(resp, userData.refreshToken);
+            }
             return userData;
-        } catch(err){
+        } catch(err: any){
             errorHandler(err);
         }
     },
@@ -50,7 +58,7 @@ export default {
             await userService.logout(refreshToken);
             resp.clearCookie('refreshToken');
             return refreshToken;
-        } catch(err){
+        } catch(err: any){
             errorHandler(err);
         }
     },
@@ -62,7 +70,7 @@ export default {
             const userData = await userService.refresh(refreshToken);
             setCookieToken(resp, userData.refreshToken);
             return userData;
-        } catch(err){
+        } catch(err: any){
             errorHandler(err);
         }
     }

@@ -2,6 +2,9 @@ import { gql, useMutation } from "@apollo/client";
 import getAllPosts from "../queries/getAllPosts";
 import getUserPosts, { IGetUserPosts } from "../queries/getUserPosts";
 import type {IGetAllPosts} from '../queries/getAllPosts';
+import client from "../client";
+import getUserPostsCount from "../queries/getUserPostsCount";
+import getAllPostsCount from "../queries/getAllPostsCount";
 
 const addPost = gql`
     mutation addPost($desc: String, $imgs: [Upload!], $videos: [Upload!]){
@@ -75,6 +78,7 @@ const useAddPost = () => {
                     });
                 }
             }
+            client.refetchQueries({include: [getUserPosts, getAllPosts, getUserPostsCount, getAllPostsCount]});
         }
     })};
     return {addPost: mutate, data: addData, loading: addLoading};

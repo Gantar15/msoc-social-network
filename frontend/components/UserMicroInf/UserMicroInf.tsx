@@ -8,21 +8,27 @@ import { IUser } from '../../models/user';
 import styles from './userMicroInf.module.scss';
 
 
-const UserMicroInf: FC<{user: IUser}> = ({user}) => {
+const UserMicroInf: FC<{user: IUser, isAuthUser: boolean}> = ({user, isAuthUser}) => {
+    
     return (
         <div className={styles.userMicroInf}>
             <div className={styles.userInfo}>
-                <A href="/profile/361">
+                <A href={`/profile/${user.id}`}>
                     <div className={styles.avatar}>
-                        <Image className={styles.img} src="/imgs/photo1.jpg" width="10" height="10" layout="responsive"/>
+                        <Image className={styles.img} src={
+                            user.profilePicture ?? '/imgs/default_user_logo.jpg'
+                        } width="10" height="10" layout="responsive"/>
                         <div className={styles.networkStatus + ' ' + styles.online}></div>
                     </div>
                 </A>
-                <A href="/profile/361">
-                    <span className={styles.name}>Григорий</span>
+                <A href={`/profile/${user.id}`}>
+                    <span className={styles.name}>{user.name}</span>
                 </A>
             </div>
-            <Subscribe subscribe={false} userId={user.id}/>
+            {
+                isAuthUser ? null
+                : <Subscribe subscribe={false} userId={user.id}/>
+            }
         </div>
     );
 };

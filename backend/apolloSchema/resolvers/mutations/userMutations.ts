@@ -64,7 +64,7 @@ export default {
             name && AuthValidator.nameValidator(name);
 
             return user;
-        } catch(err){
+        } catch(err: any){
             errorHandler(err);
         }
     },
@@ -87,7 +87,7 @@ export default {
             }
             
             return user;
-        } catch(err){
+        } catch(err: any){
             errorHandler(err);
         }
     },
@@ -108,11 +108,11 @@ export default {
                 await currentUser.update({
                     followins: [...currentUser.followins, user.id]
                 });
-                return true;
+                return user;
             }
 
-            return false;
-        } catch(err){
+            return user;
+        } catch(err: any){
             errorHandler(err);
         }
     },
@@ -134,11 +134,11 @@ export default {
                 await currentUser.update({
                     followins
                 });
-                return true;
+                return user;
             }
 
-            return false;
-        } catch(err){
+            return user;
+        } catch(err: any){
             errorHandler(err);
         }
     }

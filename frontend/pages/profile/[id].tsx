@@ -11,10 +11,9 @@ import { useEffect, useState } from 'react';
 import { useRefresh } from '../../apollo/mutations/refresh';
 import { useQuery, useLazyQuery } from '@apollo/client';
 import getUserPosts from '../../apollo/queries/getUserPosts';
-import type {IGetUserPosts} from '../../apollo/queries/getUserPosts';
-import { IAuthUser, IUser } from '../../models/user';
+import { IAuthUser } from '../../models/user';
 import getAuthUser from '../../apollo/queries/getAuthUser';
-import getUser from '../../apollo/queries/getUser';
+import type {IGetUserPosts} from '../../apollo/queries/getUserPosts';
 import getUserPostsCount, {userPostsCount_Query} from '../../apollo/queries/getUserPostsCount';
 import getFollowers, {getFollowers_Query} from '../../apollo/queries/getFollowers';
 import getFollowins, {getFollowins_Query} from '../../apollo/queries/getFollowins';
@@ -26,7 +25,7 @@ import styles from '../../public/styles/profile.module.scss';
 
 const Profile: NextPage = () => {
     const router = useRouter();
-    const profileUserId: number = +router.query.id!; 
+    const profileUserId: number = +router.query.id!;
 
     const {refresh} = useRefresh();
     const postsLimit = 20;
@@ -47,34 +46,31 @@ const Profile: NextPage = () => {
 
     useEffect(() => {
         refresh();
+
+        followersCountExecute({
+            variables: {
+                userId: profileUserId
+            }
+        });
+        followinsCountExecute({
+            variables: {
+                userId: profileUserId
+            }
+        });
+        getFollowersExecute({variables: {
+            userId: profileUserId,
+            offset: 0,
+            limit: 5
+        }});
+        getFollowinsExecute({variables: {
+            userId: profileUserId,
+            offset: 0,
+            limit: 5
+        }});
+        userPostsCountExecute({variables: {
+            userId: profileUserId
+        }});
     }, []);
-    useEffect(() => {
-        if(authUser?.getAuthUser){
-            followersCountExecute({
-                variables: {
-                    userId: authUser.getAuthUser.id
-                }
-            });
-            followinsCountExecute({
-                variables: {
-                    userId: authUser.getAuthUser.id
-                }
-            });
-            getFollowersExecute({variables: {
-                userId: authUser.getAuthUser.id,
-                offset: 0,
-                limit: 5
-            }});
-            getFollowinsExecute({variables: {
-                userId: authUser.getAuthUser.id,
-                offset: 0,
-                limit: 5
-            }});
-            userPostsCountExecute({variables: {
-                userId: authUser.getAuthUser.id
-            }});
-        }
-    }, [authUser]);
 
     return (
         <MainContainer activePage={1} title="Profile">
@@ -82,7 +78,10 @@ const Profile: NextPage = () => {
                 <ProfileHeader userId={profileUserId}/>
                 <section className={styles.mainContent}>
                     <section>
-                        <SharePost/>
+                        { authUser?.getAuthUser?.id ?
+                            authUser?.getAuthUser.id == profileUserId ? <SharePost/> : null
+                            : null
+                        }
                         <div className={styles.postsBlock}>
                             <header className={styles.filters}>
                                 <div className={styles.filter + ' ' + styles.active}>
@@ -102,7 +101,7 @@ const Profile: NextPage = () => {
                             </header>
                             <div className={styles.posts}>
                                 { postsLoading ? <div>Загрузка...</div>
-                                  : posts?.getUserPosts ?
+                                  : posts?.getUserPosts.length ?
                                     posts.getUserPosts.map(post => {
                                         return (
                                             <Post key={post.id} post={post}/>

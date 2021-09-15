@@ -85,13 +85,13 @@ export default gql`
     #Mutations
     type Mutation {
         register(name: String!, password: String!, repeatPassword: String!, email: String!): User!
-        login(email: String!, password: String!): UserData!
+        login(email: String!, password: String!, isSession: Boolean!): UserData!
         logout: String!
         refresh: UserData!
         updateUser(userId: Int!, user: InputUser!): User!
         deleteUser(userId: Int!): User!
-        followUser(userId: Int!): Boolean!
-        unfollowUser(userId: Int!): Boolean!
+        followUser(userId: Int!): User!
+        unfollowUser(userId: Int!): User!
 
         createPost(desc: String, imgs: [Upload!], videos: [Upload!]): Post!
         updatePost(postId: Int!, post: InputPost!): Post!
