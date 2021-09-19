@@ -8,7 +8,9 @@ import getFollowins from '../queries/getFollowins';
 const followUser = gql`
     mutation followUser($userId: Int!){
         followUser(userId: $userId){
-            name, email, profilePicture, id
+            name, email, 
+            profilePicture, id,
+            followers, followins
         }
     }
 `;
@@ -19,15 +21,15 @@ const useFollowUser = (userId: number) => {
             userId
         },
         update: (cache, {data}) => {
-            // cache.writeQuery({
-            //     query: getFollowers,
-            //     data: {
-            //         getFollowers: [data.followUser]
-            //     },
-            //     variables: {
-            //         limit: 20, offset: 0, userId
-            //     }
-            // });
+            cache.writeQuery({
+                query: getFollowers,
+                data: {
+                    getFollowers: [data.followUser]
+                },
+                variables: {
+                    limit: 20, offset: 0, userId
+                }
+            });
             client().refetchQueries({include: [getFollowers, getFollowersCount, getFollowins, getFollowinsCount]});
         }
     });

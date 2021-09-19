@@ -23,16 +23,16 @@ const useUnfollowUser = (userId: number) => {
                 query: getFollowers,
                 variables: {userId, offset: 0, limit: 20}
             });
-            // if(oldFollowers){
-            //     const followers = oldFollowers.getFollowers.filter((follower: any) => follower.id != userId);
-            //     cache.writeQuery({
-            //         query: getFollowers,
-            //         data: {getFollowers: followers},
-            //         variables: {
-            //             limit: 20, offset: 0, userId
-            //         }
-            //     });
-            // }
+            if(oldFollowers){
+                const followers = oldFollowers.getFollowers.filter((follower: any) => follower.id != userId);
+                cache.writeQuery({
+                    query: getFollowers,
+                    data: {getFollowers: followers},
+                    variables: {
+                        limit: 20, offset: 0, userId
+                    }
+                });
+            }
             client().refetchQueries({include: [getFollowers, getFollowersCount, getFollowins, getFollowinsCount]});
         }
     });

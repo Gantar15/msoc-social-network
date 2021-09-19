@@ -31,7 +31,7 @@ const UserMicroInf: FC<{user: IUser}> = ({user}) => {
             </div>
             {
                 isAuthUser ? null
-                : <Subscribe subscribe={user.followers?.some(id => +id === authUser?.getAuthUser?.id)} userId={user.id}/>
+                : <Subscribe user={user}/>
             }
         </div>
     );
