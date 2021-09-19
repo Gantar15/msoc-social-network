@@ -1,7 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import getAllPosts from "../queries/getAllPosts";
-import getUserPosts, { IGetUserPosts } from "../queries/getUserPosts";
-import type {IGetAllPosts} from '../queries/getAllPosts';
+import getUserPosts from "../queries/getUserPosts";
 import client from "../client";
 import getUserPostsCount from "../queries/getUserPostsCount";
 import getAllPostsCount from "../queries/getAllPostsCount";
@@ -48,37 +47,7 @@ const useAddPost = () => {
             desc, imgs, videos
         },
         update: (cache, data) => {
-            const newPost = data?.data?.createPost;
-            const oldAllPostsResponse = cache.readQuery<IGetAllPosts>({query: getAllPosts});
-            
-            if(oldAllPostsResponse && newPost){
-                cache.writeQuery({
-                    query: getAllPosts,
-                    data: {
-                        getTimelinePosts: [
-                            newPost,
-                            ...oldAllPostsResponse.getTimelinePosts
-                        ]
-                    }
-                });
-            }
-            if(newPost){
-                const oldUserPostsResponse = cache.readQuery<IGetUserPosts>({query: getUserPosts, variables: {
-                    userId: newPost?.user
-                }});
-                if(oldUserPostsResponse){
-                    cache.writeQuery({
-                        query: getUserPosts,
-                        data: {
-                            getUserPosts: [
-                                newPost,
-                                ...oldUserPostsResponse.getUserPosts
-                            ]
-                        }
-                    });
-                }
-            }
-            client.refetchQueries({include: [getUserPosts, getAllPosts, getUserPostsCount, getAllPostsCount]});
+            client().refetchQueries({include: [getUserPosts, getAllPosts, getUserPostsCount, getAllPostsCount]});
         }
     })};
     return {addPost: mutate, data: addData, loading: addLoading};

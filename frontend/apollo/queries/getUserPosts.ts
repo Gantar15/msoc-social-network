@@ -25,7 +25,7 @@ const getUserPosts = gql`
 export default getUserPosts;
 
 
-interface IGetUserPosts{
+interface getUserPosts_Query{
     getUserPosts: IPost[];
 }
-export type {IGetUserPosts};
+export type {getUserPosts_Query};

@@ -23,7 +23,7 @@ const Subscribe: FC<IProps> = ({subscribe, userId}) => {
         setSubscribeFlag(true);
     };
 
-    if(subscribeFlag){
+    if(!subscribeFlag){
         return (
             <button onClick={followHandler} className={styles.subscribe+' '+styles.subscribe_button}>
                 Подписаться

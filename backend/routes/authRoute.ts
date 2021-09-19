@@ -12,7 +12,7 @@ router.get('/activate/:link', async (req: Request, resp: Response) => {
         const activationLink: string = req.params.link;
         await userService.activate(activationLink);
         resp.redirect(process.env.CLIENT_URL+'/login'!);
-    } catch(err){
+    } catch(err: any){
         resp.status(400).end(err.message);
     }
 });
@@ -25,7 +25,7 @@ router.get('/refreshTokenValidate', async (req: Request, resp: Response) => {
             resp.json(true);
         }
         else throw result;
-    } catch(err){
+    } catch(err: any){
         resp.status(400).json(err);
     }
 });

@@ -14,17 +14,22 @@ import A from '../A/A';
 import PreloadVideo from '../PreloadVideo/PreloadVideo';
 import moment from 'moment';
 import 'moment/locale/ru';
+import type { IAuthUser } from '../../models/user';
+import {useQuery} from '@apollo/client';
+import getAuthUser from '../../apollo/queries/getAuthUser';
 
 import styles from './post.module.scss';
 
 
 const Post: FC<{post: IPost}> = ({post}) => {
+    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+
     const descriptionRef = useRef<HTMLParagraphElement>(null);
     const showMoreRef = useRef<HTMLDivElement>(null);
     const [like, setLike] = useState(post.likes.length);
     const [dislike, setDislike] = useState(post.dislikes.length);
-    const [isLiked, setIsLiked] = useState(post.likes.some(userId => userId == 1));
-    const [isDisliked, setIsDisliked] = useState(post.dislikes.some(userId => userId == 1));
+    const [isLiked, setIsLiked] = useState(post.likes.some(userId => userId == authUser?.getAuthUser?.id));
+    const [isDisliked, setIsDisliked] = useState(post.dislikes.some(userId => userId == authUser?.getAuthUser?.id));
     const {likePost} = useLikePost(post.id);
     const {dislikePost} = useDislikePost(post.id);
 
@@ -74,7 +79,7 @@ const Post: FC<{post: IPost}> = ({post}) => {
         <section className={styles.post}>
             <header>
                 <div className={styles.authorBlock}>
-                    <A href="/profile/3540" className={styles.authorImageBlock}>
+                    <A href={`/profile/${post.user}`} className={styles.authorImageBlock}>
                         {
                             post.user.profilePicture ? 
                             <Image width="45" height="45" className={styles.authorImage} src={post.user.profilePicture}/>
@@ -82,7 +87,7 @@ const Post: FC<{post: IPost}> = ({post}) => {
                         }
                     </A>
                     <div className={styles.nameBlock}>
-                        <A href="/profile/3540">
+                        <A href={`/profile/${post.user}`}>
                             <span>{post.user.name}</span>
                         </A>
                         <time>{formateTime(post.createdAt)}</time>

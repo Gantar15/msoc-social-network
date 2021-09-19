@@ -3,16 +3,15 @@ import errorHandler from "../../../lib/errorHandler";
 import Post from "../../../models/Post";
 import ApiError from "../../../lib/ApiError";
 import { IApolloContext } from "../../../types/IApolloContext";
-import { checkAuth } from "../../../middlewares/auth-middleware";
 import User from "../../../models/User";
 import { Op, fn, col } from "sequelize";
+import { checkAuth } from "../../../middlewares/auth-middleware";
+import tokenService from "../../../services/tokenService";
 
 
 export default {
-    async getPost(_:any, {postId}: {postId: number}, {resp}: IApolloContext){
+    async getPost(_:any, {postId}: {postId: number}){
         try{
-            checkAuth(resp);
-
             const post = await Post.findByPk(postId);
             if(!post) throw ApiError.badRequest('Данного поста не существует');
             return post;
@@ -21,14 +20,20 @@ export default {
         }
     },
     
-    async getTimelinePosts(_: any, {limit, offset}: {limit: number, offset: number}, {resp}: IApolloContext){
+    async getTimelinePosts(_: any, {limit, offset, refreshToken}: {limit: number, offset: number, refreshToken?: string}, {req, resp}: IApolloContext){
         try{
-            checkAuth(resp);
+            let refreshTokenStr = refreshToken ?? req.cookies.refreshToken;
 
-            const userId = resp.locals.user.id;
-            let followinsId = [];
-            if(resp.locals.user.followins)
-                followinsId = resp.locals.user.followins.map((followin: number) => followin);
+            const authUserData = await tokenService.validateRefreshToken(refreshTokenStr);
+            if(!authUserData) throw ApiError.unauthorizedError();
+
+            const userId = authUserData.id;
+            const authUser = await User.findByPk(userId);
+            if(!authUser) throw ApiError.unauthorizedError();
+
+            let followinsId: number[] = [];
+            if(authUser.followins)
+                followinsId = authUser.followins.map((followin: number) => followin);
 
             const posts = await Post.findAll({
                 where: {
@@ -63,7 +68,7 @@ export default {
             checkAuth(resp);
 
             const userId = resp.locals.user.id;
-            let followinsId = [];
+            let followinsId: number[] = [];
             if(resp.locals.user.followins)
                 followinsId = resp.locals.user.followins.map((followin: number) => followin);
 
@@ -82,10 +87,8 @@ export default {
         }
     },
 
-    async getUserPosts(_: any, {userId, limit, offset}: {userId: number, limit: number, offset: number}, {resp}: IApolloContext){
+    async getUserPosts(_: any, {userId, limit, offset}: {userId: number, limit: number, offset: number}){
         try{
-            checkAuth(resp);
-
             const userData = await User.findByPk(userId);
             if(!userData){
                 throw ApiError.badRequest('Указанного пользователя не существует');
@@ -116,10 +119,8 @@ export default {
         }
     },
 
-    async getUserPostsCount(_: any, {userId}: {userId: number}, {resp}: IApolloContext){
+    async getUserPostsCount(_: any, {userId}: {userId: number}){
         try{
-            checkAuth(resp);
-
             const userData = await User.findByPk(userId);
             if(!userData){
                 throw ApiError.badRequest('Указанного пользователя не существует');

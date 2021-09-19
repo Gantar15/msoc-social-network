@@ -3,12 +3,16 @@ import {memo} from 'react';
 import A from '../../components/A/A';
 import Image from 'next/image';
 import Subscribe from '../Subscribe/Subscribe';
-import { IUser } from '../../models/user';
+import { IAuthUser, IUser } from '../../models/user';
+import { useQuery } from '@apollo/client';
+import getAuthUser from '../../apollo/queries/getAuthUser';
 
 import styles from './userMicroInf.module.scss';
 
 
-const UserMicroInf: FC<{user: IUser, isAuthUser: boolean}> = ({user, isAuthUser}) => {
+const UserMicroInf: FC<{user: IUser}> = ({user}) => {
+    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+    const isAuthUser = authUser?.getAuthUser?.id == user.id;
     
     return (
         <div className={styles.userMicroInf}>
@@ -27,7 +31,7 @@ const UserMicroInf: FC<{user: IUser, isAuthUser: boolean}> = ({user, isAuthUser}
             </div>
             {
                 isAuthUser ? null
-                : <Subscribe subscribe={false} userId={user.id}/>
+                : <Subscribe subscribe={user.followers?.some(id => +id === authUser?.getAuthUser?.id)} userId={user.id}/>
             }
         </div>
     );

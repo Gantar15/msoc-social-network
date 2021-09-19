@@ -38,7 +38,7 @@ const ProfileUserRightbar: FC<IProps> = ({count, title, users}) => {
                                 users.map(user => {
                                     return (
                                         authUser?.getAuthUser ?
-                                        <UserMicroInf key={user.id} user={user} isAuthUser={authUser.getAuthUser.id == user.id}/>
+                                        <UserMicroInf key={user.id} user={user}/>
                                         : null
                                     );
                                 })

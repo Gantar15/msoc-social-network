@@ -2,6 +2,8 @@ import {gql, useMutation} from '@apollo/client';
 import getFollowers from '../queries/getFollowers';
 import client from '../client';
 import getFollowersCount from '../queries/getFollowersCount';
+import getFollowinsCount from '../queries/getFollowinsCount';
+import getFollowins from '../queries/getFollowins';
 
 const followUser = gql`
     mutation followUser($userId: Int!){
@@ -17,16 +19,16 @@ const useFollowUser = (userId: number) => {
             userId
         },
         update: (cache, {data}) => {
-            cache.writeQuery({
-                query: getFollowers,
-                data: {
-                    getFollowers: [data.followUser]
-                },
-                variables: {
-                    limit: 20, offset: 0, userId
-                }
-            });
-            client.refetchQueries({include: [getFollowers, getFollowersCount]});
+            // cache.writeQuery({
+            //     query: getFollowers,
+            //     data: {
+            //         getFollowers: [data.followUser]
+            //     },
+            //     variables: {
+            //         limit: 20, offset: 0, userId
+            //     }
+            // });
+            client().refetchQueries({include: [getFollowers, getFollowersCount, getFollowins, getFollowinsCount]});
         }
     });
 

@@ -1,11 +1,12 @@
 
-import {ApolloClient, from} from '@apollo/client';
+import {ApolloClient, from, NormalizedCacheObject} from '@apollo/client';
 import { onError } from "@apollo/client/link/error";
 import {isBrowser} from '../utils/ssrUtils';
 import refreshTokens from '../utils/refresh';
 import logout from '../utils/logout';
 import cache from './cache';
 import {createUploadLink} from 'apollo-upload-client';
+import { useMemo } from 'react';
 
 
 const API_URL = 'http://localhost:7700';
@@ -53,7 +54,8 @@ const uploadLink = createUploadLink({
           return fetch(uri, options);
       } catch(err){
         logout(API_URL+'/graphql');
-        location.href = '/login';
+        if(isBrowser())
+          location.href = '/login';
       };
     }
 
@@ -61,10 +63,22 @@ const uploadLink = createUploadLink({
   }
 });
 
-const client = new ApolloClient({
-  ssrMode: !isBrowser(),
-  cache: cache,
-  link: from([errorLink, uploadLink])
-});
+let apolloClient: ApolloClient<NormalizedCacheObject>;
+export default function initClient(apolloState?: NormalizedCacheObject){
+  apolloClient = apolloClient ?? new ApolloClient({
+    ssrMode: !isBrowser(),
+    cache: cache,
+    link: from([errorLink, uploadLink])
+  });
 
-export default client;
+  if(apolloState){
+    const existingCache = apolloClient.cache.extract();
+    apolloClient.restore({...existingCache, ...apolloState});
+  }
+
+  return apolloClient;
+}
+
+export const useApollo = (apolloState?: NormalizedCacheObject) => {
+  return useMemo(() => initClient(apolloState), [apolloState]);
+};

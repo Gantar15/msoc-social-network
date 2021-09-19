@@ -6,19 +6,19 @@ import Post from '../../components/Post/Post';
 import SubjectIcon from '@material-ui/icons/Subject';
 import SharePost from '../../components/SharePost/SharePost';
 import ProfileUserRightbar from "../../components/Profile/ProfileUserRightbar/ProfileUserRightbar";
-import validateRefreshToken from '../../utils/validateRefreshToken';
 import { useEffect, useState } from 'react';
 import { useRefresh } from '../../apollo/mutations/refresh';
 import { useQuery, useLazyQuery } from '@apollo/client';
-import getUserPosts from '../../apollo/queries/getUserPosts';
+import getUserPosts, {getUserPosts_Query} from '../../apollo/queries/getUserPosts';
 import { IAuthUser } from '../../models/user';
 import getAuthUser from '../../apollo/queries/getAuthUser';
-import type {IGetUserPosts} from '../../apollo/queries/getUserPosts';
 import getUserPostsCount, {userPostsCount_Query} from '../../apollo/queries/getUserPostsCount';
 import getFollowers, {getFollowers_Query} from '../../apollo/queries/getFollowers';
 import getFollowins, {getFollowins_Query} from '../../apollo/queries/getFollowins';
 import getFollowersCount, {getFollowersCount_Query} from '../../apollo/queries/getFollowersCount';
 import getFollowinsCount, {getFollowinsCount_Query} from '../../apollo/queries/getFollowinsCount';
+import apolloClient from '../../apollo/client';
+import validateRefreshToken from '../../utils/validateRefreshToken';
 
 import styles from '../../public/styles/profile.module.scss';
 
@@ -26,18 +26,19 @@ import styles from '../../public/styles/profile.module.scss';
 const Profile: NextPage = () => {
     const router = useRouter();
     const profileUserId: number = +router.query.id!;
-
+    
     const {refresh} = useRefresh();
+    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+
     const postsLimit = 20;
     const [postsOffset, setPostsOffset] = useState(0);
-    const {data: posts, loading: postsLoading, error: postsError} = useQuery<IGetUserPosts>(getUserPosts, {
+    const {data: posts, loading: postsLoading} = useQuery<getUserPosts_Query>(getUserPosts, {
         variables: {
             userId: profileUserId,
             limit: postsLimit,
             offset: postsOffset
         }
     });
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     const [followersCountExecute, {data: followersCount}] = useLazyQuery<getFollowersCount_Query>(getFollowersCount);
     const [followinsCountExecute, {data: followinsCount}] = useLazyQuery<getFollowinsCount_Query>(getFollowinsCount);
     const [getFollowersExecute, {data: followersData}] = useLazyQuery<getFollowers_Query>(getFollowers);
@@ -46,7 +47,6 @@ const Profile: NextPage = () => {
 
     useEffect(() => {
         refresh();
-
         followersCountExecute({
             variables: {
                 userId: profileUserId
@@ -70,7 +70,7 @@ const Profile: NextPage = () => {
         userPostsCountExecute({variables: {
             userId: profileUserId
         }});
-    }, []);
+    }, [profileUserId]);
 
     return (
         <MainContainer activePage={1} title="Profile">
@@ -100,8 +100,9 @@ const Profile: NextPage = () => {
                                 </div>
                             </header>
                             <div className={styles.posts}>
-                                { postsLoading ? <div>Загрузка...</div>
-                                  : posts?.getUserPosts.length ?
+                                {   
+                                    postsLoading ? <div>Загрузка...</div>
+                                    : posts?.getUserPosts.length ?
                                     posts.getUserPosts.map(post => {
                                         return (
                                             <Post key={post.id} post={post}/>
@@ -133,7 +134,8 @@ const Profile: NextPage = () => {
 };  
 export default Profile;
 
-export const getServerSideProps: GetServerSideProps = async ({req}) => {
+export const getServerSideProps: GetServerSideProps = async ({req, query}) => {
+    const userId = +query.id!;
     const API_URL = 'http://localhost:7700';
     const result = await validateRefreshToken(API_URL+'/auth/refreshTokenValidate', req.cookies.refreshToken);
     if(!result){
@@ -144,9 +146,48 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
         }
       };
     }
-  
+    
+    const client = apolloClient();
+    client.watchQuery({
+        query: getFollowers, variables: {
+            userId,
+            offset: 0,
+            limit: 5
+        }, fetchPolicy: 'cache-and-network'
+    });
+    client.watchQuery({
+        query: getFollowins, variables: {
+            userId,
+            offset: 0,
+            limit: 5
+        }, fetchPolicy: 'cache-and-network'
+    });
+    await client.query({
+        query: getUserPostsCount, variables: {
+            userId
+        }
+    });
+    client.watchQuery({
+        query: getFollowersCount, variables: {
+            userId
+        }, fetchPolicy: 'cache-and-network'
+    });
+    client.watchQuery({
+        query: getFollowinsCount, variables: {
+            userId
+        }, fetchPolicy: 'cache-and-network'
+    });
+    client.watchQuery({
+        query: getUserPosts, variables: {
+            userId,
+            offset: 0,
+            limit: 20
+        }, fetchPolicy: 'cache-and-network'
+    });
+
     return {
       props: {
+        apolloState: client.cache.extract()
       }
     };
 };

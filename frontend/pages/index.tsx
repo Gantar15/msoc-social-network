@@ -5,33 +5,28 @@ import SharePost from '../components/SharePost/SharePost';
 import HomeRightbar from '../components/HomeRightbar/HomeRightbar';
 import Post from '../components/Post/Post';
 import {useRefresh} from '../apollo/mutations/refresh';
-import client from '../apollo/client';
 import validateRefreshToken from '../utils/validateRefreshToken';
-import { useLazyQuery, useQuery } from '@apollo/client';
 import getAllPosts from '../apollo/queries/getAllPosts';
 import type {IGetAllPosts} from '../apollo/queries/getAllPosts';
+import apolloClient from '../apollo/client';
+import { useQuery } from '@apollo/client';
 
 import styles from '../public/styles/home.module.scss';
 
 
-interface IProps{
-  posts: IGetAllPosts,
-  loading: boolean
-}
-
-const Home: NextPage<IProps> = () => {
-  const {refresh} = useRefresh();
+const Home: NextPage = () => {
   const postsLimit = 20;
   const [postsOffset, setPostsOffset] = useState(0);
-  const [getPosts, {data: posts, loading: postsLoading, error: postsError}] = useLazyQuery<IGetAllPosts>(getAllPosts, {
+  const {data: posts, loading: postsLoading} = useQuery<IGetAllPosts>(getAllPosts, {
     variables: {
       limit: postsLimit,
       offset: postsOffset
     }
   });
 
+  const {refresh} = useRefresh();
+
   useEffect(() => {
-    getPosts()
     refresh();
   }, []);
 
@@ -42,7 +37,7 @@ const Home: NextPage<IProps> = () => {
           <SharePost/>
           <section className={styles.posts}>
             {postsLoading ? 'Загрузка...' 
-              : posts?.getTimelinePosts?.length ? 
+              : posts?.getTimelinePosts.length ? 
                 posts.getTimelinePosts.map(post => {
                   return (
                     <Post key={post.id} post={post}/>
@@ -71,18 +66,19 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
     };
   }
 
-  // const {data: posts, loading} = await client.query<IGetAllPosts>({
-  //   query: getAllPosts,
-  //   variables: {
-  //     limit: 20,
-  //     offset: 0
-  //   }
-  // });
+  const client = apolloClient();
+  await client.query<IGetAllPosts>({
+    query: getAllPosts,
+    variables: {
+      limit: 20,
+      offset: 0,
+      refreshToken: req.cookies.refreshToken
+    }
+  });
 
   return {
     props: {
-      // posts,
-      // loading
+      apolloState: client.cache.extract()
     }
   };
 };

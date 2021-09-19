@@ -2,15 +2,11 @@
 import ApiError from "../../../lib/ApiError";
 import errorHandler from "../../../lib/errorHandler";
 import User from "../../../models/User";
-import { checkAuth } from '../../../middlewares/auth-middleware';
-import { IApolloContext } from "../../../types/IApolloContext";
 
 
 export default{
-    async getUser(_: any, {userId}: {userId: number}, {resp}: IApolloContext){
+    async getUser(_: any, {userId}: {userId: number}){
         try{
-            checkAuth(resp);
-
             const user = await User.findByPk(userId);
             if(!user) throw ApiError.badRequest('Данного пользователя не существует');
             return user;
@@ -19,10 +15,8 @@ export default{
         }
     },
 
-    async getFollowins(_: any, {userId, offset, limit}: {userId: number, offset: number, limit: number}, {resp}: IApolloContext){
+    async getFollowins(_: any, {userId, offset, limit}: {userId: number, offset: number, limit: number}){
         try{
-            checkAuth(resp);
-
             const user = await User.findByPk(userId);
             if(!user) throw ApiError.badRequest('Данного пользователя не существует');
 
@@ -36,10 +30,8 @@ export default{
         }
     },
 
-    async getFollowers(_: any, {userId, offset, limit}: {userId: number, offset: number, limit: number}, {resp}: IApolloContext){
+    async getFollowers(_: any, {userId, offset, limit}: {userId: number, offset: number, limit: number}){
         try{
-            checkAuth(resp);
-
             const user = await User.findByPk(userId);
             if(!user) throw ApiError.badRequest('Данного пользователя не существует');
 
@@ -53,10 +45,8 @@ export default{
         }
     },
 
-    async getFollowersCount(_: any, {userId}: {userId: number}, {resp}: IApolloContext) {
+    async getFollowersCount(_: any, {userId}: {userId: number}) {
         try{
-            checkAuth(resp);
-
             const user = await User.findByPk(userId);
             if(!user) throw ApiError.badRequest('Данного пользователя не существует');
 
@@ -66,10 +56,8 @@ export default{
         }
     },
 
-    async getFollowinsCount(_: any, {userId}: {userId: number}, {resp}: IApolloContext) {
+    async getFollowinsCount(_: any, {userId}: {userId: number}) {
         try{
-            checkAuth(resp);
-
             const user = await User.findByPk(userId);
             if(!user) throw ApiError.badRequest('Данного пользователя не существует');
 
