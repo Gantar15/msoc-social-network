@@ -64,26 +64,37 @@ export default gql`
         shareCount: Int!
     }
 
+    #messenge
+    type Messenge{
+        text: String!
+        authorId: Int!
+        recipientId: Int!
+    }
+
 
     #Querys
     type Query{
-        getUser(userId: Int!): User!
-
+        #Post
         getPost(postId: Int!): Post!
-        
         getUserPosts(userId: Int!, limit: Int!, offset: Int!): [Post!]!
         getUserPostsCount(userId: Int!): Int!
         getTimelinePosts(limit: Int!, offset: Int!, refreshToken: String): [Post!]!
         getTimelinePostsCount: Int!
 
+        #User
+        getUser(userId: Int!): User!
         getFollowers(userId: Int!, limit: Int!, offset: Int!): [User!]!
         getFollowins(userId: Int!, limit: Int!, offset: Int!): [User!]!
         getFollowersCount(userId: Int!): Int!
         getFollowinsCount(userId: Int!): Int!
+
+        #Messenges
+        getMessenges(recipientId: Int!): [Messenge!]!
     }
 
     #Mutations
     type Mutation {
+        #User
         register(name: String!, password: String!, repeatPassword: String!, email: String!): User!
         login(email: String!, password: String!, isSession: Boolean!): UserData!
         logout: String!
@@ -93,10 +104,14 @@ export default gql`
         followUser(userId: Int!): User!
         unfollowUser(userId: Int!): User!
 
+        #POsts
         createPost(desc: String, imgs: [Upload!], videos: [Upload!]): Post!
         updatePost(postId: Int!, post: InputPost!): Post!
         deletePost(postId: Int!): Post!
         likePost(postId: Int!): Boolean!
         dislikePost(postId: Int!): Boolean!
+
+        #Messenges
+        sendMessenge(recipientId: Int!, messenge: String!): Messenge!
     }
 `;

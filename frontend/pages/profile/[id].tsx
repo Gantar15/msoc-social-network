@@ -41,8 +41,8 @@ const Profile: NextPage = () => {
     });
     const [followersCountExecute, {data: followersCount}] = useLazyQuery<getFollowersCount_Query>(getFollowersCount);
     const [followinsCountExecute, {data: followinsCount}] = useLazyQuery<getFollowinsCount_Query>(getFollowinsCount);
-    const [getFollowersExecute, {data: followersData}] = useLazyQuery<getFollowers_Query>(getFollowers);
-    const [getFollowinsExecute, {data: followinsData}] = useLazyQuery<getFollowins_Query>(getFollowins);
+    const [getFollowersExecute, {data: followersData}] = useLazyQuery<getFollowers_Query>(getFollowers, {fetchPolicy: 'cache-and-network'});
+    const [getFollowinsExecute, {data: followinsData}] = useLazyQuery<getFollowins_Query>(getFollowins, {fetchPolicy: 'cache-and-network'});
     const [userPostsCountExecute, {data: userPostsCount}] = useLazyQuery<userPostsCount_Query>(getUserPostsCount);
 
     useEffect(() => {

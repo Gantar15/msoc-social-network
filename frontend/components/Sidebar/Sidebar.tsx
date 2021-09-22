@@ -43,7 +43,7 @@ const Sidebar: FC<IProps> = ({activePage}) => {
                     <CallToActionIcon className={styles.navIcon}/>
                     <span>Новости</span>
                 </A>
-                <A href="/messages" className={`${styles.navItem} ${isActivePage(3)}`}>
+                <A href="/messenger" className={`${styles.navItem} ${isActivePage(3)}`}>
                     <QuestionAnswerIcon className={styles.navIcon}/>
                     <span>Сообщения</span>
                     <p className={styles.navItemCounter}>11</p>

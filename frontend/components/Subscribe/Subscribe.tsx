@@ -12,12 +12,19 @@ interface IProps{
 }
 
 const Subscribe: FC<IProps> = ({user}) => {
+    function isUserSubscribed(){
+        return user.followers?.some(id => +id === authUser?.getAuthUser?.id);
+    }
+
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
 
-    const [subscribeFlag, setSubscribeFlag] = useState(user.followers?.some(id => +id === authUser?.getAuthUser?.id));
+    const [subscribeFlag, setSubscribeFlag] = useState(isUserSubscribed());
     const {followUser} = useFollowUser(user.id);
     const {unfollowUser} = useUnfollowUser(user.id);
 
+    useEffect(() => {
+        setSubscribeFlag(isUserSubscribed());
+    }, [user]);
     const followHandler = () => {
         followUser();
         setSubscribeFlag(false);

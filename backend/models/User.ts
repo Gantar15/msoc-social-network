@@ -8,6 +8,7 @@ import { DataTypes, Optional, Model,
 import sequelize from "../db";
 import Token from './Token';
 import Post from './Post';
+import Messenge from "./Messenge";
 
 interface IUser{
     name: string,
@@ -135,6 +136,7 @@ User.init({
 
 User.hasOne(Token, {foreignKey: 'user'});
 User.hasMany(Post, {foreignKey: 'user', as: 'Post'});
+User.hasMany(Messenge, {foreignKey: 'user', as: 'Messenge'});
 
 
 export default User;

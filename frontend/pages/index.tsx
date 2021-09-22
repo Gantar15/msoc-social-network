@@ -9,27 +9,45 @@ import validateRefreshToken from '../utils/validateRefreshToken';
 import getAllPosts from '../apollo/queries/getAllPosts';
 import type {IGetAllPosts} from '../apollo/queries/getAllPosts';
 import apolloClient from '../apollo/client';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 
 import styles from '../public/styles/home.module.scss';
 
 
 const Home: NextPage = () => {
   const postsLimit = 20;
-  const [postsOffset, setPostsOffset] = useState(0);
+  const [nextPostsLimit, setNextPostsLimit] = useState(20);
   const {data: posts, loading: postsLoading} = useQuery<IGetAllPosts>(getAllPosts, {
     variables: {
       limit: postsLimit,
-      offset: postsOffset
+      offset: 0
     }
   });
-
+  const [fetchMorePosts, {data: nextPosts, loading: nextPostsLoading}] = useLazyQuery<IGetAllPosts>(getAllPosts);
+  
   const {refresh} = useRefresh();
 
   useEffect(() => {
     refresh();
-  }, []);
+    const scrollHandler = () => {
+      if(window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 200){
+        fetchMorePosts({
+          variables: {
+            limit: nextPostsLimit,
+            offset: postsLimit
+          }
+        });
+        setNextPostsLimit(currentLimit => currentLimit+postsLimit);
+      }
+    };
 
+    window.addEventListener('scroll', scrollHandler);
+
+    return () => {
+      window.removeEventListener('scroll', scrollHandler);
+    };
+  }, []);
+  
   return (
     <MainContainer activePage={2} title="Home">
       <section className={styles.homepage}>
@@ -44,6 +62,15 @@ const Home: NextPage = () => {
                   )
                 }) :
                 'Постов нет'
+            }
+            {nextPostsLoading ? 'Загрузка...' 
+              : nextPosts?.getTimelinePosts.length ? 
+                nextPosts.getTimelinePosts.map(post => {
+                  return (
+                    <Post key={post.id} post={post}/>
+                  )
+                }) :
+                null
             }
           </section>
         </section>

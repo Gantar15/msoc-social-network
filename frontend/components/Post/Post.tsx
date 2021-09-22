@@ -79,7 +79,7 @@ const Post: FC<{post: IPost}> = ({post}) => {
         <section className={styles.post}>
             <header>
                 <div className={styles.authorBlock}>
-                    <A href={`/profile/${post.user}`} className={styles.authorImageBlock}>
+                    <A href={`/profile/${post.user.id}`} className={styles.authorImageBlock}>
                         {
                             post.user.profilePicture ? 
                             <Image width="45" height="45" className={styles.authorImage} src={post.user.profilePicture}/>
@@ -87,7 +87,7 @@ const Post: FC<{post: IPost}> = ({post}) => {
                         }
                     </A>
                     <div className={styles.nameBlock}>
-                        <A href={`/profile/${post.user}`}>
+                        <A href={`/profile/${post.user.id}`}>
                             <span>{post.user.name}</span>
                         </A>
                         <time>{formateTime(post.createdAt)}</time>
