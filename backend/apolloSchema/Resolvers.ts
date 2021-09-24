@@ -8,5 +8,5 @@ export default {
     Upload: GraphQLUpload,
     Query,
     Mutation,
-    // Subscription
+    Subscription
 };

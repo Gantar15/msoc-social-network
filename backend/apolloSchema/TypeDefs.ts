@@ -93,7 +93,7 @@ export default gql`
     }
 
     #Mutations
-    type Mutation {
+    type Mutation{
         #User
         register(name: String!, password: String!, repeatPassword: String!, email: String!): User!
         login(email: String!, password: String!, isSession: Boolean!): UserData!
@@ -113,5 +113,10 @@ export default gql`
 
         #Messenges
         sendMessenge(recipientId: Int!, messenge: String!): Messenge!
+    }
+
+    #Subscriptions
+    type Subscription{
+        watchMessenge(recipientId: Int!): Messenge!
     }
 `;

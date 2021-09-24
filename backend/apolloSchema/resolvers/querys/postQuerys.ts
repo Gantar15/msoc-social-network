@@ -20,7 +20,7 @@ export default {
         }
     },
     
-    async getTimelinePosts(_: any, {limit, offset, refreshToken}: {limit: number, offset: number, refreshToken?: string}, {req, resp}: IApolloContext){
+    async getTimelinePosts(_: any, {limit, offset, refreshToken}: {limit: number, offset: number, refreshToken?: string}, {req}: IApolloContext){
         try{
             let refreshTokenStr = refreshToken ?? req.cookies.refreshToken;
 

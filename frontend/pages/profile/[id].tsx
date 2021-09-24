@@ -136,8 +136,7 @@ export default Profile;
 
 export const getServerSideProps: GetServerSideProps = async ({req, query}) => {
     const userId = +query.id!;
-    const API_URL = 'http://localhost:7700';
-    const result = await validateRefreshToken(API_URL+'/auth/refreshTokenValidate', req.cookies.refreshToken);
+    const result = await validateRefreshToken(process.env.API_URL+'/auth/refreshTokenValidate', req.cookies.refreshToken);
     if(!result){
       return {
         redirect: {
