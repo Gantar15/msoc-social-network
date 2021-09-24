@@ -5,20 +5,19 @@ import {useRefresh} from '../apollo/mutations/refresh';
 import validateRefreshToken from '../utils/validateRefreshToken';
 import watchMessenge, {watchMessenge_Subscription} from '../apollo/subsciptions/watchMessenge';
 import { useSubscription } from '@apollo/client';
-import {Switch} from 'react-router-dom';
 
 import styles from '../public/styles/messenger.module.scss';
 
 
 const Messenger: NextPage = () => {
   const {refresh} = useRefresh();
-  const {data: messenges, loading: messengesLoading} = useSubscription<watchMessenge_Subscription>(watchMessenge, {variables: {
+  const {data: messenge, loading: messengeLoading} = useSubscription<watchMessenge_Subscription>(watchMessenge, {variables: {
     recipientId: 1
   }});
   
   useEffect(() => {
-    console.log(messenges)
-  }, [messenges]);
+    console.log(messenge)
+  }, [messenge]);
 
   useEffect(() => {
     refresh();
@@ -26,7 +25,9 @@ const Messenger: NextPage = () => {
 
   return (
     <MainContainer activePage={3} title="Home">
-      <main className={styles.messenger}>сообщения</main>
+      <main className={styles.messenger}>
+
+      </main>
     </MainContainer>
   );
 };

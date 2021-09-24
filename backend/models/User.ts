@@ -136,7 +136,7 @@ User.init({
 
 User.hasOne(Token, {foreignKey: 'user'});
 User.hasMany(Post, {foreignKey: 'user', as: 'Post'});
-User.hasMany(Messenge, {foreignKey: 'user', as: 'Messenge'});
+// User.belongsToMany(User, {through: Messenge, foreignKey: 'user', targetKey: 'user'});
 
 
 export default User;

@@ -50,7 +50,7 @@ const Home: NextPage = () => {
   
   return (
     <MainContainer activePage={2} title="Home">
-      <section className={styles.homepage}>
+      <main className={styles.homepage}>
         <section className={styles.news}>
           <SharePost/>
           <section className={styles.posts}>
@@ -75,7 +75,7 @@ const Home: NextPage = () => {
           </section>
         </section>
         <HomeRightbar/>
-      </section>
+      </main>
     </MainContainer>
   );
 };

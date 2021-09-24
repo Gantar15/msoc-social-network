@@ -65,7 +65,7 @@ const subscriptionServer = SubscriptionServer.create({
     async onConnect(connectionParams: any) {
         const accessToken = connectionParams.authorization.split(' ')[1];
         const authUserDto = tokenService.validateAccessToken(accessToken);
-        const authUser = User.findByPk(authUserDto?.id);
+        const authUser = await User.findByPk(authUserDto?.id);
 
         return {
             authUser

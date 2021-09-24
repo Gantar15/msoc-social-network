@@ -19,7 +19,9 @@ export default {
                 authorId: resp.locals.user.id,
                 text: messenge
             });
-            pubsub.publish(PubSubEvents.messengeSend, messengeObj);
+            pubsub.publish(PubSubEvents.messengeSend, {
+                messenge: messengeObj
+            });
             
             return messengeObj;
         } catch(err: any){
