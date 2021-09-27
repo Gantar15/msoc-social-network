@@ -1,0 +1,58 @@
+@import '../../../public/styles/variables.scss';
+
+.interlocutor{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-image: $gradient;
+    border-radius: 12px;
+    color: $contrastBackgroundColor;
+
+    .interlocutorAvatar{
+        width: 45px;
+        height: 45px;
+
+        img{
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    }
+    .contentBlock{
+        margin-left: 15px;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        
+        &>div:nth-child(1){
+            .name{
+                word-wrap: break-word;
+                font-weight: 500;
+            }
+            .lastMessenge{
+                margin-top: 2px;
+                font-size: 13px;
+                word-wrap: break-word;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+            }
+        }
+
+        
+        .lastMessengeDate{
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2px;
+
+            time{
+                font-size: 12px;
+                margin-left: 20px;
+                margin-right: 2px;
+            }
+        }
+    }
+}

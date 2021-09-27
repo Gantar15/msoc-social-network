@@ -66,9 +66,16 @@ export default gql`
 
     #messenge
     type Messenge{
+        createdAt: String!
+        updatedAt: String!
         text: String!
         authorId: Int!
         recipientId: Int!
+    }
+    type Interlocutor{
+        id: Int!
+        name: String!
+        profilePicture: String!
     }
 
 
@@ -90,6 +97,8 @@ export default gql`
 
         #Messenges
         getMessenges(recipientId: Int!): [Messenge!]!
+        getNewestInterlocutors: [Interlocutor!]!
+        getNewestMessenges: [Messenge!]!
     }
 
     #Mutations
@@ -104,7 +113,7 @@ export default gql`
         followUser(userId: Int!): User!
         unfollowUser(userId: Int!): User!
 
-        #POsts
+        #Posts
         createPost(desc: String, imgs: [Upload!], videos: [Upload!]): Post!
         updatePost(postId: Int!, post: InputPost!): Post!
         deletePost(postId: Int!): Post!

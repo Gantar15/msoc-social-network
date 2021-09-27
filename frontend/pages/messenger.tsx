@@ -5,6 +5,8 @@ import {useRefresh} from '../apollo/mutations/refresh';
 import validateRefreshToken from '../utils/validateRefreshToken';
 import watchMessenge, {watchMessenge_Subscription} from '../apollo/subsciptions/watchMessenge';
 import { useSubscription } from '@apollo/client';
+import MessengerNavigator from '../components/Messenges/MessengerNavigator/MessengerNavigator';
+import RoomPage from '../components/Messenges/RoomPage/RoomPage';
 
 import styles from '../public/styles/messenger.module.scss';
 
@@ -26,7 +28,8 @@ const Messenger: NextPage = () => {
   return (
     <MainContainer activePage={3} title="Home">
       <main className={styles.messenger}>
-
+        <MessengerNavigator/>
+        <RoomPage/>
       </main>
     </MainContainer>
   );
