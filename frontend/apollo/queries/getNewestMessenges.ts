@@ -6,10 +6,11 @@ const getNewestMessenges = gql`
     query getNewestMessenges{
         getNewestMessenges{
             id,
-            createdAt,
             text,
             createdAt,
-            updatedAt
+            updatedAt,
+            recipientId,
+            authorId
         }
     }
 `;

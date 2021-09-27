@@ -26,7 +26,7 @@ const Messenger: NextPage = () => {
   }, []);
 
   return (
-    <MainContainer activePage={3} title="Home">
+    <MainContainer activePage={3} title="Messenger">
       <main className={styles.messenger}>
         <MessengerNavigator/>
         <RoomPage/>

@@ -3,7 +3,7 @@ import { checkAuth } from "../../../middlewares/auth-middleware";
 import { IApolloContext } from "../../../types/IApolloContext";
 import Messenge from "../../../models/Messenge";
 import User from '../../../models/User';
-import {fn, col} from 'sequelize'; 
+import {literal} from 'sequelize'; 
 
 
 export default {
@@ -33,7 +33,8 @@ export default {
 
             const newestMessenges = await Messenge.findAll({
                 attributes: [
-                    [fn('DISTINCT', col('recipientId')), 'recipientId']
+                    [literal('DISTINCT "Messenge"."recipientId"'), 'recipientId'],
+                    'createdAt'
                 ],
                 where: {
                     authorId: authUserId
@@ -61,9 +62,10 @@ export default {
             const authUserId: number = resp.locals.user.id;
 
             const newestMessenges = await Messenge.findAll({
-                attributes: {
-                    include: [[fn('DISTINCT', col('recipientId')), 'recipientId']]
-                },
+                attributes: [
+                    [literal('DISTINCT "Messenge"."recipientId"'), 'recipientId'],
+                    '*'
+                ],
                 where: {
                     authorId: authUserId
                 },

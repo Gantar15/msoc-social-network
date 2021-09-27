@@ -66,6 +66,7 @@ export default gql`
 
     #messenge
     type Messenge{
+        id: Int!
         createdAt: String!
         updatedAt: String!
         text: String!

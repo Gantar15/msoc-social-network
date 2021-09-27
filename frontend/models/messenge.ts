@@ -1,5 +1,6 @@
 
 interface IMessenge{
+    id: number;
     text: string;
     authorId: number;
     recipientId: number;

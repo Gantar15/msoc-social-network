@@ -12,7 +12,8 @@ import styles from "./MessengerNavigator.module.scss";
 const MessengerNavigator: FC = () => {
     const {data: newestInterlocutors, loading: newestInterlocutorsLoading} = useQuery<getNewestInterlocutors_Query>(getNewestInterlocutors);
     const {data: newestMessenges, loading: newestMessengesLoading} = useQuery<getNewestMessenges_Query>(getNewestMessenges);
-
+console.log(newestInterlocutors)
+console.log(newestMessenges)
     if(newestInterlocutorsLoading || newestMessengesLoading)
         return (
             <section className={styles.MessengerNavigator}>
