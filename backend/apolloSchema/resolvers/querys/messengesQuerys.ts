@@ -3,7 +3,7 @@ import { checkAuth } from "../../../middlewares/auth-middleware";
 import { IApolloContext } from "../../../types/IApolloContext";
 import Messenge from "../../../models/Messenge";
 import User from '../../../models/User';
-import {literal} from 'sequelize'; 
+import {literal, Op} from 'sequelize'; 
 
 
 export default {
@@ -31,22 +31,18 @@ export default {
             checkAuth(resp);
             const authUserId: number = resp.locals.user.id;
 
-            const newestMessenges = await Messenge.findAll({
+            const newestAuthUserMessenges = await Messenge.findAll({
                 attributes: [
-                    [literal('DISTINCT "Messenge"."recipientId"'), 'recipientId'],
-                    'createdAt'
+                    [literal('DISTINCT "Messenge"."recipientId"'), 'recipientId']
                 ],
                 where: {
                     authorId: authUserId
-                },
-                order: [
-                    ["createdAt", "ASC"]
-                ]
+                }
             });
             const newestInterlocutors = await User.findAll({
                 attributes: ['id', 'name', 'profilePicture'],
                 where: {
-                    id: newestMessenges.map(mess => mess.recipientId)
+                    id: newestAuthUserMessenges.map(mess => mess.recipientId)
                 }
             });
 
@@ -61,19 +57,36 @@ export default {
             checkAuth(resp);
             const authUserId: number = resp.locals.user.id;
 
-            const newestMessenges = await Messenge.findAll({
+            const newestAuthUserMessenges = await Messenge.findAll({
                 attributes: [
-                    [literal('DISTINCT "Messenge"."recipientId"'), 'recipientId'],
-                    '*'
+                    [literal('DISTINCT "Messenge"."recipientId"'), 'recipientId']
                 ],
                 where: {
                     authorId: authUserId
-                },
-                order: [
-                    ["createdAt", "ASC"]
-                ]
+                }
             });
-
+            
+            const newestInterlocutorsIds = newestAuthUserMessenges.map(({recipientId}) => recipientId);
+            const newestMessenges = await Promise.all(newestInterlocutorsIds.map(async (interlocutorId) => {
+                return await Messenge.findOne({
+                    where: {
+                        [Op.or]: {
+                            [Op.and]: {
+                                authorId: authUserId,
+                                recipientId: interlocutorId
+                            },
+                            [Op.and]: {
+                                authorId: interlocutorId,
+                                recipientId: authUserId
+                            }
+                        }
+                    },
+                    order: [
+                        ["createdAt", "DESC"]
+                    ],
+                });
+            }));
+            
             return newestMessenges;
         } catch(err: any){
             errorHandler(err);

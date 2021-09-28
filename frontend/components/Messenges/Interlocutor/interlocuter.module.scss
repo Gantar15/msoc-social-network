@@ -1,6 +1,7 @@
 @import '../../../public/styles/variables.scss';
 
 .interlocutor{
+    cursor: pointer;
     display: flex;
     align-items: center;
     padding: 10px;
@@ -20,7 +21,7 @@
         }
     }
     .contentBlock{
-        margin-left: 15px;
+        margin-left: 10px;
         display: flex;
         justify-content: space-between;
         width: 100%;

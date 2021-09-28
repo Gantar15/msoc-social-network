@@ -37,7 +37,7 @@ console.log(newestMessenges)
 
                             if(lastMessenge)
                                 return (
-                                    <Interlocuter interlocutor={interlocutor} lastMessenge={lastMessenge}/>
+                                    <Interlocuter key={lastMessenge.id} interlocutor={interlocutor} lastMessenge={lastMessenge}/>
                                 );
                         })
                     }

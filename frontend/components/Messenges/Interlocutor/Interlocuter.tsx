@@ -14,7 +14,7 @@ const Interlocuter: FC<IProps> = ({interlocutor, lastMessenge}) => {
     return (
         <div className={styles.interlocutor}>
             <div className={styles.interlocutorAvatar}>
-                <img className={styles.img} src={interlocutor.profilePicture ?? '/imgs/default_user_logo.jpg'}/>
+                <img className={styles.img} src={interlocutor.profilePicture ? interlocutor.profilePicture : '/imgs/default_user_logo.jpg'}/>
             </div>
             <div className={styles.contentBlock}>
                 <div>
@@ -22,7 +22,7 @@ const Interlocuter: FC<IProps> = ({interlocutor, lastMessenge}) => {
                     <p className={styles.lastMessenge}>{lastMessenge.text}</p>
                 </div>
                 <div className={styles.lastMessengeDate}>
-                    <time>{new Date(lastMessenge.createdAt).toLocaleDateString('ru')}</time>
+                    <time>{new Date(+lastMessenge.createdAt).toLocaleDateString('ru')}</time>
                 </div>
             </div>
         </div>
