@@ -61,9 +61,23 @@
         padding-top: 10px;
         display: flex;
         flex-direction: column;
+        align-items: center;
 
         &>div:nth-of-type(n+2){
             margin-top: 20px;
+        }
+
+        .noInterlocutors{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            &Message{
+                font-size: 15px;
+                margin-bottom: 0px;
+                margin-top: 0;
+            }
         }
     }
 }

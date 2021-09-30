@@ -31,18 +31,30 @@ export default {
             checkAuth(resp);
             const authUserId: number = resp.locals.user.id;
 
-            const newestAuthUserMessenges = await Messenge.findAll({
+            const newestFromAuthUserMessenges = await Messenge.findAll({
                 attributes: [
                     [literal('DISTINCT "Messenge"."recipientId"'), 'recipientId']
                 ],
-                where: {
-                    authorId: authUserId
-                }
+                where: {authorId: authUserId}
             });
+            const newestToAuthUserMessenges = await Messenge.findAll({
+                attributes: [
+                    [literal('DISTINCT "Messenge"."authorId"'), 'authorId']
+                ],
+                where: {recipientId: authUserId}
+            });
+
+            let newestInterlocutorsIds = newestFromAuthUserMessenges.map(({recipientId}) => recipientId).
+                concat(newestToAuthUserMessenges.map(({authorId}) => authorId));
+            newestInterlocutorsIds = newestInterlocutorsIds.reduce((all: number[], id) => {
+                if(!all.includes(id))
+                    all.push(id);
+                return all;
+            }, []);
             const newestInterlocutors = await User.findAll({
                 attributes: ['id', 'name', 'profilePicture'],
                 where: {
-                    id: newestAuthUserMessenges.map(mess => mess.recipientId)
+                    id: newestInterlocutorsIds
                 }
             });
 
@@ -57,36 +69,51 @@ export default {
             checkAuth(resp);
             const authUserId: number = resp.locals.user.id;
 
-            const newestAuthUserMessenges = await Messenge.findAll({
+            const newestFromAuthUserMessenges = await Messenge.findAll({
                 attributes: [
                     [literal('DISTINCT "Messenge"."recipientId"'), 'recipientId']
                 ],
-                where: {
-                    authorId: authUserId
-                }
+                where: {authorId: authUserId}
+            });
+            const newestToAuthUserMessenges = await Messenge.findAll({
+                attributes: [
+                    [literal('DISTINCT "Messenge"."authorId"'), 'authorId']
+                ],
+                where: {recipientId: authUserId}
             });
             
-            const newestInterlocutorsIds = newestAuthUserMessenges.map(({recipientId}) => recipientId);
-            const newestMessenges = await Promise.all(newestInterlocutorsIds.map(async (interlocutorId) => {
+            let newestInterlocutorsIds = newestFromAuthUserMessenges.map(({recipientId}) => recipientId).
+                concat(newestToAuthUserMessenges.map(({authorId}) => authorId));
+            newestInterlocutorsIds = newestInterlocutorsIds.reduce((all: number[], id) => {
+                if(!all.includes(id))
+                    all.push(id);
+                return all;
+            }, []);
+            let newestMessenges = await Promise.all(newestInterlocutorsIds.map(async (interlocutorId) => {
                 return await Messenge.findOne({
                     where: {
-                        [Op.or]: {
-                            [Op.and]: {
-                                authorId: authUserId,
-                                recipientId: interlocutorId
+                        [Op.or]: [
+                            {
+                                [Op.and]: {
+                                    authorId: authUserId,
+                                    recipientId: interlocutorId
+                                }
                             },
-                            [Op.and]: {
-                                authorId: interlocutorId,
-                                recipientId: authUserId
+                            {
+                                [Op.and]: {
+                                    authorId: interlocutorId,
+                                    recipientId: authUserId
+                                }
                             }
-                        }
+                        ]
                     },
                     order: [
                         ["createdAt", "DESC"]
                     ],
                 });
             }));
-            
+
+            newestMessenges = newestMessenges.filter(el => !!el);
             return newestMessenges;
         } catch(err: any){
             errorHandler(err);

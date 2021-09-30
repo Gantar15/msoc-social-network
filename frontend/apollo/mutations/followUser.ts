@@ -20,7 +20,7 @@ const useFollowUser = (userId: number) => {
         variables: {
             userId
         },
-        update: async (cache, {data}) => {
+        update: async () => {
             client().refetchQueries({include: [getFollowers, getFollowersCount, getFollowins, getFollowinsCount]});
         }
     });
