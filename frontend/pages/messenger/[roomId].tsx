@@ -1,16 +1,18 @@
 import type { NextPage, GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
-import MainContainer from '../components/MainContainer/MainContainer';
-import {useRefresh} from '../apollo/mutations/refresh';
-import validateRefreshToken from '../utils/validateRefreshToken';
-import MessengerNavigator from '../components/Messenges/MessengerNavigator/MessengerNavigator';
-import RoomPage from '../components/Messenges/RoomPage/RoomPage';
+import MainContainer from '../../components/MainContainer/MainContainer';
+import {useRefresh} from '../../apollo/mutations/refresh';
+import validateRefreshToken from '../../utils/validateRefreshToken';
+import MessengerNavigator from '../../components/Messenges/MessengerNavigator/MessengerNavigator';
+import RoomPage from '../../components/Messenges/RoomPage/RoomPage';
+import { useRouter } from 'next/router';
 
-import styles from '../public/styles/messenger.module.scss';
+import styles from '/public/styles/messenger.module.scss';
 
 
 const Messenger: NextPage = () => {
-  const [interlocutorRoom, setInterlocutorRoom] = useState<number | undefined>(undefined);
+    const router = useRouter();
+  const [interlocutorRoom, setInterlocutorRoom] = useState<number | undefined>(+router.query!.roomId!);
   const {refresh} = useRefresh();
 
   useEffect(() => {

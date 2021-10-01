@@ -26,27 +26,32 @@ console.log(newestInterlocutors, newestMessenges)
     else
         return (
             <section className={styles.MessengerNavigator}>
-                <header>
-                    <div className={styles.search}>
-                        <Search className={styles.searchIcon}/>
-                        <input type="text" placeholder="Поиск"/>
-                    </div>
-                    <SettingsOutlinedIcon className={styles.settings}/>
-                </header>
-                <section className={styles.interlocutorBlock}>
-                    {
-                        newestInterlocutors!.getNewestInterlocutors.length ?
-                        newestInterlocutors!.getNewestInterlocutors.map(interlocutor => {
-                            const lastMessenge = newestMessenges?.getNewestMessenges.find(mess => mess.recipientId == interlocutor.id || mess.authorId == interlocutor.id);
+                <div>
+                    <header>
+                        <div className={styles.search}>
+                            <Search className={styles.searchIcon}/>
+                            <input type="text" placeholder="Поиск"/>
+                        </div>
+                        <SettingsOutlinedIcon className={styles.settings}/>
+                    </header>
+                    <section className={styles.interlocutorBlock}>
+                        {
+                            newestInterlocutors!.getNewestInterlocutors.length ?
+                            newestInterlocutors!.getNewestInterlocutors.map(interlocutor => {
+                                const lastMessenge = newestMessenges?.getNewestMessenges.find(mess => mess.recipientId == interlocutor.id || mess.authorId == interlocutor.id);
 
-                            if(lastMessenge)
-                                return (
-                                    <Interlocuter setInterlocutorRoom={setInterlocutorRoom} key={lastMessenge.id} interlocutor={interlocutor} lastMessenge={lastMessenge}/>
-                                );
-                        })
-                        : <p>...</p>
-                    }
-                </section>
+                                if(lastMessenge)
+                                    return (
+                                        <Interlocuter setInterlocutorRoom={setInterlocutorRoom} key={lastMessenge.id} interlocutor={interlocutor} lastMessenge={lastMessenge}/>
+                                    );
+                            })
+                            : <p>...</p>
+                        }
+                    </section>
+                </div>
+                <footer>
+                    <p>Это все беседы</p>
+                </footer>
             </section>
         );
 };

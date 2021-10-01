@@ -2,7 +2,8 @@ import { FC, ReactElement } from "react";
 import Head from 'next/head';
 import Topbar from '../../components/Topbar/Topbar';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import styles from './mainContsiner.module.scss';
+
+import styles from './mainContainer.module.scss';
 
 
 interface IProps{

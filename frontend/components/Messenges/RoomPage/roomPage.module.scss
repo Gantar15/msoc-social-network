@@ -12,7 +12,14 @@
     background-color:  $contrastBackgroundColor;
     box-shadow: $boxShadow;
     border-radius: 10px;
+    min-height: 80vh;
+    padding: 0 30px;
 
+    .messImgs{
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+    }
     .noInterlocutorTitle{
         font-size: 20px;
         margin-bottom: 10px;
@@ -21,5 +28,6 @@
     }
     .noInterlocutorMessage{
         margin-bottom: 30px;
+        text-align: center;
     }
 }

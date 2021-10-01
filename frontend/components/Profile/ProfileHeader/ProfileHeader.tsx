@@ -9,6 +9,8 @@ import getAuthUser from '../../../apollo/queries/getAuthUser';
 import getUser from '../../../apollo/queries/getUser';
 import useUnfollowUser from '../../../apollo/mutations/unfollowUser';
 import useFollowUser from '../../../apollo/mutations/followUser';
+import TelegramIcon from '@material-ui/icons/Telegram';
+import A from '../../A/A';
 
 import styles from './profileHeader.module.scss';
 
@@ -68,17 +70,26 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                 </div>
                 <div className={styles.nameBlock}>
                     <span className={styles.name}>{userData?.getUser.name}</span>
-                    {
-                        userData?.getUser && authUser?.getAuthUser && userData?.getUser.id != authUser?.getAuthUser.id ?
-                        isSubscribe ? 
-                            (<button className={styles.unsubscribe} onClick={unfollowHandler}>
-                                Отписаться
-                            </button>)
-                            :(<button className={styles.subscribe} onClick={followHandler}>
-                                Подписаться
-                            </button>)
-                        : null
-                    }
+                    <div className={styles.subscribeBlock}>
+                        {
+                            userData?.getUser && authUser?.getAuthUser && userData?.getUser.id != authUser?.getAuthUser.id ?
+                            isSubscribe ? 
+                                (<button className={styles.unsubscribe} onClick={unfollowHandler}>
+                                    Отписаться
+                                </button>)
+                                :(<button className={styles.subscribe} onClick={followHandler}>
+                                    Подписаться
+                                </button>)
+                            : null
+                        }
+                        {
+                            userData?.getUser.id != authUser?.getAuthUser.id ?
+                            (<A href={`/messenger/${userId}`} className={styles.sendMessenge}>
+                                <TelegramIcon className={styles.icon}/>
+                            </A>)
+                            : null
+                        }
+                    </div>
                 </div>
             </div>
             <div className={styles.userInfoBlock}>
