@@ -1,0 +1,35 @@
+@import '../../../public/styles/variables.scss';
+
+.messenge{
+    display: flex;
+    color: $contrastInonsColor;
+
+    &:nth-of-type(n+2){
+        margin-top: 10px;
+    }
+    &.ours{
+        color: $contrastBackgroundColor;
+        align-self: flex-end;
+        background-image: $gradient;
+        padding: 10px;
+        border-radius: 13px;
+        
+        .messengeDate{
+            margin-left: 5px;
+        }
+    }
+    &.theirs{
+        align-self: flex-start;
+
+        .messengeDate{
+            margin-right: 5px;
+        }
+    }
+
+    .messengeText{
+
+    }
+    .messengeDate{
+        font-size: 11px;
+    }
+}

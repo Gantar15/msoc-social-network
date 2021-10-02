@@ -11,16 +11,19 @@ import styles from "./MessengerNavigator.module.scss";
 
 interface IProps{
     setInterlocutorRoom: Function;
+    interlocutorRoom: number;
 }
 
-const MessengerNavigator: FC<IProps> = ({setInterlocutorRoom}) => {
+const MessengerNavigator: FC<IProps> = ({setInterlocutorRoom, interlocutorRoom}) => {
     const {data: newestInterlocutors, loading: newestInterlocutorsLoading} = useQuery<getNewestInterlocutors_Query>(getNewestInterlocutors);
     const {data: newestMessenges, loading: newestMessengesLoading} = useQuery<getNewestMessenges_Query>(getNewestMessenges);
-console.log(newestInterlocutors, newestMessenges)
+
     if(newestInterlocutorsLoading || newestMessengesLoading)
         return (
             <section className={styles.MessengerNavigator}>
-                Загрузка...
+                <div>
+                    Загрузка...
+                </div>
             </section>
         );
     else
@@ -42,7 +45,13 @@ console.log(newestInterlocutors, newestMessenges)
 
                                 if(lastMessenge)
                                     return (
-                                        <Interlocuter setInterlocutorRoom={setInterlocutorRoom} key={lastMessenge.id} interlocutor={interlocutor} lastMessenge={lastMessenge}/>
+                                        <Interlocuter 
+                                            isActive={interlocutorRoom == interlocutor.id} 
+                                            setInterlocutorRoom={setInterlocutorRoom} 
+                                            key={lastMessenge.id} 
+                                            interlocutor={interlocutor} 
+                                            lastMessenge={lastMessenge}
+                                        />
                                     );
                             })
                             : <p>...</p>

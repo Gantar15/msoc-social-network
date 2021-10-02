@@ -1,7 +1,8 @@
 import { FC, memo, useEffect } from "react";
-import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
+import { useLazyQuery, useQuery, useMutation, useSubscription } from "@apollo/client";
 import watchMessenge, {watchMessenge_Subscription} from '../../../apollo/subsciptions/watchMessenge';
 import getMessenges, {getMessenges_Query} from "../../../apollo/queries/getMessenges";
+import Messenge from "../Messenge/Messenge";
 
 import styles from './roomPage.module.scss';
 
@@ -11,7 +12,7 @@ interface IProps{
 }
 
 const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
-    const [getMessengesExecute, {data: messenges, loading: messengesLoading}] = useLazyQuery<getMessenges_Query>(getMessenges);
+    const [getMessengesExecute, {data: messenges, loading: messengesLoading}] = useLazyQuery<getMessenges_Query>(getMessenges, {fetchPolicy: 'network-only'});
     const {data: newMessenge, loading: newMessengeLoading} = useSubscription<watchMessenge_Subscription>(watchMessenge, {
       variables: {
         recipientId: interlocutorRoom
@@ -36,14 +37,16 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
                 <p className={styles.noInterlocutorMessage}>Выберите собеседника</p>
             </div>
         );
-
+        
     return (
         <section className={styles.roomPage}>
-            {
-                messenges?.getMessenges.map(messenge => (
-                    <p>{messenge.text}</p>
-                ))
-            }
+            <section className={styles.messengesBlock}>
+                {
+                    messenges?.getMessenges.map(messenge => (
+                        <Messenge key={messenge.id} messenge={messenge}/>
+                    ))
+                }
+            </section>
         </section>
     );
 };

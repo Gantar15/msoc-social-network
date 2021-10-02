@@ -83,7 +83,7 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                             : null
                         }
                         {
-                            userData?.getUser.id != authUser?.getAuthUser.id ?
+                            userData?.getUser.id != authUser?.getAuthUser?.id ?
                             (<A href={`/messenger/${userId}`} className={styles.sendMessenge}>
                                 <TelegramIcon className={styles.icon}/>
                             </A>)

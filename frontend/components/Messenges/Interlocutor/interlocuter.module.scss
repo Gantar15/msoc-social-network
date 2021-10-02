@@ -4,12 +4,27 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 8px;
     width: 100%;
-    background-image: $gradient;
-    border-radius: 12px;
-    color: $contrastBackgroundColor;
+    border-radius: 13px;
+    color: $contrastFontColor;
+    
+    &:hover{
+        background-color: $inputColor;
+    }
+    &.active{
+        background-image: $gradient;
+        color: $contrastBackgroundColor;
 
+        .contentBlock{
+            .lastMessengeDate{
+                time{
+                    color: $contrastBackgroundColor;
+                    font-weight: normal;
+                }
+            }
+        }
+    }
     .interlocutorAvatar{
         width: 45px;
         height: 45px;
@@ -30,7 +45,7 @@
         &>div:nth-child(1){
             .name{
                 word-wrap: break-word;
-                font-weight: 500;
+                font-weight: bold;
             }
             .lastMessenge{
                 margin-top: 2px;
@@ -48,12 +63,14 @@
         .lastMessengeDate{
             display: flex;
             justify-content: flex-end;
-            margin-top: 2px;
+            margin-top: 3px;
 
             time{
-                font-size: 12px;
+                font-weight: bold;
+                font-size: 11px;
                 margin-left: 20px;
-                margin-right: 2px;
+                margin-right: 6px;
+                color: $placeholderFontColor;
             }
         }
     }

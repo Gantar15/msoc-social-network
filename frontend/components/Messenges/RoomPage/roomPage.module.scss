@@ -2,13 +2,13 @@
 @import '../../../public/styles/variables.scss';
 
 .roomPage{
-    margin-left: 15px;
     flex: 5;
+    margin-left: 15px;
     color: $contrastInonsColor;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     background-color:  $contrastBackgroundColor;
     box-shadow: $boxShadow;
     border-radius: 10px;
@@ -29,5 +29,28 @@
     .noInterlocutorMessage{
         margin-bottom: 30px;
         text-align: center;
+    }
+
+    .messengesBlock{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        overflow-y: auto;
+        width: 100%;
+
+        &::-webkit-scrollbar{
+            width: 9px;
+            height: 9px;
+        }
+        &::-webkit-scrollbar-thumb{
+            background: #caccd6bb;
+            border-radius: 30px;
+        }
+        &::-webkit-scrollbar-thumb:hover{
+            background: #cacdd8e3;
+        }
+        &::-webkit-scrollbar-track{
+            visibility: hidden;
+        }
     }
 }

@@ -20,7 +20,7 @@ const Messenger: NextPage = () => {
   return (
     <MainContainer activePage={3} title="Messenger">
       <main className={styles.messenger}>
-        <MessengerNavigator setInterlocutorRoom={setInterlocutorRoom}/>
+        <MessengerNavigator setInterlocutorRoom={setInterlocutorRoom} interlocutorRoom={interlocutorRoom}/>
         <RoomPage interlocutorRoom={interlocutorRoom}/>
       </main>
     </MainContainer>

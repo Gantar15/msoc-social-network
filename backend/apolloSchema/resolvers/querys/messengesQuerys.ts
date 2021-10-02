@@ -10,10 +10,14 @@ export default {
     async getMessenges(_: any, {recipientId}: {recipientId: number}, {resp}: IApolloContext){
         try{
             checkAuth(resp);
+            const authUserId = resp.locals.user.id;
 
             const messenges = await Messenge.findAll({
                 where: {
-                    recipientId
+                    [Op.or]: [
+                        {authorId: authUserId, recipientId},
+                        {authorId: recipientId, recipientId: authUserId}
+                    ]
                 },
                 order: [
                     ["createdAt", "ASC"]
