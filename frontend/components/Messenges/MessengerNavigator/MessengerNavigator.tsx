@@ -20,7 +20,7 @@ const MessengerNavigator: FC<IProps> = ({setInterlocutorRoom, interlocutorRoom})
 
     if(newestInterlocutorsLoading || newestMessengesLoading)
         return (
-            <section className={styles.MessengerNavigator}>
+            <section className={styles.messengerNavigator}>
                 <div>
                     Загрузка...
                 </div>
@@ -28,36 +28,34 @@ const MessengerNavigator: FC<IProps> = ({setInterlocutorRoom, interlocutorRoom})
         );
     else
         return (
-            <section className={styles.MessengerNavigator}>
-                <div>
-                    <header>
-                        <div className={styles.search}>
-                            <Search className={styles.searchIcon}/>
-                            <input type="text" placeholder="Поиск"/>
-                        </div>
-                        <SettingsOutlinedIcon className={styles.settings}/>
-                    </header>
-                    <section className={styles.interlocutorBlock}>
-                        {
-                            newestInterlocutors!.getNewestInterlocutors.length ?
-                            newestInterlocutors!.getNewestInterlocutors.map(interlocutor => {
-                                const lastMessenge = newestMessenges?.getNewestMessenges.find(mess => mess.recipientId == interlocutor.id || mess.authorId == interlocutor.id);
+            <section className={styles.messengerNavigator}>
+                <header>
+                    <div className={styles.search}>
+                        <Search className={styles.searchIcon}/>
+                        <input type="text" placeholder="Поиск"/>
+                    </div>
+                    <SettingsOutlinedIcon className={styles.settings}/>
+                </header>
+                <section className={styles.interlocutorsBlock}>
+                    {
+                        newestInterlocutors!.getNewestInterlocutors.length ?
+                        newestInterlocutors!.getNewestInterlocutors.map(interlocutor => {
+                            const lastMessenge = newestMessenges?.getNewestMessenges.find(mess => mess.recipientId == interlocutor.id || mess.authorId == interlocutor.id);
 
-                                if(lastMessenge)
-                                    return (
-                                        <Interlocuter 
-                                            isActive={interlocutorRoom == interlocutor.id} 
-                                            setInterlocutorRoom={setInterlocutorRoom} 
-                                            key={lastMessenge.id} 
-                                            interlocutor={interlocutor} 
-                                            lastMessenge={lastMessenge}
-                                        />
-                                    );
-                            })
-                            : <p>...</p>
-                        }
-                    </section>
-                </div>
+                            if(lastMessenge)
+                                return (
+                                    <Interlocuter 
+                                        isActive={interlocutorRoom == interlocutor.id} 
+                                        setInterlocutorRoom={setInterlocutorRoom} 
+                                        key={lastMessenge.id} 
+                                        interlocutor={interlocutor} 
+                                        lastMessenge={lastMessenge}
+                                    />
+                                );
+                        })
+                        : <p>...</p>
+                    }
+                </section>
                 <footer>
                     <p>Это все беседы</p>
                 </footer>

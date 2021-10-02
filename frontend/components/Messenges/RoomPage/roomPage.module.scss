@@ -12,32 +12,32 @@
     background-color:  $contrastBackgroundColor;
     box-shadow: $boxShadow;
     border-radius: 10px;
-    min-height: 80vh;
-    padding: 0 30px;
+    height: 80vh;
 
-    .messImgs{
-        width: 80px;
-        height: 80px;
-        object-fit: contain;
-    }
-    .noInterlocutorTitle{
-        font-size: 20px;
-        margin-bottom: 10px;
-        margin-top: 30px;
-        text-align: center;
-    }
-    .noInterlocutorMessage{
-        margin-bottom: 30px;
-        text-align: center;
+    &.noInterlocutor{
+        justify-content: center;
+
+        .messImgs{
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+        .noInterlocutorTitle{
+            font-size: 20px;
+            margin-bottom: 10px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .noInterlocutorMessage{
+            margin-bottom: 30px;
+            text-align: center;
+        }
     }
 
     .messengesBlock{
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
         overflow-y: auto;
         width: 100%;
-
+    
         &::-webkit-scrollbar{
             width: 9px;
             height: 9px;
@@ -51,6 +51,14 @@
         }
         &::-webkit-scrollbar-track{
             visibility: hidden;
+        }
+
+        &>div{
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            width: 100%;
+            padding: 0 30px;
         }
     }
 }

@@ -31,7 +31,7 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     
     if(!interlocutorRoom)
         return (
-            <div className={styles.roomPage}>
+            <div className={styles.roomPage + ' ' + styles.noInterlocutor}>
                 <img className={styles.messImgs} src="/imgs/comments.svg"/>
                 <h2 className={styles.noInterlocutorTitle}>Здесь будут отображены сообщения</h2>
                 <p className={styles.noInterlocutorMessage}>Выберите собеседника</p>
@@ -41,11 +41,13 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     return (
         <section className={styles.roomPage}>
             <section className={styles.messengesBlock}>
-                {
-                    messenges?.getMessenges.map(messenge => (
-                        <Messenge key={messenge.id} messenge={messenge}/>
-                    ))
-                }
+                <div>
+                    {
+                        messenges?.getMessenges.map(messenge => (
+                            <Messenge key={messenge.id} messenge={messenge}/>
+                        ))
+                    }
+                </div>
             </section>
         </section>
     );

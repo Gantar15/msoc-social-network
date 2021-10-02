@@ -1,125 +1,115 @@
 @import '../../../public/styles/variables.scss';
 
-.MessengerNavigator{
+.messengerNavigator{
     flex: 2.5;
-    overflow-y: auto;
     border-radius: 10px;
     box-shadow: $boxShadow;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: $contrastBackgroundColor;
 
-    &::-webkit-scrollbar{
-        width: 9px;
-        height: 9px;
-    }
-    &::-webkit-scrollbar-thumb{
-        background: #caccd6bb;
-        border-radius: 30px;
-    }
-    &::-webkit-scrollbar-thumb:hover{
-        background: #cacdd8e3;
-    }
-    &::-webkit-scrollbar-track{
-        visibility: hidden;
-    }
+    header{
+        padding: 8px 0;
+        padding-bottom: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid $border;
+        margin: 0 20px;
 
-    &>div{
-        height: calc(100% - 57px);
-        background-color: $contrastBackgroundColor;
-        padding: 10px 15px;
-
-        header{
-            padding-bottom: 8px;
-            padding-right: 3px;
-            padding-left: 3px;
+        .search{
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid $border;
+            width: 100%;
+            max-width: 400px;
+            height: 40px;
+            border-radius: 10px;   
+            padding-right: 5px;
 
-            .search{
-                display: flex;
-                align-items: center;
+            input{
+                border-radius: 0 20px 20px 0;
+                color: $mainFontColor;
+                padding: 3px 10px 3px 5px;
+                font-size: 14px;
+                font-weight: bold;
                 width: 100%;
-                max-width: 400px;
-                height: 40px;
-                border-radius: 10px;   
-                padding-right: 5px;
+                height: 30px;
 
-                input{
-                    border-radius: 0 20px 20px 0;
-                    color: $mainFontColor;
-                    padding: 3px 10px 3px 5px;
-                    font-size: 14px;
-                    font-weight: bold;
-                    width: 100%;
-                    height: 30px;
-
-                    &::placeholder{
-                        color: $placeholderFontColor;
-                    }
-                }
-                &Icon{
-                    font-size: 23px !important;
-                    height: 30px;
-                    cursor: pointer;
+                &::placeholder{
                     color: $placeholderFontColor;
                 }
             }
-
-            .settings{
-                color: $placeholderFontColor;
+            &Icon{
+                font-size: 23px !important;
+                height: 30px;
                 cursor: pointer;
-                transition: color .2s;
-
-                &:hover{
-                    color: $mainFontColor;
-                }
+                color: $placeholderFontColor;
             }
         }
 
-        .interlocutorBlock{
-            padding-top: 10px;
+        .settings{
+            color: $placeholderFontColor;
+            cursor: pointer;
+            transition: color .2s;
+
+            &:hover{
+                color: $mainFontColor;
+            }
+        }
+    }
+    .interlocutorsBlock{
+        height: 100%;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar{
+            width: 9px;
+            height: 9px;
+        }
+        &::-webkit-scrollbar-thumb{
+            background: #caccd6bb;
+            border-radius: 30px;
+        }
+        &::-webkit-scrollbar-thumb:hover{
+            background: #cacdd8e3;
+        }
+        &::-webkit-scrollbar-track{
+            visibility: hidden;
+        }
+
+        .noInterlocutors{
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
 
-            &>div:nth-of-type(n+2){
-                margin-top: 10px;
-            }
-
-            .noInterlocutors{
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-
-                &Message{
-                    font-size: 15px;
-                    margin-bottom: 0px;
-                    margin-top: 0;
-                }
+            &Message{
+                font-size: 15px;
+                margin-bottom: 0px;
+                margin-top: 0;
             }
         }
     }
 
     footer{
-        height: 57px;
-        position: sticky;
-        bottom: 0;
-        width: 100%;
+        padding: 15px 0;
+        padding-top: 0;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 0 18px;
-        padding-bottom: 20px;
-        background-color: $contrastBackgroundColor;
         border-radius: 0 0 10px 10px;
+        margin: 0 20px;
 
         p{
+            padding-top: 15px;
             width: 100%;
-            padding-top: 18px;
             border-top: 1px solid $border;
             text-align: center;
-            font-size: 15px;
+            font-size: 13px;
             color: $mainFontColor;
         }
     }
