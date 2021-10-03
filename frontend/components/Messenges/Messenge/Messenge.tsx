@@ -9,33 +9,19 @@ import styles from './messenge.module.scss';
 
 interface IProps {
     messenge: IMessenge;
-    key: number;
 }
 
-const Messenge: FC<IProps> = ({messenge, key}) => {
+const Messenge: FC<IProps> = ({messenge}) => {
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     const isOurs = authUser?.getAuthUser.id == messenge.authorId;
-    
-    if(isOurs)
-        return (
-            <section key={key} className={styles.messenge + ' ' + styles.ours}>
-                <p className={styles.messengeText}>
-                    {
-                        messenge.text
-                    }
-                </p>
-                <span className={styles.messengeDate}>
-                    {
-                        new Date(+messenge.createdAt).toLocaleString('ru', {
-                            hour: '2-digit', minute: '2-digit'
-                        })
-                    }
-                </span>
-            </section>
-        );
 
     return (
-        <section key={key} className={styles.messenge + ' ' + styles.theirs}>
+        <section className={styles.messenge + (isOurs ? ' ' + styles.ours : ' ' + styles.theirs)}>
+            <p className={styles.messengeText}>
+                {
+                    messenge.text
+                }
+            </p>
             <span className={styles.messengeDate}>
                 {
                     new Date(+messenge.createdAt).toLocaleString('ru', {
@@ -43,11 +29,6 @@ const Messenge: FC<IProps> = ({messenge, key}) => {
                     })
                 }
             </span>
-            <p className={styles.messengeText}>
-                {
-                    messenge.text
-                }
-            </p>
         </section>
     )
 };

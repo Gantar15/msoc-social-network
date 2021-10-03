@@ -3,6 +3,12 @@ import { useLazyQuery, useQuery, useMutation, useSubscription } from "@apollo/cl
 import watchMessenge, {watchMessenge_Subscription} from '../../../apollo/subsciptions/watchMessenge';
 import getMessenges, {getMessenges_Query} from "../../../apollo/queries/getMessenges";
 import Messenge from "../Messenge/Messenge";
+import getAuthUser from '../../../apollo/queries/getAuthUser';
+import type { IAuthUser } from "../../../models/user";
+import getUser, { getUser_Query } from "../../../apollo/queries/getUser";
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import A from '../../A/A';
+import MessengeSender from "../MessengeSender/MessengeSender";
 
 import styles from './roomPage.module.scss';
 
@@ -19,6 +25,22 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
       },
       shouldResubscribe: true
     });
+    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+    const [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
+    const {data: interlocutorData} = useQuery<getUser_Query>(getUser, {
+        variables: {
+            userId: interlocutorRoom
+        }
+    });
+
+    useEffect(() => {
+        if(authUser?.getAuthUser)
+            getUserQuery({
+                variables: {
+                    userId: authUser.getAuthUser.id
+                }
+            });
+    }, [authUser]);
     
     useEffect(() => {
         if(interlocutorRoom)
@@ -37,18 +59,41 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
                 <p className={styles.noInterlocutorMessage}>Выберите собеседника</p>
             </div>
         );
-        
+
     return (
         <section className={styles.roomPage}>
+            <header className={styles.roomPageHeader}>
+                <div>
+                    <div className={styles.profileBlock}>
+                        <A href={`/profile/${interlocutorRoom}`} className={styles.profilePicture}>
+                            <img src={authUserData?.getUser.profilePicture ? authUserData?.getUser.profilePicture : '/imgs/default_user_logo.jpg'}/>
+                        </A>
+                        <div className={styles.nameBlock}>
+                            <A href={`/profile/${interlocutorRoom}`} className={styles.name}>
+                                <span>
+                                    {
+                                        interlocutorData?.getUser.name
+                                    }
+                                </span>
+                            </A>
+                            <span className={styles.networkStatus}>
+                                В сети 35 мин. назад
+                            </span>
+                        </div>
+                    </div>
+                    <MoreHorizIcon className={styles.roomSettings}/>
+                </div>
+            </header>
             <section className={styles.messengesBlock}>
                 <div>
                     {
-                        messenges?.getMessenges.map(messenge => (
+                        messenges?.getMessenges && messenges.getMessenges.map(messenge => {console.log(messenge.id);return (
                             <Messenge key={messenge.id} messenge={messenge}/>
-                        ))
+                        )})
                     }
                 </div>
             </section>
+            <MessengeSender/>
         </section>
     );
 };

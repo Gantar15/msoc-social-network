@@ -6,7 +6,7 @@ import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
 import { useLazyQuery, useQuery } from '@apollo/client';
 import { IAuthUser, IUser } from '../../models/user';
 import getAuthUser from '../../apollo/queries/getAuthUser';
-import getUser from '../../apollo/queries/getUser';
+import getUser, {getUser_Query} from '../../apollo/queries/getUser';
 import useAddPost from '../../apollo/mutations/addPost';
 
 import styles from './sharePost.module.scss';
@@ -14,7 +14,7 @@ import styles from './sharePost.module.scss';
 
 const SharePost: FC = () => {
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
-    let [getUserQuery, {data: authUserData}] = useLazyQuery<{getUser: IUser}>(getUser);
+    let [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
     const [photo, setPhoto] = useState<null | FileList>(null);
     const [video, setVideo] = useState<null | FileList>(null);
     const descRef = useRef<HTMLTextAreaElement | null>(null);

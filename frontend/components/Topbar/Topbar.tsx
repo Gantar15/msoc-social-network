@@ -3,7 +3,7 @@ import { FC, useEffect, memo } from 'react';
 import {Search, Notifications} from '@material-ui/icons';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useLazyQuery, useQuery } from '@apollo/client';
-import getUser from '../../apollo/queries/getUser';
+import getUser, {getUser_Query} from '../../apollo/queries/getUser';
 import getAuthUser from '../../apollo/queries/getAuthUser';
 import type { IAuthUser, IUser } from '../../models/user';
 import { useLogout } from '../../apollo/mutations/logout';
@@ -13,7 +13,7 @@ import styles from './topbar.module.scss';
 
 const Topbar: FC = () => {
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
-    let [getUserQuery, {data: authUserData}] = useLazyQuery<{getUser: IUser}>(getUser);
+    let [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
     const {logout} = useLogout();
 
     useEffect(() => {

@@ -11,7 +11,7 @@ import styles from "./MessengerNavigator.module.scss";
 
 interface IProps{
     setInterlocutorRoom: Function;
-    interlocutorRoom: number;
+    interlocutorRoom?: number;
 }
 
 const MessengerNavigator: FC<IProps> = ({setInterlocutorRoom, interlocutorRoom}) => {
@@ -45,7 +45,7 @@ const MessengerNavigator: FC<IProps> = ({setInterlocutorRoom, interlocutorRoom})
                             if(lastMessenge)
                                 return (
                                     <Interlocuter 
-                                        isActive={interlocutorRoom == interlocutor.id} 
+                                        isActive={!!(interlocutorRoom && interlocutorRoom == interlocutor.id)} 
                                         setInterlocutorRoom={setInterlocutorRoom} 
                                         key={lastMessenge.id} 
                                         interlocutor={interlocutor} 

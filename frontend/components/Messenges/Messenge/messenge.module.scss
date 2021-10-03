@@ -3,33 +3,38 @@
 .messenge{
     display: flex;
     color: $contrastInonsColor;
+    padding: 10px;
+    border-radius: 13px;
 
     &:nth-of-type(n+2){
-        margin-top: 10px;
+        margin-top: 7px;
     }
     &.ours{
         color: $contrastBackgroundColor;
         align-self: flex-end;
         background-image: $gradient;
-        padding: 10px;
-        border-radius: 13px;
-        
-        .messengeDate{
-            margin-left: 5px;
-        }
+        border-end-end-radius: 0;
     }
     &.theirs{
         align-self: flex-start;
+        background-color: $inputColor;
+        border-end-start-radius: 0;
 
         .messengeDate{
-            margin-right: 5px;
+            color: $placeholderFontColor;
+        }
+        .messengeText{
+            color: $mainFontColor;
+            font-weight: 500;
         }
     }
 
     .messengeText{
-
+        font-size: 0.9em;
     }
     .messengeDate{
+        margin-left: 20px;
+        align-self: flex-end;
         font-size: 11px;
     }
 }

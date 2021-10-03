@@ -6,7 +6,7 @@ import GavelIcon from '@material-ui/icons/Gavel';
 import { useQuery } from '@apollo/client';
 import { IAuthUser, IUser } from '../../../models/user';
 import getAuthUser from '../../../apollo/queries/getAuthUser';
-import getUser from '../../../apollo/queries/getUser';
+import getUser, {getUser_Query} from '../../../apollo/queries/getUser';
 import useUnfollowUser from '../../../apollo/mutations/unfollowUser';
 import useFollowUser from '../../../apollo/mutations/followUser';
 import TelegramIcon from '@material-ui/icons/Telegram';
@@ -22,7 +22,7 @@ interface IProps{
 const ProfileHeader: FC<IProps> = ({userId}) => {
     const [isSubscribe, setIsSubscribe] = useState(false);
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
-    let {data: userData} = useQuery<{getUser: IUser}>(getUser, {
+    let {data: userData} = useQuery<getUser_Query>(getUser, {
         variables: {
             userId: userId
         }
@@ -83,7 +83,7 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                             : null
                         }
                         {
-                            userData?.getUser.id != authUser?.getAuthUser?.id ?
+                            userData?.getUser && authUser?.getAuthUser && userData?.getUser.id != authUser?.getAuthUser?.id ?
                             (<A href={`/messenger/${userId}`} className={styles.sendMessenge}>
                                 <TelegramIcon className={styles.icon}/>
                             </A>)

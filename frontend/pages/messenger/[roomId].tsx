@@ -12,7 +12,7 @@ import styles from '/public/styles/messenger.module.scss';
 
 const Messenger: NextPage = () => {
     const router = useRouter();
-  const [interlocutorRoom, setInterlocutorRoom] = useState<number | undefined>(+router.query!.roomId!);
+  const [interlocutorRoom, setInterlocutorRoom] = useState<number>(+router.query!.roomId!);
   const {refresh} = useRefresh();
 
   useEffect(() => {
