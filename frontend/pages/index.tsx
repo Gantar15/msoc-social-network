@@ -93,7 +93,7 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
   }
 
   const client = apolloClient();
-  await client.query<IGetAllPosts>({
+  await client.query({
     query: getAllPosts,
     variables: {
       limit: 20,

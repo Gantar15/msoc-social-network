@@ -97,7 +97,7 @@ export default gql`
         getFollowinsCount(userId: Int!): Int!
 
         #Messenges
-        getMessenges(recipientId: Int!): [Messenge!]!
+        getMessenges(recipientId: Int!, refreshToken: String): [Messenge!]!
         getNewestInterlocutors: [Interlocutor!]!
         getNewestMessenges: [Messenge!]!
     }

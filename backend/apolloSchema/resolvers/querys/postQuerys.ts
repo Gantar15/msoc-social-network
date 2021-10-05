@@ -24,7 +24,7 @@ export default {
         try{
             let refreshTokenStr = refreshToken ?? req.cookies.refreshToken;
 
-            const authUserData = await tokenService.validateRefreshToken(refreshTokenStr);
+            const authUserData = tokenService.validateRefreshToken(refreshTokenStr);
             if(!authUserData) throw ApiError.unauthorizedError();
 
             const userId = authUserData.id;

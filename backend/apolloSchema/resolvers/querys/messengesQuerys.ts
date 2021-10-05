@@ -4,13 +4,21 @@ import { IApolloContext } from "../../../types/IApolloContext";
 import Messenge from "../../../models/Messenge";
 import User from '../../../models/User';
 import {literal, Op} from 'sequelize'; 
+import ApiError from "../../../lib/ApiError";
+import tokenService from "../../../services/tokenService";
 
 
 export default {
-    async getMessenges(_: any, {recipientId}: {recipientId: number}, {resp}: IApolloContext){
+    async getMessenges(_: any, {recipientId, refreshToken}: {recipientId: number, refreshToken?: string}, {req, resp}: IApolloContext){
         try{
-            checkAuth(resp);
-            const authUserId = resp.locals.user.id;
+            let refreshTokenStr = refreshToken ?? req.cookies.refreshToken;
+
+            const authUserData = tokenService.validateRefreshToken(refreshTokenStr);
+            if(!authUserData) throw ApiError.unauthorizedError();
+
+            const authUserId = authUserData.id;
+            const authUser = await User.findByPk(authUserId);
+            if(!authUser) throw ApiError.unauthorizedError();
 
             const messenges = await Messenge.findAll({
                 where: {

@@ -27,11 +27,7 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     });
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     const [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
-    const {data: interlocutorData} = useQuery<getUser_Query>(getUser, {
-        variables: {
-            userId: interlocutorRoom
-        }
-    });
+    const [getInterlocutorData, {data: interlocutorData}] = useLazyQuery<getUser_Query>(getUser);
     const messengesBlockRef = useRef<HTMLDivElement | null>(null);
     const apolloClient = useApollo();
     
@@ -45,12 +41,19 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     }, [authUser]);
 
     useEffect(() => {
-        if(interlocutorRoom)
+        if(interlocutorRoom){
             getMessengesExecute({
                 variables: {
                     recipientId: interlocutorRoom
                 }
             });
+
+            getInterlocutorData({
+                variables: {
+                    userId: interlocutorRoom
+                }
+            });
+        }
     }, [interlocutorRoom]);
 
     useEffect(() => {

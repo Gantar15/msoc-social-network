@@ -2,8 +2,8 @@ import {gql} from '@apollo/client';
 import { IMessenge } from "../../models/messenge";
 
 const getMessenges = gql`
-    query getMessenges($recipientId: Int!){
-        getMessenges(recipientId: $recipientId){
+    query getMessenges($recipientId: Int!, $refreshToken: String){
+        getMessenges(recipientId: $recipientId, refreshToken: $refreshToken){
             id,
             text,
             createdAt,
