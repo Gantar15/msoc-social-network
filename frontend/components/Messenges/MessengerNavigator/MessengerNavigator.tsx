@@ -48,7 +48,7 @@ const MessengerNavigator: FC<IProps> = ({setInterlocutorRoom, interlocutorRoom})
                                         isActive={!!(interlocutorRoom && interlocutorRoom == interlocutor.id)} 
                                         setInterlocutorRoom={setInterlocutorRoom} 
                                         key={lastMessenge.id} 
-                                        interlocutor={interlocutor} 
+                                        interlocutor={interlocutor}
                                         lastMessenge={lastMessenge}
                                     />
                                 );

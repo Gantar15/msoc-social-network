@@ -1,4 +1,4 @@
-import { FC, memo, useEffect } from "react";
+import { FC, memo, useEffect, useRef } from "react";
 import { useLazyQuery, useQuery, useMutation, useSubscription } from "@apollo/client";
 import watchMessenge, {watchMessenge_Subscription} from '../../../apollo/subsciptions/watchMessenge';
 import getMessenges, {getMessenges_Query} from "../../../apollo/queries/getMessenges";
@@ -22,8 +22,7 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     const {data: newMessenge, loading: newMessengeLoading} = useSubscription<watchMessenge_Subscription>(watchMessenge, {
       variables: {
         recipientId: interlocutorRoom
-      },
-      shouldResubscribe: true
+      }
     });
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     const [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
@@ -32,7 +31,8 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
             userId: interlocutorRoom
         }
     });
-
+    const messengesBlockRef = useRef<HTMLDivElement | null>(null);
+console.log(newMessenge?.watchMessenge)
     useEffect(() => {
         if(authUser?.getAuthUser)
             getUserQuery({
@@ -49,7 +49,7 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
                     recipientId: interlocutorRoom
                 }
             });
-    }, [interlocutorRoom])
+    }, [interlocutorRoom]);
     
     if(!interlocutorRoom)
         return (
@@ -85,15 +85,20 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
                 </div>
             </header>
             <section className={styles.messengesBlock}>
-                <div>
+                <div ref={messengesBlockRef}>
                     {
-                        messenges?.getMessenges && messenges.getMessenges.map(messenge => {console.log(messenge.id);return (
+                        messenges?.getMessenges && messenges.getMessenges.map(messenge => (
                             <Messenge key={messenge.id} messenge={messenge}/>
-                        )})
+                        ))
+                    }
+                    {
+                        newMessenge?.watchMessenge ?
+                            <Messenge key={newMessenge.watchMessenge.id} messenge={newMessenge.watchMessenge}/>
+                            : null
                     }
                 </div>
             </section>
-            <MessengeSender/>
+            <MessengeSender interlocutorRoom={interlocutorRoom}/>
         </section>
     );
 };
