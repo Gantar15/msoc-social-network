@@ -1,5 +1,5 @@
 import {gql, useMutation} from '@apollo/client';
-import client from '../client';
+import {useApollo} from '../client';
 import getFollowers, {getFollowers_Query} from '../queries/getFollowers';
 import getFollowersCount from '../queries/getFollowersCount';
 import getFollowinsCount from '../queries/getFollowinsCount';
@@ -14,6 +14,7 @@ const unfollowUser = gql`
 `;
 
 const useUnfollowUser = (userId: number) => {
+    const client = useApollo();
     const [unfollow] = useMutation(unfollowUser, {
         variables: {
             userId
@@ -33,7 +34,7 @@ const useUnfollowUser = (userId: number) => {
                     }
                 });
             }
-            client().refetchQueries({include: [getFollowers, getFollowersCount, getFollowins, getFollowinsCount]});
+            client.refetchQueries({include: [getFollowers, getFollowersCount, getFollowins, getFollowinsCount]});
         }
     });
 

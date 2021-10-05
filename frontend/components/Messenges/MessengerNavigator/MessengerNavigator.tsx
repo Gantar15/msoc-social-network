@@ -38,8 +38,8 @@ const MessengerNavigator: FC<IProps> = ({setInterlocutorRoom, interlocutorRoom})
                 </header>
                 <section className={styles.interlocutorsBlock}>
                     {
-                        newestInterlocutors!.getNewestInterlocutors.length ?
-                        newestInterlocutors!.getNewestInterlocutors.map(interlocutor => {
+                        newestInterlocutors?.getNewestInterlocutors.length ?
+                        newestInterlocutors.getNewestInterlocutors.map(interlocutor => {
                             const lastMessenge = newestMessenges?.getNewestMessenges.find(mess => mess.recipientId == interlocutor.id || mess.authorId == interlocutor.id);
 
                             if(lastMessenge)

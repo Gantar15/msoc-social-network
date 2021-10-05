@@ -1,7 +1,7 @@
 import { gql, useMutation } from "@apollo/client";
 import getAllPosts from "../queries/getAllPosts";
 import getUserPosts from "../queries/getUserPosts";
-import client from "../client";
+import {useApollo} from "../client";
 import getUserPostsCount from "../queries/getUserPostsCount";
 import getAllPostsCount from "../queries/getAllPostsCount";
 
@@ -41,13 +41,14 @@ interface IAddPost{
 
 const useAddPost = () => {
     const [add, {data: addData, loading: addLoading}] = useMutation<IAddPost>(addPost);
+    const client = useApollo();
 
     const mutate = (desc: string|null, imgs: FileList|null, videos: FileList|null) => {add({
         variables: {
             desc, imgs, videos
         },
         update: (cache, data) => {
-            client().refetchQueries({include: [getUserPosts, getAllPosts, getUserPostsCount, getAllPostsCount]});
+            client.refetchQueries({include: [getUserPosts, getAllPosts, getUserPostsCount, getAllPostsCount]});
         }
     })};
     return {addPost: mutate, data: addData, loading: addLoading};

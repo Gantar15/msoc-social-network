@@ -9,6 +9,7 @@ import getUser, { getUser_Query } from "../../../apollo/queries/getUser";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import A from '../../A/A';
 import MessengeSender from "../MessengeSender/MessengeSender";
+import useApollo from '../../../apollo/client';
 
 import styles from './roomPage.module.scss';
 
@@ -18,8 +19,8 @@ interface IProps{
 }
 
 const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
-    const [getMessengesExecute, {data: messenges, loading: messengesLoading}] = useLazyQuery<getMessenges_Query>(getMessenges, {fetchPolicy: 'network-only'});
-    const {data: newMessenge, loading: newMessengeLoading} = useSubscription<watchMessenge_Subscription>(watchMessenge, {
+    const [getMessengesExecute, {data: messenges}] = useLazyQuery<getMessenges_Query>(getMessenges, {fetchPolicy: 'network-only'});
+    const {data: newMessenge} = useSubscription<watchMessenge_Subscription>(watchMessenge, {
       variables: {
         recipientId: interlocutorRoom
       }
@@ -32,7 +33,8 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
         }
     });
     const messengesBlockRef = useRef<HTMLDivElement | null>(null);
-console.log(newMessenge?.watchMessenge)
+    const apolloClient = useApollo();
+    
     useEffect(() => {
         if(authUser?.getAuthUser)
             getUserQuery({
@@ -41,7 +43,7 @@ console.log(newMessenge?.watchMessenge)
                 }
             });
     }, [authUser]);
-    
+
     useEffect(() => {
         if(interlocutorRoom)
             getMessengesExecute({
@@ -50,6 +52,11 @@ console.log(newMessenge?.watchMessenge)
                 }
             });
     }, [interlocutorRoom]);
+
+    useEffect(() => {
+        if(newMessenge?.watchMessenge)
+            apolloClient.refetchQueries({include: [getMessenges]});
+    }, [newMessenge]);
     
     if(!interlocutorRoom)
         return (
@@ -59,7 +66,7 @@ console.log(newMessenge?.watchMessenge)
                 <p className={styles.noInterlocutorMessage}>Выберите собеседника</p>
             </div>
         );
-
+        
     return (
         <section className={styles.roomPage}>
             <header className={styles.roomPageHeader}>
@@ -87,14 +94,10 @@ console.log(newMessenge?.watchMessenge)
             <section className={styles.messengesBlock}>
                 <div ref={messengesBlockRef}>
                     {
-                        messenges?.getMessenges && messenges.getMessenges.map(messenge => (
+                        messenges?.getMessenges ? messenges.getMessenges.map(messenge => (
                             <Messenge key={messenge.id} messenge={messenge}/>
                         ))
-                    }
-                    {
-                        newMessenge?.watchMessenge ?
-                            <Messenge key={newMessenge.watchMessenge.id} messenge={newMessenge.watchMessenge}/>
-                            : null
+                        : 'Загрузка...'
                     }
                 </div>
             </section>

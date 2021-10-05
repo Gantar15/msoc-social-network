@@ -3,18 +3,20 @@ import {IMessenge} from "../../../models/Messenge";
 import pubsub, {PubSubEvents} from "../../../apolloSchema/PubSub";
 import {User} from '../../../models/User';
 
+interface IMessengePayload{
+    messenge: {dataValues: IMessenge};
+}
+
 export default {
     watchMessenge: {
         subscribe: withFilter(
             () => pubsub.asyncIterator([PubSubEvents.messengeSend]),
-            (_: any, {recipientId}: {recipientId: number}, {authUser}: {authUser: User | null}) => {
-                return recipientId == authUser?.id;
+            (payload: IMessengePayload, _: any, {authUser}: {authUser: User | null}) => {
+                return authUser?.id == payload.messenge.dataValues.recipientId;
             }
         ),
-        resolve: (payload: {messenge: {dataValues: IMessenge}}) => {
-            return {
-                ...payload.messenge.dataValues
-            };
+        resolve: (payload: IMessengePayload) => {
+            return payload.messenge;
         }
     }
 };
