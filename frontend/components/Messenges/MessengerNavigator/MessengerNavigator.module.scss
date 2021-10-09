@@ -10,8 +10,8 @@
     background-color: $contrastBackgroundColor;
 
     header{
-        padding: 8px 0;
-        padding-bottom: 6px;
+        padding: 10px 0;
+        padding-bottom: 9px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -23,8 +23,7 @@
             align-items: center;
             width: 100%;
             max-width: 400px;
-            height: 40px;
-            border-radius: 10px;   
+            border-radius: 10px;
             padding-right: 5px;
 
             input{
@@ -96,7 +95,7 @@
     }
 
     footer{
-        padding: 15px 0;
+        padding: 17px 0;
         padding-top: 0;
         display: flex;
         justify-content: center;
@@ -105,12 +104,12 @@
         margin: 0 20px;
 
         p{
-            padding-top: 15px;
+            padding-top: 17px;
             width: 100%;
             border-top: 2px solid $border;
             text-align: center;
             font-size: 13px;
-            color: $mainFontColor;
+            color: $placeholderFontColor;
         }
     }
 }

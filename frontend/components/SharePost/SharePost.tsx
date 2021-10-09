@@ -4,7 +4,7 @@ import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import MovieIcon from '@material-ui/icons/Movie';
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
 import { useLazyQuery, useQuery } from '@apollo/client';
-import { IAuthUser, IUser } from '../../models/user';
+import { IAuthUser } from '../../models/user';
 import getAuthUser from '../../apollo/queries/getAuthUser';
 import getUser, {getUser_Query} from '../../apollo/queries/getUser';
 import useAddPost from '../../apollo/mutations/addPost';
@@ -81,7 +81,7 @@ const SharePost: FC = () => {
                 error ? <p>{error}</p> : null
             }
             <div className={styles.shareTop}>
-                <A href="/profile">
+                <A href={`/profile/${authUser?.getAuthUser?.id}`}>
                     <img className={styles.shareUserLogo} width="40" height="40" src={
                             authUserData?.getUser.profilePicture ? authUserData.getUser.profilePicture
                             : '/imgs/default_user_logo.jpg'
@@ -97,7 +97,6 @@ const SharePost: FC = () => {
                 <div className={styles.shareOptions}>
                     <div className={styles.shareOption} onClick={() => photoRef.current?.click()}>
                         <PhotoLibraryIcon className={styles.optionIcon}/>
-                        <span>Фото</span>
                         <input ref={photoRef} style={{display: 'none'}} type="file" multiple accept=".png, .jpg, .gif, .jpeg, .svg, .webp"
                         onChange={
                             ev => {
@@ -107,7 +106,6 @@ const SharePost: FC = () => {
                     </div>
                     <div className={styles.shareOption} onClick={() => videoRef.current?.click()}>
                         <MovieIcon className={styles.optionIcon}/>
-                        <span>Видео</span>
                         <input ref={videoRef} style={{display: 'none'}} type="file" accept=".mp4, .webm, .ogv, .swf" multiple
                         onChange={
                             ev => {
@@ -117,7 +115,6 @@ const SharePost: FC = () => {
                     </div>
                     <div className={styles.shareOption}>
                         <SentimentSatisfiedIcon className={styles.optionIcon}/>
-                        <span>Эмоции</span>
                     </div>
                 </div>
                 <button onClick={submitHandler}>Добавить</button>

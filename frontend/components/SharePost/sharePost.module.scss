@@ -64,7 +64,7 @@
 
                 &:hover{
                     .optionIcon{
-                        color: $mainFontColor;
+                        color: $activeIconColor;
                     }
                 }
 
@@ -72,15 +72,9 @@
                     transition: color .2s;
                     color: $placeholderFontColor;
                 }
-                span{
-                    color: $mainFontColor;
-                    font-size: 14px;
-                    font-weight: 500;
-                    margin-left: 5px;
-                }
 
                 &:nth-of-type(n+2){
-                    margin-left: 15px;
+                    margin-left: 12px;
                 }
             }
         }
