@@ -57,6 +57,14 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     }, [interlocutorRoom]);
 
     useEffect(() => {
+        if(messengesBlockRef?.current)
+        setTimeout(() => {
+            if(messengesBlockRef?.current)
+                messengesBlockRef.current.scrollTo(0, messengesBlockRef.current.scrollHeight)
+        }, 100);
+    }, [interlocutorRoom, messenges])
+
+    useEffect(() => {
         if(newMessenge?.watchMessenge)
             apolloClient.refetchQueries({include: [getMessenges]});
     }, [newMessenge]);
@@ -94,8 +102,8 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
                     <MoreHorizIcon className={styles.roomSettings}/>
                 </div>
             </header>
-            <section className={styles.messengesBlock}>
-                <div ref={messengesBlockRef}>
+            <section ref={messengesBlockRef} className={styles.messengesBlock}>
+                <div>
                     {
                         messenges?.getMessenges ? messenges.getMessenges.map(messenge => (
                             <Messenge key={messenge.id} messenge={messenge}/>

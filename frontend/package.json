@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:ownip": "next dev -H 192.168.43.223",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
