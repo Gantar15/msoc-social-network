@@ -4,6 +4,7 @@ import { Telegram } from '@material-ui/icons';
 import {MicTwoTone} from '@material-ui/icons';
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
+import MediaMenu from '../MediaMenu/MediaMenu';
 
 import styles from './messengeSender.module.scss';
 
@@ -14,11 +15,16 @@ interface IProps{
 
 const MessengeSender: FC<IProps> = ({interlocutorRoom}) => {
     const [messengeText, setMessengeText] = useState<string>('');
+    const [videos, setVideos] = useState<FileList|null>(null);
+    const [imgs, setImgs] = useState<FileList|null>(null);
+    const [documents, setDocuments] = useState<FileList|null>(null);
+    const [audios, setAudios] = useState<FileList|null>(null);
+    const [isShowMediaMenu, setIsShowMediaMenu] = useState(false);
     const {sendMessenge} = useSendMessenge(interlocutorRoom);
 
     const inputHandler = (ev: any) => setMessengeText(ev.target.value);
     const sendHandler = () => {
-        sendMessenge(messengeText);
+        sendMessenge(messengeText, imgs, videos, documents, audios);
         setMessengeText('');
     };
     const enterHandler = (ev: any) => {
@@ -29,7 +35,12 @@ const MessengeSender: FC<IProps> = ({interlocutorRoom}) => {
     return (
         <section className={styles.messengeSender}>
             <div>
-                <AttachFileIcon className={styles.addFile}/>
+                <div className={styles.addFileBlock}>
+                    <AttachFileIcon onClick={() => setIsShowMediaMenu(currentVal => !currentVal)} className={styles.addFile}/>
+                    {
+                        isShowMediaMenu ? <MediaMenu/> : null
+                    }
+                </div>
                 <input value={messengeText} onKeyDown={enterHandler} onInput={inputHandler} className={styles.messengeField} type="text" placeholder="Напишите че-нибудь..."/>
                 <section className={styles.rightMenu + 
                         (messengeText ? ' ' + styles.active : '')}>

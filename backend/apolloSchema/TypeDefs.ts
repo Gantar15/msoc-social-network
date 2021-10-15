@@ -50,11 +50,14 @@ export default gql`
     input InputPost{
         desc: String
         imgs: [String!]
+        videos: [String!]
+        audios: [String!]
     }
     type Post{
         desc: String
         imgs: [String!]
         videos: [String!]
+        audios: [String!]
         likes: [Int!]!
         user: User!
         id: Int!
@@ -72,6 +75,10 @@ export default gql`
         text: String!
         authorId: Int!
         recipientId: Int!
+        imgs: [String!]
+        videos: [String!]
+        documents: [String!]
+        audios: [String!]
     }
     type Interlocutor{
         id: Int!
@@ -115,14 +122,14 @@ export default gql`
         unfollowUser(userId: Int!): User!
 
         #Posts
-        createPost(desc: String, imgs: [Upload!], videos: [Upload!]): Post!
+        createPost(desc: String, imgs: [Upload!], videos: [Upload!], audios: [Upload!]): Post!
         updatePost(postId: Int!, post: InputPost!): Post!
         deletePost(postId: Int!): Post!
         likePost(postId: Int!): Boolean!
         dislikePost(postId: Int!): Boolean!
 
         #Messenges
-        sendMessenge(recipientId: Int!, messenge: String!): Messenge!
+        sendMessenge(recipientId: Int!, messenge: String!, imgs: [Upload!], videos: [Upload!], documents: [Upload!], audios: [Upload!]): Messenge!
     }
 
     #Subscriptions

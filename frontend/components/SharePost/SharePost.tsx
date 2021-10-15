@@ -3,6 +3,7 @@ import A from '../A/A';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import MovieIcon from '@material-ui/icons/Movie';
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
+import AudiotrackIcon from '@material-ui/icons/Audiotrack';
 import { useLazyQuery, useQuery } from '@apollo/client';
 import { IAuthUser } from '../../models/user';
 import getAuthUser from '../../apollo/queries/getAuthUser';
@@ -17,9 +18,11 @@ const SharePost: FC = () => {
     let [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
     const [photo, setPhoto] = useState<null | FileList>(null);
     const [video, setVideo] = useState<null | FileList>(null);
+    const [audio, setAudio] = useState<null | FileList>(null);
     const descRef = useRef<HTMLTextAreaElement | null>(null);
     const photoRef = useRef<HTMLInputElement | null>(null);
     const videoRef = useRef<HTMLInputElement | null>(null);
+    const audioRef = useRef<HTMLInputElement | null>(null);
     const {addPost} = useAddPost();
     let [error, setError] = useState<string | null>(null);
 
@@ -40,38 +43,46 @@ const SharePost: FC = () => {
     const submitHandler = () => {
         if(descRef.current){
             const videos = video?.length ? video : null;
+            const audios = audio?.length ? audio : null;
             const imgs = photo?.length ? photo : null;
             const desc = descRef.current.value;
 
-            if(!videos && !imgs && !desc)   
+            if(!videos && !imgs && !desc && !audios)
                 return setError('Нельзя опубликовать пустой пост')
             if(videos){
                 for (let i = 0; i < videos.length; i++) {
                     const video = videos[i];
-                    const mbSize = +(video.size/1073741824).toFixed(1); 
-                    console.log(mbSize)
+                    const mbSize = +(video.size/1073741824).toFixed(1);
                     if(mbSize > 3) return setError('Размер видео не должен превышать 3Гб');
                 }
             }
             if(imgs){
                 for (let i = 0; i < imgs.length; i++) {
                     const img = imgs[i];
-                    const mbSize = +(img.size/1048576).toFixed(1); 
-                    console.log(mbSize)
+                    const mbSize = +(img.size/1048576).toFixed(1);
                     if(mbSize > 12) return setError('Размер изображения не должен превышать 12Мб');
                 }
             }
-            let videosLength = 0, imgsLength = 0;
+            if(audios){
+                for (let i = 0; i < audios.length; i++) {
+                    const audio = audios[i];
+                    const mbSize = +(audio.size/1048576).toFixed(1);
+                    if(mbSize > 22) return setError('Размер аудио не должен превышать 22Мб');
+                }
+            }
+            let videosLength = 0, imgsLength = 0, audiosLength = 0;
             if(imgs) imgsLength = imgs.length;
             if(videos) videosLength = videos.length;
-            if(imgsLength + videosLength > 10)
+            if(audios) audiosLength = audios.length;
+            if(imgsLength + videosLength + audiosLength > 10)
                 return setError('Нельзя прикрепить больше десяти файлов');
 
-            addPost(desc, imgs, videos);
+            addPost(desc, imgs, videos, audios);
 
             descRef.current!.value = '';
             photoRef.current!.value = '';
             videoRef.current!.value = '';
+            audioRef.current!.value = '';
         }
     };
 
@@ -110,6 +121,15 @@ const SharePost: FC = () => {
                         onChange={
                             ev => {
                                 if(ev.target.files && ev.target.validity.valid) setVideo(ev.target.files)
+                            }
+                        }/>
+                    </div>
+                    <div className={styles.shareOption} onClick={() => audioRef.current?.click()}>
+                        <AudiotrackIcon className={styles.optionIcon}/>
+                        <input ref={audioRef} style={{display: 'none'}} type="file" accept=".mp3, .mp4, .wma, .ogg, .aac, .WebM," multiple
+                        onChange={
+                            ev => {
+                                if(ev.target.files && ev.target.validity.valid) setAudio(ev.target.files)
                             }
                         }/>
                     </div>

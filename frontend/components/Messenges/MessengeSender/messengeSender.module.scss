@@ -11,16 +11,22 @@
         display: flex;
         align-items: center;
 
-        .addFile{
-            background-color: $contrastBackgroundColor;
-            color: $placeholderFontColor;
-            cursor: pointer;
-            font-size: 25px;
-            transition: color .1s;
-            transform: rotateZ(30deg);
+        .addFileBlock{
+            display: flex;
+            align-items: center;
+            position: relative;
 
-            &:hover{
-                color: $activeIconColor;
+            .addFile{
+                background-color: $contrastBackgroundColor;
+                color: $placeholderFontColor;
+                cursor: pointer;
+                font-size: 25px;
+                transition: color .1s;
+                transform: rotateZ(30deg);
+
+                &:hover{
+                    color: $activeIconColor;
+                }
             }
         }
         input.messengeField{

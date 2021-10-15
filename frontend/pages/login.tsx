@@ -148,20 +148,3 @@ const Login: NextPage = () => {
 };
 
 export default Login;
-
-export const getServerSideProps: GetServerSideProps = async ({req}) => {
-    const result = await validateRefreshToken(process.env.API_URL+'/auth/refreshTokenValidate', req.cookies.refreshToken);
-    if(result){
-      return {
-        redirect: {
-          destination: '/',
-          permanent: false
-        }
-      };
-    }
-  
-    return {
-      props: {
-      }
-    };
-};

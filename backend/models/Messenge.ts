@@ -9,6 +9,9 @@ interface IMessenge{
     authorId: number;
     recipientId: number;
     text: string;
+    imgs: string[];
+    videos: string[];
+    audios: string[];
 }
 export type {IMessenge};
 
@@ -18,11 +21,26 @@ class Messenge extends Model<IMessenge, TokenCreationAttributes> implements IMes
     public authorId!: number;
     public recipientId!: number;
     public text!: string;
+    public imgs!: string[];
+    public videos!: string[];
+    public audios!: string[];
 }
 Messenge.init({
     authorId: DataTypes.INTEGER,
     recipientId: DataTypes.INTEGER,
-    text: DataTypes.STRING
+    text: DataTypes.STRING,
+    imgs: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: []
+    },
+    videos: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: []
+    },    
+    audios: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: []
+    },
 },{
     sequelize
 });

@@ -10,6 +10,7 @@ interface IPost{
     desc: string;
     imgs: string[];
     videos: string[];
+    audios: string[];
     likes: number[];
     dislikes: number[];
     shareCount: number;
@@ -24,6 +25,7 @@ class Post extends Model<IPost, TokenCreationAttributes> implements IPost {
     public desc!: string;
     public imgs!: string[];
     public videos!: string[];
+    public audios!: string[];
     public likes!: number[];
     public dislikes!: number[];
     public shareCount!: number;
@@ -39,6 +41,10 @@ Post.init({
         defaultValue: []
     },
     videos: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: []
+    },    
+    audios: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: []
     },

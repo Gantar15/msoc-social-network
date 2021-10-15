@@ -11,18 +11,27 @@ import {v4 as uuidv4} from 'uuid';
 import User from '../../../models/User';
 
 
-interface InputPost{
+interface InputUpdatePost{
     desc: string;
     imgs: string[];
+    videos: string[];
+    audios: string[];
+}
+interface InputCreatePost{
+    desc: string | null;
+    imgs: Promise<FileUpload>[] | null;
+    videos: Promise<FileUpload>[] | null;
+    audios: Promise<FileUpload>[] | null;
 }
 
 export default {
-    async createPost(_:any, {desc, imgs, videos}: {desc: string | null, imgs: Promise<FileUpload>[] | null, videos: Promise<FileUpload>[] | null}, {resp}: IApolloContext){
+    async createPost(_:any, {desc, imgs, videos, audios}: InputCreatePost, {resp}: IApolloContext){
         try{
             checkAuth(resp);
 
             let imgsPath: string[] = [];
             let videosPath: string[] = [];
+            let audiosPath: string[] = [];
             try{
                 if(imgs){
                     imgsPath = await Promise.all(imgs.map(async (image) => {
@@ -31,7 +40,7 @@ export default {
                         const fileExt = parse(imageUploadObj.filename).ext;
                         const filename = uuidv4() + fileExt;
                         const imgPath = join(__dirname, '..', '..', '..', 'files', 'posts_imgs', filename);
-                        await imgStream.pipe(fs.createWriteStream(imgPath));
+                        imgStream.pipe(fs.createWriteStream(imgPath));
                         return `${process.env.SITE_URL}/posts_imgs/${filename}`;
                     }));
                 }
@@ -42,7 +51,18 @@ export default {
                         const fileExt = parse(videoUploadObj.filename).ext;
                         const filename = uuidv4() + fileExt;
                         const videoPath = join(__dirname, '..', '..', '..', 'files', 'posts_videos', filename);
-                        await videoStream.pipe(fs.createWriteStream(videoPath));
+                        videoStream.pipe(fs.createWriteStream(videoPath));
+                        return `${process.env.SITE_URL}/posts_videos/${filename}`;
+                    }));
+                }
+                if(audios){
+                    audiosPath = await Promise.all(audios.map(async (audio) => {
+                        const audioUploadObj = await audio;
+                        const audioStream: Readable = audioUploadObj.createReadStream();
+                        const fileExt = parse(audioUploadObj.filename).ext;
+                        const filename = uuidv4() + fileExt;
+                        const audioPath = join(__dirname, '..', '..', '..', 'files', 'posts_audios', filename);
+                        audioStream.pipe(fs.createWriteStream(audioPath));
                         return `${process.env.SITE_URL}/posts_videos/${filename}`;
                     }));
                 }
@@ -53,6 +73,7 @@ export default {
                 videos: videosPath,
                 desc,
                 imgs: imgsPath,
+                audios: audiosPath
             });
             const user: any = await User.findByPk(newPost.user);
 
@@ -65,7 +86,7 @@ export default {
         }
     },
 
-    async updatePost(_:any, {postId, post: updatePostData}: {postId: number, post: InputPost}, {resp}: IApolloContext){
+    async updatePost(_:any, {postId, post: updatePostData}: {postId: number, post: InputUpdatePost}, {resp}: IApolloContext){
         try{
             checkAuth(resp);
 

@@ -2,14 +2,18 @@ import {gql, useMutation} from '@apollo/client';
 import getMessenges from '../queries/getMessenges';
 
 const sendMessenge = gql`
-    mutation sendMessenge($recipientId: Int!, $messenge: String!){
-        sendMessenge(recipientId: $recipientId, messenge: $messenge){
+    mutation sendMessenge($recipientId: Int!, $messenge: String!, $imgs: [Upload!], $videos: [Upload!], $documents: [Upload!], $audios: [Upload!]){
+        sendMessenge(recipientId: $recipientId, messenge: $messenge, imgs: $imgs, videos: $videos, documents: $documents, audios: $audios){
             id,
             text,
             createdAt,
             updatedAt,
             recipientId,
-            authorId
+            authorId,
+            imgs,
+            videos,
+            documents,
+            audios
         }
     }
 `;
@@ -19,11 +23,15 @@ const useSendMessenge = (recipientId: number) => {
         refetchQueries: [getMessenges]
     });
 
-    return {sendMessenge: (messenge: string) => {
+    return {sendMessenge: (messenge: string|null, imgs: FileList|null, videos: FileList|null, documents: FileList|null, audios: FileList|null) => {
         sendMessengeExecute({
             variables: {
                 recipientId,
-                messenge
+                messenge,
+                imgs,
+                videos,
+                documents,
+                audios
             }
         });
     }, data: newMessenge};
