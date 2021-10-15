@@ -28,13 +28,16 @@
             font-weight: 500;
         }
     }
-
-    .messengeText{
-        font-size: 0.9em;
-    }
+    
     .messengeDate{
         margin-left: 20px;
         align-self: flex-end;
         font-size: 11px;
+    }
+    .messengeContent{
+        .messengeText{
+            font-size: 0.9em;
+            font-weight: normal;
+        }
     }
 }

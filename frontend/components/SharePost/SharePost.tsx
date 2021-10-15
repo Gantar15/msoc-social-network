@@ -67,7 +67,7 @@ const SharePost: FC = () => {
                 for (let i = 0; i < audios.length; i++) {
                     const audio = audios[i];
                     const mbSize = +(audio.size/1048576).toFixed(1);
-                    if(mbSize > 22) return setError('Размер аудио не должен превышать 22Мб');
+                    if(mbSize > 32) return setError('Размер аудио не должен превышать 32Мб');
                 }
             }
             let videosLength = 0, imgsLength = 0, audiosLength = 0;

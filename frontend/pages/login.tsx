@@ -8,7 +8,6 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { useLogin } from '../apollo/mutations/login';
 import A from '../components/A/A';
-import validateRefreshToken from '../utils/validateRefreshToken';
 
 import scss from '../public/styles/login.module.scss';
 

@@ -15,19 +15,22 @@
 
     &.noInterlocutor{
         justify-content: center;
+        color: #203958b9;
 
         .messImgs{
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            opacity: 0.75;
+            height: 70px;
             object-fit: contain;
         }
         .noInterlocutorTitle{
-            font-size: 20px;
-            margin-bottom: 10px;
-            margin-top: 30px;
+            font-size: 19px;
+            margin-bottom: 5px;
+            margin-top: 15px;
             text-align: center;
         }
         .noInterlocutorMessage{
+            font-size: 14px;
             margin-bottom: 30px;
             text-align: center;
         }
