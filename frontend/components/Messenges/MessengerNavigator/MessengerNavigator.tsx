@@ -53,7 +53,13 @@ const MessengerNavigator: FC<IProps> = ({setInterlocutorRoom, interlocutorRoom})
                                     />
                                 );
                         })
-                        : <p>...</p>
+                        : 
+                        newestInterlocutorsLoading ? <p>...</p>
+                        : (
+                            <p className={styles.noInnterlocutorsText}>
+                                Собеседников нет
+                            </p>
+                        )
                     }
                 </section>
                 <footer>

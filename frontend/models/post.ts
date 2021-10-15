@@ -14,5 +14,6 @@ interface IPost{
     createdAt: string;
     shareCount: number;
     videos: string[];
+    audios: string[];
 }
 export type {IPost};

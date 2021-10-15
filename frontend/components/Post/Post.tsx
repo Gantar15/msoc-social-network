@@ -60,7 +60,6 @@ const Post: FC<{post: IPost}> = ({post}) => {
     }
     function likeHandler(){
         likePost();
-
         setLike(like => isLiked ? like-1 : like+1);
         setDislike(dislike => isDisliked ? dislike-1 : dislike);
         setIsLiked(isLiked => !isLiked);
@@ -68,13 +67,12 @@ const Post: FC<{post: IPost}> = ({post}) => {
     }
     function dislikeHandler(){
         dislikePost();
-
         setDislike(dislike => isDisliked ? dislike-1 : dislike+1);
         setLike(like => isLiked ? like-1 : like);
         setIsDisliked(isDisliked => !isDisliked);
         setIsLiked(false);
     }
-
+    console.log(post)
     return (
         <section className={styles.post}>
             <header>
@@ -109,7 +107,7 @@ const Post: FC<{post: IPost}> = ({post}) => {
                     }
                 </div>
                 {
-                    post.imgs.length + post.videos.length != 0 ?
+                    post.imgs.length + post.videos.length + post.audios.length != 0 ?
                     (<div className={styles.postMainContent}>
                         {
                             post.imgs.map((img, index) => {
@@ -127,6 +125,13 @@ const Post: FC<{post: IPost}> = ({post}) => {
                             post.videos.map((video, index) => {
                                 return (
                                     <PreloadVideo key={index} src={video}/>
+                                );
+                            })
+                        }
+                        {
+                            post.audios.map((audio, index) => {
+                                return (
+                                    <audio style={{width: '100%'}} src={audio} key={index} controls></audio>
                                 );
                             })
                         }

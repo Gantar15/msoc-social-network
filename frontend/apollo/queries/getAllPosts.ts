@@ -13,6 +13,7 @@ const getAllPosts = gql`
             desc,
             imgs,
             videos,
+            audios,
             likes,
             id,
             dislikes,

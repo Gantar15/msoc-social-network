@@ -6,5 +6,8 @@ interface IMessenge{
     recipientId: number;
     createdAt: string;
     updatedAt: string;
+    videos: string[];
+    imgs: string[];
+    audios: string[];
 }
 export type {IMessenge};

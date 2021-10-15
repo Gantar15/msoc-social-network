@@ -63,7 +63,7 @@ export default {
                         const filename = uuidv4() + fileExt;
                         const audioPath = join(__dirname, '..', '..', '..', 'files', 'posts_audios', filename);
                         audioStream.pipe(fs.createWriteStream(audioPath));
-                        return `${process.env.SITE_URL}/posts_videos/${filename}`;
+                        return `${process.env.SITE_URL}/posts_audios/${filename}`;
                     }));
                 }
             } catch(err){

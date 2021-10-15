@@ -40,7 +40,7 @@ export default {
                         const filename = uuidv4() + fileExt;
                         const imgPath = join(__dirname, '..', '..', '..', 'files', 'messenges_imgs', filename);
                         imgStream.pipe(fs.createWriteStream(imgPath));
-                        return `${process.env.SITE_URL}/posts_imgs/${filename}`;
+                        return `${process.env.SITE_URL}/messenges_imgs/${filename}`;
                     }));
                 }
                 if(videos){
@@ -51,7 +51,7 @@ export default {
                         const filename = uuidv4() + fileExt;
                         const videoPath = join(__dirname, '..', '..', '..', 'files', 'messenges_videos', filename);
                         videoStream.pipe(fs.createWriteStream(videoPath));
-                        return `${process.env.SITE_URL}/posts_videos/${filename}`;
+                        return `${process.env.SITE_URL}/messenges_videos/${filename}`;
                     }));
                 }
                 if(audios){
@@ -62,7 +62,7 @@ export default {
                         const filename = uuidv4() + fileExt;
                         const audioPath = join(__dirname, '..', '..', '..', 'files', 'messenges_audios', filename);
                         audioStream.pipe(fs.createWriteStream(audioPath));
-                        return `${process.env.SITE_URL}/posts_videos/${filename}`;
+                        return `${process.env.SITE_URL}/messenges_audios/${filename}`;
                     }));
                 }
             } catch(err){

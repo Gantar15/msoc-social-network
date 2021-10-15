@@ -80,17 +80,8 @@
             visibility: hidden;
         }
 
-        .noInterlocutors{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            &Message{
-                font-size: 15px;
-                margin-bottom: 0px;
-                margin-top: 0;
-            }
+        .noInnterlocutorsText{
+            color: $mainFontColor;
         }
     }
 

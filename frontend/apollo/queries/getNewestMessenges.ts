@@ -10,7 +10,10 @@ const getNewestMessenges = gql`
             createdAt,
             updatedAt,
             recipientId,
-            authorId
+            authorId,
+            audios,
+            videos,
+            imgs
         }
     }
 `;

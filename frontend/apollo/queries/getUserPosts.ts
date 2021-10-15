@@ -13,6 +13,7 @@ const getUserPosts = gql`
             desc,
             imgs,
             videos,
+            audios,
             likes,
             id,
             dislikes,
