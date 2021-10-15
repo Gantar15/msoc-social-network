@@ -13,7 +13,8 @@ const getNewestMessenges = gql`
             authorId,
             audios,
             videos,
-            imgs
+            imgs,
+            documents
         }
     }
 `;

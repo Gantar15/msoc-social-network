@@ -38,7 +38,7 @@ const MessengeSender: FC<IProps> = ({interlocutorRoom}) => {
                 <div className={styles.addFileBlock}>
                     <AttachFileIcon onClick={() => setIsShowMediaMenu(currentVal => !currentVal)} className={styles.addFile}/>
                     {
-                        isShowMediaMenu ? <MediaMenu/> : null
+                        isShowMediaMenu ? <MediaMenu setIsShowMediaMenu={setIsShowMediaMenu} setVideos={setVideos} setImgs={setImgs} setDocuments={setDocuments} setAudios={setAudios}/> : null
                     }
                 </div>
                 <input value={messengeText} onKeyDown={enterHandler} onInput={inputHandler} className={styles.messengeField} type="text" placeholder="Напишите че-нибудь..."/>

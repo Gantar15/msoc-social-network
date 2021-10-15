@@ -14,7 +14,7 @@ interface IProps {
 const Messenge: FC<IProps> = ({messenge}) => {
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     const isOurs = authUser?.getAuthUser.id == messenge.authorId;
-
+console.log(messenge)
     return (
         <section className={styles.messenge + (isOurs ? ' ' + styles.ours : ' ' + styles.theirs)}>
             <p className={styles.messengeText}>

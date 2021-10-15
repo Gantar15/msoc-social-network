@@ -108,7 +108,7 @@ const SharePost: FC = () => {
                 <div className={styles.shareOptions}>
                     <div className={styles.shareOption} onClick={() => photoRef.current?.click()}>
                         <PhotoLibraryIcon className={styles.optionIcon}/>
-                        <input ref={photoRef} style={{display: 'none'}} type="file" multiple accept=".png, .jpg, .gif, .jpeg, .svg, .webp"
+                        <input ref={photoRef} style={{display: 'none'}} type="file" multiple accept="image/*"
                         onChange={
                             ev => {
                                 if(ev.target.files && ev.target.validity.valid) setPhoto(ev.target.files)
@@ -117,7 +117,7 @@ const SharePost: FC = () => {
                     </div>
                     <div className={styles.shareOption} onClick={() => videoRef.current?.click()}>
                         <MovieIcon className={styles.optionIcon}/>
-                        <input ref={videoRef} style={{display: 'none'}} type="file" accept=".mp4, .webm, .ogv, .swf" multiple
+                        <input ref={videoRef} style={{display: 'none'}} type="file" accept="video/*" multiple
                         onChange={
                             ev => {
                                 if(ev.target.files && ev.target.validity.valid) setVideo(ev.target.files)
@@ -126,7 +126,7 @@ const SharePost: FC = () => {
                     </div>
                     <div className={styles.shareOption} onClick={() => audioRef.current?.click()}>
                         <AudiotrackIcon className={styles.optionIcon}/>
-                        <input ref={audioRef} style={{display: 'none'}} type="file" accept=".mp3, .mp4, .wma, .ogg, .aac, .WebM," multiple
+                        <input ref={audioRef} style={{display: 'none'}} type="file" accept="audio/*" multiple
                         onChange={
                             ev => {
                                 if(ev.target.files && ev.target.validity.valid) setAudio(ev.target.files)

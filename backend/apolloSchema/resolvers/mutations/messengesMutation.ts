@@ -18,10 +18,11 @@ interface InputCreateMessenge{
     imgs: Promise<FileUpload>[] | null;
     videos: Promise<FileUpload>[] | null;
     audios: Promise<FileUpload>[] | null;
+    documents: Promise<FileUpload>[] | null;
 }
 
 export default {
-    async sendMessenge(_: any, {recipientId, messenge, imgs, videos, audios}: InputCreateMessenge, {resp}: IApolloContext){
+    async sendMessenge(_: any, {recipientId, messenge, imgs, videos, audios, documents}: InputCreateMessenge, {resp}: IApolloContext){
         try{
             checkAuth(resp);
 
@@ -31,6 +32,7 @@ export default {
             let imgsPath: string[] = [];
             let videosPath: string[] = [];
             let audiosPath: string[] = [];
+            let documentsPath: string[] = [];
             try{
                 if(imgs){
                     imgsPath = await Promise.all(imgs.map(async (image) => {
@@ -65,6 +67,17 @@ export default {
                         return `${process.env.SITE_URL}/messenges_audios/${filename}`;
                     }));
                 }
+                if(documents){
+                    documentsPath = await Promise.all(documents.map(async (document) => {
+                        const documentUploadObj = await document;
+                        const documentStream: Readable = documentUploadObj.createReadStream();
+                        const fileExt = parse(documentUploadObj.filename).ext;
+                        const filename = uuidv4() + fileExt;
+                        const audioPath = join(__dirname, '..', '..', '..', 'files', 'messenges_documents', filename);
+                        documentStream.pipe(fs.createWriteStream(audioPath));
+                        return `${process.env.SITE_URL}/messenges_documents/${filename}`;
+                    }));
+                }
             } catch(err){
                 console.log(err)
             }
@@ -75,7 +88,8 @@ export default {
                 text: messenge,
                 imgs: imgsPath,
                 videos: videosPath,
-                audios: audiosPath
+                audios: audiosPath,
+                documents: documentsPath
             });
             pubsub.publish(PubSubEvents.messengeSend, {
                 messenge: messengeObj

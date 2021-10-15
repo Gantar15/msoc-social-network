@@ -12,7 +12,8 @@ const getMessenges = gql`
             authorId,
             audios,
             videos,
-            imgs
+            imgs,
+            documents
         }
     }
 `;
