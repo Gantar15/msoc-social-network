@@ -37,7 +37,7 @@
             transition: font-size .2s;
         }
     }
-    &.imageItem:hover{
+    &:hover{
         .backdropBlock{
             background-color: $placeholderFontColor;
             opacity: 0.4;
