@@ -6,7 +6,6 @@ import MessageIcon from '@material-ui/icons/Message';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import type {IPost} from '../../models/post';
 import useLikePost from '../../apollo/mutations/likePost';
 import useDislikePost from '../../apollo/mutations/dislikePost';
@@ -17,6 +16,7 @@ import 'moment/locale/ru';
 import type { IAuthUser } from '../../models/user';
 import {useQuery} from '@apollo/client';
 import getAuthUser from '../../apollo/queries/getAuthUser';
+import ImageElement from '../ImageElement/ImageElement';
 
 import styles from './post.module.scss';
 
@@ -108,16 +108,11 @@ const Post: FC<{post: IPost}> = ({post}) => {
                 </div>
                 {
                     post.imgs.length + post.videos.length + post.audios.length != 0 ?
-                    (<div className={styles.postMainContent}>
+                    (<div className={styles.postMediaContent}>
                         {
                             post.imgs.map((img, index) => {
                                 return (
-                                    <div key={index} className={styles.postMainContentItem} data-image-item>
-                                        <div className={styles.backdropBlock}>
-                                            <FullscreenIcon className={styles.icon}/>
-                                        </div>
-                                        <Image className={styles.image} width="100" height="100" layout="responsive" src={img}/>
-                                    </div>
+                                    <ImageElement key={index} src={img}/>
                                 );
                             })
                         }

@@ -4,8 +4,8 @@ import getAuthUser from '../../../apollo/queries/getAuthUser';
 import type { IAuthUser } from "../../../models/user";
 import { useQuery } from '@apollo/client';
 import PreloadVideo from '../../PreloadVideo/PreloadVideo';
-import Image from 'next/image';
-import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import ImageElement from '../../ImageElement/ImageElement';
+import AudioElement from '../../AudioElement/AudioElement';
 
 import styles from './messenge.module.scss';
 
@@ -18,8 +18,12 @@ const Messenge: FC<IProps> = ({messenge}) => {
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     const isOurs = authUser?.getAuthUser.id == messenge.authorId;
     
+    function isExistMediaContent(){
+        return messenge.imgs.length + messenge.videos.length + messenge.audios.length + messenge.documents.length != 0;
+    }
+
     return (
-        <section className={styles.messenge + (isOurs ? ' ' + styles.ours : ' ' + styles.theirs)}>
+        <section className={styles.messenge + (isOurs ? ' ' + styles.ours : ' ' + styles.theirs)  + (isExistMediaContent() ? ' ' + styles.existMediaContent : '')}>
             <div className={styles.messengeContent}>
                 <p className={styles.messengeText}>
                     {
@@ -27,17 +31,12 @@ const Messenge: FC<IProps> = ({messenge}) => {
                     }
                 </p>
                 {
-                    messenge.imgs.length + messenge.videos.length + messenge.audios.length != 0 ?
-                    (<div className={styles.postMainContent}>
+                    isExistMediaContent() ?
+                    (<div className={styles.messengeMediaContent}>
                         {
                             messenge.imgs.map((img, index) => {
                                 return (
-                                    <div key={index} className={styles.postMainContentItem} data-image-item>
-                                        <div className={styles.backdropBlock}>
-                                            <FullscreenIcon className={styles.icon}/>
-                                        </div>
-                                        <Image className={styles.image} width="100" height="100" layout="responsive" src={img}/>
-                                    </div>
+                                    <ImageElement key={index} src={img}/>
                                 );
                             })
                         }
@@ -51,7 +50,7 @@ const Messenge: FC<IProps> = ({messenge}) => {
                         {
                             messenge.audios.map((audio, index) => {
                                 return (
-                                    <audio style={{width: '100%'}} src={audio} key={index} controls></audio>
+                                    <AudioElement key={index} src={audio}/>
                                 );
                             })
                         }
