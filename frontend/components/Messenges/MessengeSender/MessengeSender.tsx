@@ -23,7 +23,17 @@ const MessengeSender: FC<IProps> = ({interlocutorRoom}) => {
     const {sendMessenge} = useSendMessenge(interlocutorRoom);
 
     const inputHandler = (ev: any) => setMessengeText(ev.target.value);
+
+    const isValidData = () => {
+        if(!messengeText && !imgs?.length && !audios?.length && !videos?.length && !documents?.length)
+            return;
+
+        return true;
+    };
+
     const sendHandler = () => {
+        if(!isValidData()) return;
+
         sendMessenge(messengeText, imgs, videos, documents, audios);
         setMessengeText('');
         setVideos(null);

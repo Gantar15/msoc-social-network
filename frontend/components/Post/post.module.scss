@@ -134,7 +134,7 @@
                             transform: translateZ(0);
                         }
                         30%{
-                            transform: translateZ(25px);
+                            transform: translateZ(15px);
                         }
                         100%{
                             transform: translateZ(0);
@@ -142,7 +142,7 @@
                     }
 
                     .icon{
-                        animation: active .5s ease;                        
+                        animation: active .5s ease;
                     }
                 }
 

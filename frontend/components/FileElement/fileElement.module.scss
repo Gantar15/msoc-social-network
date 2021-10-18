@@ -1,0 +1,44 @@
+
+@import '../../public/styles/variables.scss';
+
+.fileElement{
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+
+    &.theirs{
+        .icon{
+            color: $activeIconColor;
+        }
+        .description{
+            .filename{
+                color: $mainFontColor;
+            }
+            .filesize{
+                color: $activeIconColor;
+            }
+        }
+    }
+
+    .icon{
+        font-size: 32px;
+        color: $contrastBackgroundColor;
+    }
+    .description{
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .filename{
+            font-size: 13px;
+            font-weight: 500;
+            color: $inputColor;
+        }
+        .filesize{
+            margin-top: 5px;
+            font-size: 11px;
+            color: #e7e7e7;
+        }
+    }
+}

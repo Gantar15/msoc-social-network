@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import Image from 'next/image';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 
@@ -19,4 +19,4 @@ const ImageElement: FC<IProps> = ({src}) => {
         </section>
     );
 };
-export default ImageElement;
+export default memo(ImageElement);

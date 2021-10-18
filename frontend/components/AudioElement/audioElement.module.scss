@@ -7,5 +7,7 @@
 
     audio{
         width: 100%;
+        border: 2px solid $contrastBackgroundColor;
+        border-radius: 55px;
     }
 }

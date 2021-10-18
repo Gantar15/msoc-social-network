@@ -8,6 +8,7 @@ import ImageElement from '../../ImageElement/ImageElement';
 import AudioElement from '../../AudioElement/AudioElement';
 
 import styles from './messenge.module.scss';
+import FileElement from '../../FileElement/FileElement';
 
 
 interface IProps {
@@ -51,6 +52,13 @@ const Messenge: FC<IProps> = ({messenge}) => {
                             messenge.audios.map((audio, index) => {
                                 return (
                                     <AudioElement key={index} src={audio}/>
+                                );
+                            })
+                        }
+                        {
+                            messenge.documents.map((file, index) => {
+                                return (
+                                    <FileElement isOurs={isOurs} src={file} key={index}/>
                                 );
                             })
                         }

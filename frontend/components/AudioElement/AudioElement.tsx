@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 
 import styles from './audioElement.module.scss';
 
@@ -14,4 +14,4 @@ const AudioElement: FC<IProps> = ({src}) => {
         </section>
     );
 };
-export default AudioElement;
+export default memo(AudioElement);
