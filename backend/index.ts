@@ -58,6 +58,7 @@ const apolloServer = new ApolloServer({
         }
     }]
 });
+
 const subscriptionServer = SubscriptionServer.create({
     schema,
     subscribe,
@@ -70,6 +71,9 @@ const subscriptionServer = SubscriptionServer.create({
         return {
             authUser
         }
+    },
+    onDisconnect(webSocket: WebSocket) {
+        
     }
 }, {
     server: httpServer,

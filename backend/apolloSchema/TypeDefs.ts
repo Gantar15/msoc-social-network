@@ -130,6 +130,10 @@ export default gql`
 
         #Messenges
         sendMessenge(recipientId: Int!, messenge: String!, imgs: [Upload!], videos: [Upload!], documents: [Upload!], audios: [Upload!]): Messenge!
+
+        #Video chat
+        joinVideoRoom(roomId: Int!): Boolean!
+        leaveVideoRoom: Boolean!
     }
 
     #Subscriptions

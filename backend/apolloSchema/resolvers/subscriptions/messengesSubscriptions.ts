@@ -1,7 +1,8 @@
 import { withFilter } from "graphql-subscriptions";
 import {IMessenge} from "../../../models/Messenge";
-import pubsub, {PubSubEvents} from "../../../apolloSchema/PubSub";
+import pubsub, {MessengesEvents} from "../../../apolloSchema/PubSub";
 import {User} from '../../../models/User';
+
 
 interface IMessengePayload{
     messenge: {dataValues: IMessenge};
@@ -10,7 +11,7 @@ interface IMessengePayload{
 export default {
     watchMessenge: {
         subscribe: withFilter(
-            () => pubsub.asyncIterator([PubSubEvents.messengeSend]),
+            () => pubsub.asyncIterator([MessengesEvents.messengeSend]),
             (payload: IMessengePayload, _: any, {authUser}: {authUser: User | null}) => {
                 return authUser?.id == payload.messenge.dataValues.recipientId;
             }

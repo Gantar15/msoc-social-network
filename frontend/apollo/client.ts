@@ -14,6 +14,7 @@ const wsImpl = require('ws');
 
 
 const API_URL = 'http://localhost:7700';
+const API_WS_URL = 'ws://localhost:7700';
 const CLIENT_URL = 'http://localhost:3000';
 
 
@@ -33,6 +34,7 @@ const errorLink = onError(
     return forward(operation);
   }
 );
+
 
 const uploadLink = createUploadLink({
   uri: API_URL + '/graphql',
@@ -67,8 +69,9 @@ const uploadLink = createUploadLink({
   }
 });
 
+
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:7700/graphql',
+  uri: API_WS_URL + '/graphql',
   options: {
     reconnect: true,
     connectionParams: {
@@ -77,6 +80,7 @@ const wsLink = new WebSocketLink({
   },
   webSocketImpl: isBrowser() ? WebSocket : wsImpl 
 });
+
 
 const resultLink = split(
   ({query}) => {
@@ -89,6 +93,7 @@ const resultLink = split(
   wsLink,
   uploadLink
 );
+
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 export default function initClient(apolloState?: NormalizedCacheObject){
@@ -105,6 +110,7 @@ export default function initClient(apolloState?: NormalizedCacheObject){
 
   return apolloClient;
 }
+
 
 export const useApollo = (apolloState?: NormalizedCacheObject) => {
   return useMemo(() => initClient(apolloState), [apolloState]);

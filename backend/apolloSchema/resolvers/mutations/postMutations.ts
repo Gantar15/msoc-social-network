@@ -4,11 +4,8 @@ import Post from '../../../models/Post';
 import type {IApolloContext} from '../../../types/IApolloContext';
 import { checkAuth } from '../../../middlewares/auth-middleware';
 import type {FileUpload} from 'graphql-upload';
-import {join, parse} from 'path';
-import fs from 'fs';
-import {Readable} from 'stream';
-import {v4 as uuidv4} from 'uuid';
 import User from '../../../models/User';
+import saveFilesFromStream from '../../../lib/saveFilesFromStream';
 
 
 interface InputUpdatePost{
@@ -34,37 +31,13 @@ export default {
             let audiosPath: string[] = [];
             try{
                 if(imgs){
-                    imgsPath = await Promise.all(imgs.map(async (image) => {
-                        const imageUploadObj = await image;
-                        const imgStream: Readable = imageUploadObj.createReadStream();
-                        const fileExt = parse(imageUploadObj.filename).ext;
-                        const filename = uuidv4() + fileExt;
-                        const imgPath = join(__dirname, '..', '..', '..', 'files', 'posts_imgs', filename);
-                        imgStream.pipe(fs.createWriteStream(imgPath));
-                        return `${process.env.SITE_URL}/posts_imgs/${filename}`;
-                    }));
+                    imgsPath = await saveFilesFromStream(imgs, 'posts_imgs');
                 }
                 if(videos){
-                    videosPath = await Promise.all(videos.map(async (video) => {
-                        const videoUploadObj = await video;
-                        const videoStream: Readable = videoUploadObj.createReadStream();
-                        const fileExt = parse(videoUploadObj.filename).ext;
-                        const filename = uuidv4() + fileExt;
-                        const videoPath = join(__dirname, '..', '..', '..', 'files', 'posts_videos', filename);
-                        videoStream.pipe(fs.createWriteStream(videoPath));
-                        return `${process.env.SITE_URL}/posts_videos/${filename}`;
-                    }));
+                    videosPath = await saveFilesFromStream(videos, 'posts_videos');
                 }
                 if(audios){
-                    audiosPath = await Promise.all(audios.map(async (audio) => {
-                        const audioUploadObj = await audio;
-                        const audioStream: Readable = audioUploadObj.createReadStream();
-                        const fileExt = parse(audioUploadObj.filename).ext;
-                        const filename = uuidv4() + fileExt;
-                        const audioPath = join(__dirname, '..', '..', '..', 'files', 'posts_audios', filename);
-                        audioStream.pipe(fs.createWriteStream(audioPath));
-                        return `${process.env.SITE_URL}/posts_audios/${filename}`;
-                    }));
+                    audiosPath = await saveFilesFromStream(audios, 'posts_audios');
                 }
             } catch(err){
                 console.log(err)

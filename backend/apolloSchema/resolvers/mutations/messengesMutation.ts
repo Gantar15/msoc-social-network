@@ -1,15 +1,12 @@
 import errorHandler from "../../../lib/errorHandler";
 import { IApolloContext } from "../../../types/IApolloContext";
 import Messenge from "../../../models/Messenge";
-import pubsub, {PubSubEvents} from "../../PubSub";
+import pubsub, {MessengesEvents} from "../../PubSub";
 import ApiError from "../../../lib/ApiError";
 import { checkAuth } from "../../../middlewares/auth-middleware";
 import User from "../../../models/User";
 import { FileUpload } from "graphql-upload";
-import {join, parse} from 'path';
-import fs from 'fs';
-import {Readable} from 'stream';
-import {v4 as uuidv4} from 'uuid';
+import saveFilesFromStream from "../../../lib/saveFilesFromStream";
 
 
 interface InputCreateMessenge{
@@ -35,48 +32,16 @@ export default {
             let documentsPath: string[] = [];
             try{
                 if(imgs){
-                    imgsPath = await Promise.all(imgs.map(async (image) => {
-                        const imageUploadObj = await image;
-                        const imgStream: Readable = imageUploadObj.createReadStream();
-                        const fileExt = parse(imageUploadObj.filename).ext;
-                        const filename = uuidv4() + fileExt;
-                        const imgPath = join(__dirname, '..', '..', '..', 'files', 'messenges_imgs', filename);
-                        imgStream.pipe(fs.createWriteStream(imgPath));
-                        return `${process.env.SITE_URL}/messenges_imgs/${filename}`;
-                    }));
+                    imgsPath = await saveFilesFromStream(imgs, 'messenges_imgs');
                 }
                 if(videos){
-                    videosPath = await Promise.all(videos.map(async (video) => {
-                        const videoUploadObj = await video;
-                        const videoStream: Readable = videoUploadObj.createReadStream();
-                        const fileExt = parse(videoUploadObj.filename).ext;
-                        const filename = uuidv4() + fileExt;
-                        const videoPath = join(__dirname, '..', '..', '..', 'files', 'messenges_videos', filename);
-                        videoStream.pipe(fs.createWriteStream(videoPath));
-                        return `${process.env.SITE_URL}/messenges_videos/${filename}`;
-                    }));
+                    videosPath = await saveFilesFromStream(videos, 'messenges_videos');
                 }
                 if(audios){
-                    audiosPath = await Promise.all(audios.map(async (audio) => {
-                        const audioUploadObj = await audio;
-                        const audioStream: Readable = audioUploadObj.createReadStream();
-                        const fileExt = parse(audioUploadObj.filename).ext;
-                        const filename = uuidv4() + fileExt;
-                        const audioPath = join(__dirname, '..', '..', '..', 'files', 'messenges_audios', filename);
-                        audioStream.pipe(fs.createWriteStream(audioPath));
-                        return `${process.env.SITE_URL}/messenges_audios/${filename}`;
-                    }));
+                    audiosPath = await saveFilesFromStream(audios, 'messenges_audios');
                 }
                 if(documents){
-                    documentsPath = await Promise.all(documents.map(async (document) => {
-                        const documentUploadObj = await document;
-                        const documentStream: Readable = documentUploadObj.createReadStream();
-                        const fileExt = parse(documentUploadObj.filename).ext;
-                        const filename = uuidv4() + fileExt;
-                        const audioPath = join(__dirname, '..', '..', '..', 'files', 'messenges_documents', filename);
-                        documentStream.pipe(fs.createWriteStream(audioPath));
-                        return `${process.env.SITE_URL}/messenges_documents/${filename}`;
-                    }));
+                    documentsPath = await saveFilesFromStream(documents, 'messenges_documents');
                 }
             } catch(err){
                 console.log(err)
@@ -91,7 +56,7 @@ export default {
                 audios: audiosPath,
                 documents: documentsPath
             });
-            pubsub.publish(PubSubEvents.messengeSend, {
+            pubsub.publish(MessengesEvents.messengeSend, {
                 messenge: messengeObj
             });
             

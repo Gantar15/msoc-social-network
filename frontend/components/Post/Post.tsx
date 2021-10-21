@@ -94,18 +94,22 @@ const Post: FC<{post: IPost}> = ({post}) => {
                 <MoreHorizIcon className={styles.postOptions}/>
             </header>
             <section>
-                <div className={styles.descriptionBlock}>
-                    <p ref={descriptionRef}>
-                        {post.desc}
-                    </p>
-                    {
-                        post.desc ?
-                        (<div ref={showMoreRef} onClick={showMoreHandler} className={styles.more} data-active>
-                            Читать дальше
+                {
+                    post.desc ?
+                        (<div className={styles.descriptionBlock}>
+                            <p ref={descriptionRef}>
+                                {post.desc}
+                            </p>
+                            {
+                                post.desc ?
+                                (<div ref={showMoreRef} onClick={showMoreHandler} className={styles.more} data-active>
+                                    Читать дальше
+                                </div>)
+                                : null
+                            }
                         </div>)
                         : null
-                    }
-                </div>
+                }
                 {
                     post.imgs.length + post.videos.length + post.audios.length != 0 ?
                     (<div className={styles.postMediaContent}>
