@@ -77,5 +77,31 @@ export default {
         });
 
         return true;
+    },
+
+    async relayICE(_: any, {targetPeer, iceCandidate}: {targetPeer: number, iceCandidate: string}, {resp}: IApolloContext){
+        checkAuth(resp);
+        const authUser: User = resp.locals.user;
+
+        pubsub.publish(VideoCharEvents.iceCandidate, {
+            targetPeer,
+            peerId: authUser.id,
+            iceCandidate
+        });
+
+        return true;
+    },
+
+    async relaySDP(_: any, {targetPeer, sessionDescription}: {targetPeer: number, sessionDescription: string}, {resp}: IApolloContext){
+        checkAuth(resp);
+        const authUser: User = resp.locals.user;
+        
+        pubsub.publish(VideoCharEvents.sessionDescription, {
+            targetPeer,
+            peerId: authUser.id,
+            sessionDescription
+        });
+
+        return true;
     }
 };

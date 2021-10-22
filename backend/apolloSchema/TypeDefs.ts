@@ -86,6 +86,23 @@ export default gql`
         profilePicture: String!
     }
 
+    #video char
+    type AddPeerOut{
+        createOffer: Boolean!
+        peerId: Int!
+    }
+    type RemovePeerOut{
+        peerId: Int!
+    }
+    type SessionDescriptionOut{
+        peerID: Int!
+        sessionDescription: String!
+    }
+    type IceCandidateOut{
+        peerID: Int!
+        iceCandidate: String!
+    }
+
 
     #Querys
     type Query{
@@ -134,10 +151,18 @@ export default gql`
         #Video chat
         joinVideoRoom(roomId: Int!): Boolean!
         leaveVideoRoom: Boolean!
+        relayICE(targetPeer: Int!, iceCandidate: String!): Boolean!
+        relaySDP(targetPeer: Int!, sessionDescription: String!): Boolean!
     }
 
     #Subscriptions
     type Subscription{
         watchMessenge(recipientId: Int!): Messenge!
+
+        #Video chat
+        addVideoPeer: AddPeerOut!
+        removeVideoPeer: RemovePeerOut!
+        sessionDescription: SessionDescriptionOut!
+        iceCandidate: IceCandidateOut!
     }
 `;

@@ -73,7 +73,6 @@ const subscriptionServer = SubscriptionServer.create({
         }
     },
     onDisconnect(webSocket: WebSocket) {
-        
     }
 }, {
     server: httpServer,
