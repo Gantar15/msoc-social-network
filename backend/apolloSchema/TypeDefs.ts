@@ -68,6 +68,10 @@ export default gql`
     }
 
     #messenge
+    type AccordFile{
+        filename: String!
+        codedFilename: String!
+    }
     type Messenge{
         id: Int!
         createdAt: String!
@@ -77,7 +81,7 @@ export default gql`
         recipientId: Int!
         imgs: [String!]
         videos: [String!]
-        documents: [String!]
+        documents: [AccordFile!]
         audios: [String!]
     }
     type Interlocutor{

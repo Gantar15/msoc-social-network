@@ -87,6 +87,12 @@
 
                 .posts{
                     padding-top: 20px;
+
+                    .noposts{
+                        font-size: 14px;
+                        color: $activeIconColor;
+                        text-align: center;
+                    }
                 }
             }
         }

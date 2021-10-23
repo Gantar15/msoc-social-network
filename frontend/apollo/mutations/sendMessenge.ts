@@ -12,7 +12,10 @@ const sendMessenge = gql`
             authorId,
             imgs,
             videos,
-            documents,
+            documents{
+                filename,
+                codedFilename
+            },
             audios
         }
     }

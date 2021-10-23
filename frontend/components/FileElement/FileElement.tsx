@@ -7,10 +7,10 @@ import styles from './fileElement.module.scss';
 interface IProps{
     src: string;
     isOurs: boolean;
+    filename: string;
 }
 
-const AudioElement: FC<IProps> = ({src, isOurs}) => {
-    const filename = src.split('/')[src.split('/').length-1];
+const AudioElement: FC<IProps> = ({src, filename, isOurs}) => {
     const [filesize, setFilesize] = useState('');
 
     useEffect(() => {

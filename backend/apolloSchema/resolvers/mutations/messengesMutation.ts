@@ -59,11 +59,10 @@ export default {
             if(documents){
                 let index = 0;
                 for await (const document of documents) {
-                    messengeObj.createAccordFile({
-                        filename: document.filename.split('\\')[document.filename.split('\\').length-1],
-                        codedFilename: documentsPath[index]
+                    await messengeObj.createAccordFile({
+                        filename: document.filename,
+                        codedFilename: documentsPath[index++]
                     });
-                    ++index;
                 }
             }
 

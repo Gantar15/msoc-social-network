@@ -26,28 +26,33 @@ const Messenge: FC<IProps> = ({messenge}) => {
     return (
         <section className={styles.messenge + (isOurs ? ' ' + styles.ours : ' ' + styles.theirs)  + (isExistMediaContent() ? ' ' + styles.existMediaContent : '')}>
             <div className={styles.messengeContent}>
-                <p className={styles.messengeText}>
-                    {
-                        messenge.text
-                    }
-                </p>
+                {   messenge.text ? 
+                    <p className={styles.messengeText}>
+                        {
+                            messenge.text
+                        }
+                    </p>
+                    : null
+                }
                 {
                     isExistMediaContent() ?
                     (<div className={styles.messengeMediaContent}>
-                        {
-                            messenge.imgs.map((img, index) => {
-                                return (
-                                    <ImageElement key={index} src={img}/>
-                                );
-                            })
-                        }
-                        {
-                            messenge.videos.map((video, index) => {
-                                return (
-                                    <PreloadVideo key={index} src={video}/>
-                                );
-                            })
-                        }
+                        <div className={styles.graphicContent}>
+                            {
+                                messenge.imgs.map((img, index) => {
+                                    return (
+                                        <ImageElement key={index} src={img}/>
+                                    );
+                                })
+                            }
+                            {
+                                messenge.videos.map((video, index) => {
+                                    return (
+                                        <PreloadVideo key={index} src={video}/>
+                                    );
+                                })
+                            }
+                        </div>
                         {   messenge.audios.length + messenge.documents.length ?
                             <div className={styles.messengeFileContent}>
                                 {
@@ -60,7 +65,7 @@ const Messenge: FC<IProps> = ({messenge}) => {
                                 {
                                     messenge.documents.map((file, index) => {
                                         return (
-                                            <FileElement isOurs={isOurs} src={file} key={index}/>
+                                            <FileElement isOurs={isOurs} filename={file.filename} src={file.codedFilename} key={index}/>
                                         );
                                     })
                                 }

@@ -14,7 +14,9 @@ const getNewestMessenges = gql`
             audios,
             videos,
             imgs,
-            documents
+            documents{
+                filename
+            }
         }
     }
 `;

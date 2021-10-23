@@ -6,16 +6,16 @@ import { FileUpload } from 'graphql-upload';
 
 
 async function saveFilesFromStream(files: Promise<FileUpload>[], path: string){
-    const imgsPath: string[] = await Promise.all(files.map(async (file) => {
+    const filesPath: string[] = await Promise.all(files.map(async (file) => {
         const fileUploadObj = await file;
         const fileStream: Readable = fileUploadObj.createReadStream();
         const fileExt = parse(fileUploadObj.filename).ext;
         const filename = uuidv4() + fileExt;
-        const imgPath = join(__dirname, '..', '..', '..', 'files', path, filename);
-        fileStream.pipe(fs.createWriteStream(imgPath));
+        const filePath = join(__dirname, '..', 'files', path, filename);
+        fileStream.pipe(fs.createWriteStream(filePath));
         return `${process.env.SITE_URL}/${path}/${filename}`;
     }));
 
-    return imgsPath;
+    return filesPath;
 }
 export default saveFilesFromStream;

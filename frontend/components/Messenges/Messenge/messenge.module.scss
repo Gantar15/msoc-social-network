@@ -48,14 +48,28 @@
             font-weight: normal;
         }
 
-        .messengeMediaContent{
+        &>*:nth-child(n+2){
             margin-top: 5px;
-            display: flex;
-            flex-wrap: wrap;
+        }
 
+        .messengeMediaContent{
+
+            &>*:nth-child(n+2){
+                margin-top: 5px;
+            }
+
+            .graphicContent{
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+            }
             .messengeFileContent{
                 padding: 0 5px;
                 width: 100%;
+
+                :nth-child(n+2){
+                    margin-top: 5px;
+                }
             }
         }
     }

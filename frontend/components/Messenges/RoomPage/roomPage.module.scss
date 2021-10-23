@@ -15,22 +15,22 @@
 
     &.noInterlocutor{
         justify-content: center;
-        color: #203958b9;
+        color: $activeIconColor;
 
         .messImgs{
-            width: 70px;
+            width: 60px;
             opacity: 0.75;
-            height: 70px;
+            height: 60px;
             object-fit: contain;
         }
         .noInterlocutorTitle{
-            font-size: 19px;
+            font-size: 17px;
             margin-bottom: 5px;
             margin-top: 15px;
             text-align: center;
         }
         .noInterlocutorMessage{
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: 30px;
             text-align: center;
         }

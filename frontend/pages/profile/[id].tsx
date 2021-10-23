@@ -108,7 +108,7 @@ const Profile: NextPage = () => {
                                             <Post key={post.id} post={post}/>
                                         )
                                     })
-                                    : 'Постов нет'
+                                    : <p className={styles.noposts}>Постов нет</p>
                                 }
                             </div>
                         </div>

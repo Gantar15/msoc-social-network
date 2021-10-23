@@ -13,7 +13,10 @@ const getMessenges = gql`
             audios,
             videos,
             imgs,
-            documents
+            documents{
+                filename,
+                codedFilename
+            }
         }
     }
 `;

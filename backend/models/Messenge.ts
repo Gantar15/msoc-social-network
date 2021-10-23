@@ -52,5 +52,6 @@ Messenge.init({
 });
 
 Messenge.hasMany(AccordFile);
+AccordFile.belongsTo(Messenge);
 
 export default Messenge;

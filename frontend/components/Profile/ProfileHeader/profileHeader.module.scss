@@ -115,6 +115,7 @@
                     font-weight: bold;
                     padding: 9px 17px;
                     font-size: 13px;
+                    width: 100%;
                     color: $contrastBackgroundColor;
     
                     &.subscribe{
@@ -132,10 +133,9 @@
                     margin-left: 5px;
                     background-image: $gradient;
                     border-radius: 10px;
-                    padding-right: 1px;
+                    padding: 0 6px;
                     cursor: pointer;
                     height: 100%;
-                    width: 100%;
 
                     .icon{
                         color: $contrastBackgroundColor;

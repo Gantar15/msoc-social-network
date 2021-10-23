@@ -2,7 +2,6 @@
 import sequelize from "../db";
 import { DataTypes, Optional, 
     Model } from "sequelize";
-import Messenge from "./Messenge";
 
 
 interface IAccordFile{
@@ -22,7 +21,8 @@ AccordFile.init({
     filename: DataTypes.STRING,
     codedFilename: DataTypes.STRING
 },{
-    sequelize
+    sequelize,
+    timestamps: false
 });
 
 export default AccordFile;

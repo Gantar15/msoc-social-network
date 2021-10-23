@@ -9,6 +9,6 @@ interface IMessenge{
     videos: string[];
     imgs: string[];
     audios: string[];
-    documents: string[];
+    documents: {filename: string, codedFilename: string}[];
 }
 export type {IMessenge};

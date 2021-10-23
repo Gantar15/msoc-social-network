@@ -1,3 +1,4 @@
+@import './variables.scss';
 
 .homepage{
     display: flex;
@@ -12,6 +13,12 @@
         .posts{
             display: flex;
             flex-direction: column;
+            
+            .noposts{
+                font-size: 14px;
+                color: $activeIconColor;
+                text-align: center;
+            }
         }
     }
 }
