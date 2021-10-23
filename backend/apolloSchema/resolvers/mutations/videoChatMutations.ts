@@ -17,9 +17,8 @@ export default {
                     [Op.not]: null
                 })
         });
-        if(existingRoom) {
-            await VideoRoom.create();
-        }
+        if(existingRoom)
+            return false;
     
         const videoRoomCandidate = await VideoRoom.findByPk(roomId);
         if(videoRoomCandidate){

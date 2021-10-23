@@ -17,6 +17,22 @@ interface IProps{
 
 const Interlocuter: FC<IProps> = ({interlocutor, lastMessenge, setInterlocutorRoom, isActive}) => {
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+    let lastMessengeContent: string = '';
+    if(lastMessenge.text){
+        lastMessengeContent = lastMessenge.text;
+    }
+    else if(lastMessenge.imgs){
+        lastMessengeContent = "Фото";
+    }
+    else if(lastMessenge.videos){
+        lastMessengeContent = "Видео";
+    }
+    else if(lastMessenge.audios){
+        lastMessengeContent = "Аудиозапись";
+    }
+    else if(lastMessenge.documents){
+        lastMessengeContent = "Файл";
+    }
     
     return (
         <div className={styles.interlocutor + (isActive ? ' '+styles.active : '')} onClick={() => setInterlocutorRoom(interlocutor.id)}>
@@ -28,7 +44,7 @@ const Interlocuter: FC<IProps> = ({interlocutor, lastMessenge, setInterlocutorRo
                     <p className={styles.name}>{interlocutor.name}</p>
                     <p className={styles.lastMessenge}>{
                         lastMessenge.authorId == authUser?.getAuthUser?.id ?
-                        'Вы: ' + lastMessenge.text : lastMessenge.text
+                        'Вы: ' + lastMessengeContent : lastMessengeContent
                     }</p>
                 </div>
                 <div className={styles.lastMessengeDate}>

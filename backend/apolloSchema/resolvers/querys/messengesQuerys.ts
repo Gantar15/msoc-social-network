@@ -6,10 +6,11 @@ import User from '../../../models/User';
 import {literal, Op} from 'sequelize'; 
 import ApiError from "../../../lib/ApiError";
 import tokenService from "../../../services/tokenService";
+import AccordFile from "../../../models/AccordFile";
 
 
 export default {
-    async getMessenges(_: any, {recipientId, refreshToken}: {recipientId: number, refreshToken?: string}, {req, resp}: IApolloContext){
+    async getMessenges(_: any, {recipientId, refreshToken}: {recipientId: number, refreshToken?: string}, {req}: IApolloContext){
         try{
             let refreshTokenStr = refreshToken ?? req.cookies.refreshToken;
 
@@ -32,6 +33,10 @@ export default {
                 ]
             });
 
+            messenges.forEach(async (messenge) => {
+                //@ts-ignore
+                messenge.documents = (await messenge?.getAccordFiles()).map(({filename}) => (filename));
+            });
             return messenges;
         } catch(err: any){
             errorHandler(err);
@@ -122,10 +127,15 @@ export default {
                     order: [
                         ["createdAt", "DESC"]
                     ],
+                    include: AccordFile
                 });
             }));
 
             newestMessenges = newestMessenges.filter(el => !!el);
+            newestMessenges.forEach(async (newestMessenge) => {
+                //@ts-ignore
+                newestMessenge.documents = (await newestMessenge?.getAccordFiles()).map(({filename}) => (filename));
+            });
             return newestMessenges;
         } catch(err: any){
             errorHandler(err);

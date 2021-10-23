@@ -52,6 +52,11 @@
             margin-top: 5px;
             display: flex;
             flex-wrap: wrap;
+
+            .messengeFileContent{
+                padding: 0 5px;
+                width: 100%;
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ import type { IAuthUser } from '../../models/user';
 import {useQuery} from '@apollo/client';
 import getAuthUser from '../../apollo/queries/getAuthUser';
 import ImageElement from '../ImageElement/ImageElement';
+import AudioElement from '../AudioElement/AudioElement';
 
 import styles from './post.module.scss';
 
@@ -130,7 +131,7 @@ const Post: FC<{post: IPost}> = ({post}) => {
                         {
                             post.audios.map((audio, index) => {
                                 return (
-                                    <audio style={{width: '100%'}} src={audio} key={index} controls></audio>
+                                    <AudioElement key={index} src={audio}/>
                                 );
                             })
                         }

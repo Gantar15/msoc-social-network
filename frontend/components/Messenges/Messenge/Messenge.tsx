@@ -48,19 +48,24 @@ const Messenge: FC<IProps> = ({messenge}) => {
                                 );
                             })
                         }
-                        {
-                            messenge.audios.map((audio, index) => {
-                                return (
-                                    <AudioElement key={index} src={audio}/>
-                                );
-                            })
-                        }
-                        {
-                            messenge.documents.map((file, index) => {
-                                return (
-                                    <FileElement isOurs={isOurs} src={file} key={index}/>
-                                );
-                            })
+                        {   messenge.audios.length + messenge.documents.length ?
+                            <div className={styles.messengeFileContent}>
+                                {
+                                    messenge.audios.map((audio, index) => {
+                                        return (
+                                            <AudioElement key={index} src={audio}/>
+                                        );
+                                    })
+                                }
+                                {
+                                    messenge.documents.map((file, index) => {
+                                        return (
+                                            <FileElement isOurs={isOurs} src={file} key={index}/>
+                                        );
+                                    })
+                                }
+                            </div> 
+                            : null
                         }
                     </div>)
                    : null 

@@ -1,7 +1,10 @@
 
 import sequelize from "../db";
 import { DataTypes, Optional, 
-    Model } from "sequelize";
+    Model,
+    HasManyCreateAssociationMixin,
+    HasManyGetAssociationsMixin} from "sequelize";
+import AccordFile from "./AccordFile";
 
 
 interface IMessenge{
@@ -12,7 +15,6 @@ interface IMessenge{
     imgs: string[];
     videos: string[];
     audios: string[];
-    documents: string[];
 }
 export type {IMessenge};
 
@@ -25,7 +27,9 @@ class Messenge extends Model<IMessenge, TokenCreationAttributes> implements IMes
     public imgs!: string[];
     public videos!: string[];
     public audios!: string[];
-    public documents!: string[];
+    
+    public getAccordFiles!: HasManyGetAssociationsMixin<AccordFile>;
+    public createAccordFile!: HasManyCreateAssociationMixin<AccordFile>;
 }
 Messenge.init({
     authorId: DataTypes.INTEGER,
@@ -42,13 +46,11 @@ Messenge.init({
     audios: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: []
-    },    
-    documents: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        defaultValue: []
     }
 },{
     sequelize
 });
+
+Messenge.hasMany(AccordFile);
 
 export default Messenge;

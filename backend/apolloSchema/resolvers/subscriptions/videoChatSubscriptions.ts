@@ -3,12 +3,6 @@ import pubsub, {VideoCharEvents} from "../../../apolloSchema/PubSub";
 import {User} from '../../../models/User';
 
 
-interface IAddVideoPeerPayload{
-    targetPeer: number,
-    createOffer: boolean,
-    peerId: number
-}
-
 export default {
     addVideoPeer: {
         subscribe: withFilter(

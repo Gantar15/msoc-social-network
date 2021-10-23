@@ -53,9 +53,20 @@ export default {
                 text: messenge,
                 imgs: imgsPath,
                 videos: videosPath,
-                audios: audiosPath,
-                documents: documentsPath
+                audios: audiosPath
             });
+
+            if(documents){
+                let index = 0;
+                for await (const document of documents) {
+                    messengeObj.createAccordFile({
+                        filename: document.filename.split('\\')[document.filename.split('\\').length-1],
+                        codedFilename: documentsPath[index]
+                    });
+                    ++index;
+                }
+            }
+
             pubsub.publish(MessengesEvents.messengeSend, {
                 messenge: messengeObj
             });

@@ -31,9 +31,9 @@ const AudioElement: FC<IProps> = ({src, isOurs}) => {
                 <CloudDownload className={styles.icon}/>
             </a>
             <div className={styles.description}>
-                <p className={styles.filename}>
+                <a target='_blank' href={src} className={styles.filename}>
                     {filename}
-                </p>
+                </a>
                 <p className={styles.filesize}>
                     {filesize}
                 </p>
