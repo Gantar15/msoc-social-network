@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useRef } from "react";
+import { FC, memo, useEffect, useRef, Fragment } from "react";
 import { useLazyQuery, useQuery, useSubscription } from "@apollo/client";
 import watchMessenge, {watchMessenge_Subscription} from '../../../apollo/subsciptions/watchMessenge';
 import getMessenges, {getMessenges_Query} from "../../../apollo/queries/getMessenges";
@@ -12,6 +12,7 @@ import MessengeSender from "../MessengeSender/MessengeSender";
 import useApollo from '../../../apollo/client';
 
 import styles from './roomPage.module.scss';
+import { ControlPointSharp } from "@material-ui/icons";
 
 
 interface IProps{
@@ -105,9 +106,18 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
             <section ref={messengesBlockRef} className={styles.messengesBlock}>
                 <div>
                     {
-                        messenges?.getMessenges ? messenges.getMessenges.map(messenge => (
-                            <Messenge key={messenge.id} messenge={messenge}/>
-                        ))
+                        messenges?.getMessenges ? messenges.getMessenges.map((messenge, index) => {
+                            let dateEl: any = null;
+                            if(index == 0 || index-1 >= 0 && new Date(+messenge.createdAt).getDate() > new Date(+messenges.getMessenges[index-1].createdAt).getDate())
+                                dateEl = <p className={styles.dateMark}>{new Date(+messenge.createdAt).toLocaleString('ru', {month: 'long', day: '2-digit'})}</p>;
+                            
+                            return (
+                                <Fragment key={messenge.id}>
+                                    {dateEl}
+                                    <Messenge messenge={messenge}/>
+                                </Fragment>
+                            );
+                        })
                         : 'Загрузка...'
                     }
                 </div>
