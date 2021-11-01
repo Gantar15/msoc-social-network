@@ -1,13 +1,13 @@
 import { withFilter } from "graphql-subscriptions";
 import pubsub, {VideoCharEvents} from "../../../apolloSchema/PubSub";
-import {User} from '../../../models/User';
+import type { ISubscriptionsContext } from "types/ISubscriptionsContext";
 
 
 export default {
     addVideoPeer: {
         subscribe: withFilter(
             () => pubsub.asyncIterator([VideoCharEvents.addPeer]),
-            async ({targetPeer}: {targetPeer: number, createOffer: boolean, peerId: number}, _: any, {authUser}: {authUser: User | null}) => {
+            async ({targetPeer}: {targetPeer: number, createOffer: boolean, peerId: number}, _: any, {authUser}: ISubscriptionsContext) => {
                 if(!authUser) return false;
                 if(authUser.id != targetPeer) return false;
 
@@ -25,7 +25,7 @@ export default {
     removeVideoPeer: {
         subscribe: withFilter(
             () => pubsub.asyncIterator([VideoCharEvents.removePeer]),
-            async ({targetPeer}: {targetPeer: number, peerId: number}, _: any, {authUser}: {authUser: User | null}) => {
+            async ({targetPeer}: {targetPeer: number, peerId: number}, _: any, {authUser}: ISubscriptionsContext) => {
                 if(!authUser) return false;
                 if(authUser.id != targetPeer) return false;
 
@@ -42,14 +42,14 @@ export default {
     sessionDescription: {
         subscribe: withFilter(
             () => pubsub.asyncIterator([VideoCharEvents.sessionDescription]),
-            async ({targetPeer}: {targetPeer: number, sessionDescription: string}, _: any, {authUser}: {authUser: User | null}) => {
+            async ({targetPeer}: {targetPeer: number, sessionDescription: Object}, _: any, {authUser}: ISubscriptionsContext) => {
                 if(!authUser) return false;
                 if(authUser.id != targetPeer) return false;
 
                 return true;
             }
         ),
-        resolve: (payload: {targetPeer: number, sessionDescription: string}) => {
+        resolve: (payload: {targetPeer: number, sessionDescription: Object}) => {
             return {
                 sessionDescription: payload.sessionDescription
             };
@@ -59,14 +59,14 @@ export default {
     iceCandidate: {
         subscribe: withFilter(
             () => pubsub.asyncIterator([VideoCharEvents.iceCandidate]),
-            async ({targetPeer}: {targetPeer: number, iceCandidate: string}, _: any, {authUser}: {authUser: User | null}) => {
+            async ({targetPeer}: {targetPeer: number, iceCandidate: Object}, _: any, {authUser}: ISubscriptionsContext) => {
                 if(!authUser) return false;
                 if(authUser.id != targetPeer) return false;
 
                 return true;
             }
         ),
-        resolve: (payload: {targetPeer: number, iceCandidate: string}) => {
+        resolve: (payload: {targetPeer: number, iceCandidate: Object}) => {
             return {
                 iceCandidate: payload.iceCandidate
             };

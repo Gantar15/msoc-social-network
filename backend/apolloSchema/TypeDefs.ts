@@ -91,6 +91,32 @@ export default gql`
     }
 
     #video char
+    enum RTCSdpType{
+        answer
+        offer
+        pranswer
+        rollback
+    }
+    type SessionDescriptionInit{
+        sdp: String
+        type: RTCSdpType!
+    }
+    input SessionDescriptionInitInput{
+        sdp: String
+        type: RTCSdpType!
+    }
+    type IceCandidateInit{
+        candidate: String
+        sdpMLineIndex: Int
+        sdpMid: String
+        usernameFragment: String
+    }
+    input IceCandidateInitInput{
+        candidate: String
+        sdpMLineIndex: Int
+        sdpMid: String
+        usernameFragment: String
+    }
     type AddPeerOut{
         createOffer: Boolean!
         peerId: Int!
@@ -99,12 +125,12 @@ export default gql`
         peerId: Int!
     }
     type SessionDescriptionOut{
-        peerID: Int!
-        sessionDescription: String!
+        peerId: Int!
+        sessionDescription: SessionDescriptionInit!
     }
     type IceCandidateOut{
-        peerID: Int!
-        iceCandidate: String!
+        peerId: Int!
+        iceCandidate: IceCandidateInit!
     }
 
 
@@ -155,8 +181,8 @@ export default gql`
         #Video chat
         joinVideoRoom(roomId: Int!): Boolean!
         leaveVideoRoom: Boolean!
-        relayICE(targetPeer: Int!, iceCandidate: String!): Boolean!
-        relaySDP(targetPeer: Int!, sessionDescription: String!): Boolean!
+        relayICE(targetPeer: Int!, iceCandidate: IceCandidateInitInput!): Boolean!
+        relaySDP(targetPeer: Int!, sessionDescription: SessionDescriptionInitInput!): Boolean!
     }
 
     #Subscriptions

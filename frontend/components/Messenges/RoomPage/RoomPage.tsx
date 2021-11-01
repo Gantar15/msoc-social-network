@@ -12,7 +12,6 @@ import MessengeSender from "../MessengeSender/MessengeSender";
 import useApollo from '../../../apollo/client';
 
 import styles from './roomPage.module.scss';
-import { ControlPointSharp } from "@material-ui/icons";
 
 
 interface IProps{
@@ -69,15 +68,6 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
         if(newMessenge?.watchMessenge)
             apolloClient.refetchQueries({include: [getMessenges]});
     }, [newMessenge]);
-    
-    if(!interlocutorRoom)
-        return (
-            <div className={styles.roomPage + ' ' + styles.noInterlocutor}>
-                <img className={styles.messImgs} src="/imgs/comments.svg"/>
-                <h2 className={styles.noInterlocutorTitle}>Здесь будут отображены сообщения</h2>
-                <p className={styles.noInterlocutorMessage}>Выберите собеседника</p>
-            </div>
-        );
         
     return (
         <section className={styles.roomPage}>
@@ -122,7 +112,7 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
                     }
                 </div>
             </section>
-            <MessengeSender interlocutorRoom={interlocutorRoom}/>
+            {interlocutorRoom ? <MessengeSender interlocutorRoom={interlocutorRoom}/> : null}
         </section>
     );
 };

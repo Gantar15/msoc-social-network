@@ -71,8 +71,6 @@ const subscriptionServer = SubscriptionServer.create({
         return {
             authUser
         }
-    },
-    onDisconnect(webSocket: WebSocket) {
     }
 }, {
     server: httpServer,
@@ -83,7 +81,7 @@ async function startServer(){
     await sequelize.sync();
     
     await apolloServer.start();
-    apolloServer.applyMiddleware({app, cors:{origin: process.env.CLIENT_URL}});
+    apolloServer.applyMiddleware({app, cors: {origin: process.env.CLIENT_URL}});
 
     const PORT = process.env.PORT || 5000;
     httpServer.listen(PORT, () => console.log(`Server was started on port ${PORT}`));

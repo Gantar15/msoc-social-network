@@ -20,28 +20,33 @@ export default {
         if(existingRoom)
             return false;
     
-        const videoRoomCandidate = await VideoRoom.findByPk(roomId);
-        if(videoRoomCandidate){
-            videoRoomCandidate.users.push(authUser.id);
-            await videoRoomCandidate.save();
-            const roomPeers = videoRoomCandidate.users;
-    
-            roomPeers.forEach(clientId => {
+        let videoRoomCandidate = await VideoRoom.findByPk(roomId);
+        if(!videoRoomCandidate){
+            videoRoomCandidate = await VideoRoom.create({
+                id: roomId,
+                users: []
+            });
+        }
+        
+        await videoRoomCandidate.update({
+            users: [...videoRoomCandidate.users, authUser.id]
+        });
+        const roomPeers = videoRoomCandidate.users;
+
+        roomPeers.forEach(clientId => {
+            if(clientId !== authUser.id)
                 pubsub.publish(VideoCharEvents.addPeer, {
                     peerId: clientId,
                     createOffer: true,
                     targetPeer: authUser.id
                 });
-    
-                pubsub.publish(VideoCharEvents.addPeer, {
-                    peerId: authUser.id,
-                    createOffer: false,
-                    targetPeer: clientId
-                });
+
+            pubsub.publish(VideoCharEvents.addPeer, {
+                peerId: authUser.id,
+                createOffer: false,
+                targetPeer: clientId
             });
-        }
-        else
-            return false;
+        });
     
         return true;
     },
@@ -78,7 +83,7 @@ export default {
         return true;
     },
 
-    async relayICE(_: any, {targetPeer, iceCandidate}: {targetPeer: number, iceCandidate: string}, {resp}: IApolloContext){
+    async relayICE(_: any, {targetPeer, iceCandidate}: {targetPeer: number, iceCandidate: Object}, {resp}: IApolloContext){
         checkAuth(resp);
         const authUser: User = resp.locals.user;
 
@@ -91,7 +96,7 @@ export default {
         return true;
     },
 
-    async relaySDP(_: any, {targetPeer, sessionDescription}: {targetPeer: number, sessionDescription: string}, {resp}: IApolloContext){
+    async relaySDP(_: any, {targetPeer, sessionDescription}: {targetPeer: number, sessionDescription: Object}, {resp}: IApolloContext){
         checkAuth(resp);
         const authUser: User = resp.locals.user;
         

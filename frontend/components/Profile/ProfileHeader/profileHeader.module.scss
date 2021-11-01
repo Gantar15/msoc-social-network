@@ -11,6 +11,18 @@
     display: flex;
     position: relative;
 
+    &.authUserProfile{
+        .userIconBlock{
+            div.avatarBlock{
+                top: -80px;
+            }
+            div.nameBlock{
+                padding: 30px 0 0 30px;
+                margin-top: 65px;
+            }
+        }
+    }
+
     .profileOptions{
         position: absolute;
         top: -50px;
@@ -105,41 +117,67 @@
                 font-size: 18px;
             }
             .subscribeBlock{
-                display: flex;
-                align-items: center;
-                margin-top: 10px;
+                margin-top: 15px;
 
-                button{
-                    cursor: pointer;
-                    border-radius: 10px;
-                    font-weight: bold;
-                    padding: 9px 17px;
-                    font-size: 13px;
-                    width: 100%;
-                    color: $contrastBackgroundColor;
-    
-                    &.subscribe{
-                        background: $gradient;
+                div{
+                    display: flex;
+                    align-items: center;
+
+                    button{
+                        cursor: pointer;
+                        border-radius: 10px;
+                        font-weight: bold;
+                        padding: 9px 17px;
+                        font-size: 13px;
+                        width: 100%;
+                        color: $contrastBackgroundColor;
+        
+                        &.subscribe{
+                            background: $gradient;
+                        }
+                        &.unsubscribe{
+                            background-color: $inputColor;
+                            color: $mainFontColor;
+                        }
                     }
-                    &.unsubscribe{
-                        background-color: $inputColor;
-                        color: $mainFontColor;
+                    .sendMessenge{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-left: 5px;
+                        background-image: $gradient;
+                        border-radius: 10px;
+                        padding: 0 6px;
+                        cursor: pointer;
+                        height: 33px;
+
+                        .icon{
+                            color: $contrastBackgroundColor;
+                            font-size: 23px;
+                        }
                     }
                 }
-                .sendMessenge{
+                .call{
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    margin-left: 5px;
-                    background-image: $gradient;
-                    border-radius: 10px;
-                    padding: 0 6px;
+                    margin-top: 5px;
                     cursor: pointer;
-                    height: 100%;
-
+                    border-radius: 10px;
+                    padding: 9px 17px;
+                    width: 100%;
+                    background-color: $inputColor;
+                    color: $mainFontColor;
+                    
+                    p{
+                        font-weight: bold;
+                        font-size: 13px;
+                    }
                     .icon{
-                        color: $contrastBackgroundColor;
-                        font-size: 23px;
+                        margin-left: 5px;
+                        font-size: 10px;
+                        transform: rotate(-90deg);
+                        margin-top: 2px;
                     }
                 }
             }

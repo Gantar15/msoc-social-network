@@ -19,6 +19,7 @@ import getFollowersCount, {getFollowersCount_Query} from '../../apollo/queries/g
 import getFollowinsCount, {getFollowinsCount_Query} from '../../apollo/queries/getFollowinsCount';
 import apolloClient from '../../apollo/client';
 import validateRefreshToken from '../../utils/validateRefreshToken';
+import CallModal from '../../components/CallModal/CallModal';
 
 import styles from '../../public/styles/profile.module.scss';
 
@@ -44,6 +45,7 @@ const Profile: NextPage = () => {
     const [getFollowersExecute, {data: followersData}] = useLazyQuery<getFollowers_Query>(getFollowers, {fetchPolicy: 'cache-and-network'});
     const [getFollowinsExecute, {data: followinsData}] = useLazyQuery<getFollowins_Query>(getFollowins, {fetchPolicy: 'cache-and-network'});
     const [userPostsCountExecute, {data: userPostsCount}] = useLazyQuery<userPostsCount_Query>(getUserPostsCount);
+    const [isShowCallModal, setIsShowCallModal] = useState(false);
 
     useEffect(() => {
         refresh();
@@ -71,11 +73,14 @@ const Profile: NextPage = () => {
             userId: profileUserId
         }});
     }, [profileUserId]);
-
+    
     return (
         <MainContainer activePage={1} title="Profile">
             <main className={styles.profile}>
-                <ProfileHeader userId={profileUserId}/>
+                {
+                    isShowCallModal ? <CallModal roomId={profileUserId}/> : null
+                }
+                <ProfileHeader userId={profileUserId} setIsShowCallModal={setIsShowCallModal}/>
                 <section className={styles.mainContent}>
                     <section>
                         { authUser?.getAuthUser?.id ?
@@ -117,13 +122,13 @@ const Profile: NextPage = () => {
                     <section>
                         {
                             !followersCount ?
-                                'Загрузка...'
+                                null
                                 : !followersData ? null : <ProfileUserRightbar title={'Подписчики'} users={followersData.getFollowers} count={followersCount.getFollowersCount}/>
                         }
 
                         {
                             !followinsCount ?
-                                'Загрузка...'
+                                null
                                 : !followinsData ? null : <ProfileUserRightbar title={'Подписки'} users={followinsData.getFollowins} count={followinsCount.getFollowinsCount}/>
                         }
                     </section>

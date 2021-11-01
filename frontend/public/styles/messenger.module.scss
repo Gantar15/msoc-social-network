@@ -1,5 +1,40 @@
 
+@import './variables.scss';
+
+
 .messenger{
     display: flex;
     height: 80vh;
+
+    .noInterlocutor{
+        flex: 5;
+        margin-left: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color:  $contrastBackgroundColor;
+        box-shadow: $boxShadow;
+        border-radius: 10px;
+        height: 80vh;
+        justify-content: center;
+        color: #717d88;
+
+        .messImgs{
+            width: 60px;
+            opacity: 0.75;
+            height: 60px;
+            object-fit: contain;
+        }
+        .noInterlocutorTitle{
+            font-size: 17px;
+            margin-bottom: 5px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .noInterlocutorMessage{
+            font-size: 13px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+    }
 }

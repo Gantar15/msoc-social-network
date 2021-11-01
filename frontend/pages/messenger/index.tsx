@@ -21,7 +21,17 @@ const Messenger: NextPage = () => {
     <MainContainer activePage={3} title="Messenger">
       <main className={styles.messenger}>
         <MessengerNavigator setInterlocutorRoom={setInterlocutorRoom} interlocutorRoom={interlocutorRoom}/>
-        <RoomPage interlocutorRoom={interlocutorRoom}/>
+        { 
+          interlocutorRoom ?
+            <RoomPage interlocutorRoom={interlocutorRoom}/>
+            : (
+              <div className={styles.roomPage + ' ' + styles.noInterlocutor}>
+                <img className={styles.messImgs} src="/imgs/comments.svg"/>
+                <h2 className={styles.noInterlocutorTitle}>Здесь будут отображены сообщения</h2>
+                <p className={styles.noInterlocutorMessage}>Выберите собеседника</p>
+              </div>
+            )
+        }
       </main>
     </MainContainer>
   );

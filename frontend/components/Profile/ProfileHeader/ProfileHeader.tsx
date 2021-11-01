@@ -4,22 +4,24 @@ import EditIcon from '@material-ui/icons/Edit';
 import SettingsIcon from '@material-ui/icons/Settings';
 import GavelIcon from '@material-ui/icons/Gavel';
 import { useQuery } from '@apollo/client';
-import { IAuthUser, IUser } from '../../../models/user';
+import { IAuthUser } from '../../../models/user';
 import getAuthUser from '../../../apollo/queries/getAuthUser';
 import getUser, {getUser_Query} from '../../../apollo/queries/getUser';
 import useUnfollowUser from '../../../apollo/mutations/unfollowUser';
 import useFollowUser from '../../../apollo/mutations/followUser';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import A from '../../A/A';
+import ArrowBackIosSharp from '@material-ui/icons/ArrowBackIosSharp';
 
 import styles from './profileHeader.module.scss';
 
 
 interface IProps{
     userId: number;
+    setIsShowCallModal: Function;
 }
 
-const ProfileHeader: FC<IProps> = ({userId}) => {
+const ProfileHeader: FC<IProps> = ({userId, setIsShowCallModal}) => {
     const [isSubscribe, setIsSubscribe] = useState(false);
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     let {data: userData} = useQuery<getUser_Query>(getUser, {
@@ -29,6 +31,7 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
     });
     const {followUser} = useFollowUser(userId);
     const {unfollowUser} = useUnfollowUser(userId);
+    const isAuthUserProfile = userData?.getUser && authUser?.getAuthUser && userData?.getUser.id == authUser?.getAuthUser.id;
 
     useEffect(() => {
         if(userData?.getUser && authUser?.getAuthUser){
@@ -44,9 +47,9 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
         unfollowUser();
         setIsSubscribe(false);
     };
-
+    
     return (
-        <header className={styles.profileHeader}>
+        <header className={styles.profileHeader + (isAuthUserProfile ? ' '+styles.authUserProfile : '')}>
             <div className={styles.profileOptions}>
                 <div className={styles.option}>
                     <span>Настройки</span>
@@ -71,22 +74,32 @@ const ProfileHeader: FC<IProps> = ({userId}) => {
                 <div className={styles.nameBlock}>
                     <span className={styles.name}>{userData?.getUser.name}</span>
                     <div className={styles.subscribeBlock}>
+                        <div>
+                            {
+                                !isAuthUserProfile && userData?.getUser && authUser?.getAuthUser ?
+                                isSubscribe ? 
+                                    (<button className={styles.unsubscribe} onClick={unfollowHandler}>
+                                        Отписаться
+                                    </button>)
+                                    :(<button className={styles.subscribe} onClick={followHandler}>
+                                        Подписаться
+                                    </button>)
+                                : null
+                            }
+                            {
+                                !isAuthUserProfile && userData?.getUser && authUser?.getAuthUser ?
+                                (<A href={`/messenger/${userId}`} className={styles.sendMessenge}>
+                                    <TelegramIcon className={styles.icon}/>
+                                </A>)
+                                : null
+                            }
+                        </div>
                         {
-                            userData?.getUser && authUser?.getAuthUser && userData?.getUser.id != authUser?.getAuthUser.id ?
-                            isSubscribe ? 
-                                (<button className={styles.unsubscribe} onClick={unfollowHandler}>
-                                    Отписаться
-                                </button>)
-                                :(<button className={styles.subscribe} onClick={followHandler}>
-                                    Подписаться
-                                </button>)
-                            : null
-                        }
-                        {
-                            userData?.getUser && authUser?.getAuthUser && userData?.getUser.id != authUser?.getAuthUser?.id ?
-                            (<A href={`/messenger/${userId}`} className={styles.sendMessenge}>
-                                <TelegramIcon className={styles.icon}/>
-                            </A>)
+                            !isAuthUserProfile && userData?.getUser && authUser?.getAuthUser ?
+                            (<button className={styles.call} onClick={() => setIsShowCallModal(true)}>
+                                <p>Позвонить</p>
+                                <ArrowBackIosSharp className={styles.icon}/>
+                            </button>)
                             : null
                         }
                     </div>
