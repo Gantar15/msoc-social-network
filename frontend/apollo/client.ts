@@ -10,6 +10,7 @@ import {createUploadLink} from 'apollo-upload-client';
 import { split } from '@apollo/client';
 import {WebSocketLink} from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import typeDefs from './typeDefs';
 const wsImpl = require('ws');
 
 
@@ -100,7 +101,8 @@ export default function initClient(apolloState?: NormalizedCacheObject){
   apolloClient = apolloClient ?? new ApolloClient({
     ssrMode: !isBrowser(),
     cache: cache,
-    link: from([errorLink, resultLink])
+    link: from([errorLink, resultLink]),
+    typeDefs
   });
 
   if(apolloState){

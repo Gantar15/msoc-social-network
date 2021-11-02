@@ -130,9 +130,9 @@ const useWebRTC = (roomId: number, authUserId: number): [typeof clients, typeof 
         apolloClient.subscribe<addVideoPeer_Subscription>({
             query: addVideoPeer
         }).subscribe({
-            next(data){
+            next(data){console.log(data)
                 if(data.data?.addVideoPeer)
-                    handleNewPeer(data.data?.addVideoPeer.peerId, data.data?.addVideoPeer.createOffer)
+                    handleNewPeer(data.data.addVideoPeer.peerId, data.data.addVideoPeer.createOffer)
             }
         });
     }, []);

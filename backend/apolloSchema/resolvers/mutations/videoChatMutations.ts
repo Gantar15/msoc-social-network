@@ -34,18 +34,19 @@ export default {
         const roomPeers = videoRoomCandidate.users;
 
         roomPeers.forEach(clientId => {
-            if(clientId !== authUser.id)
+            if(clientId !== authUser.id){
                 pubsub.publish(VideoCharEvents.addPeer, {
                     peerId: clientId,
                     createOffer: true,
                     targetPeer: authUser.id
                 });
 
-            pubsub.publish(VideoCharEvents.addPeer, {
-                peerId: authUser.id,
-                createOffer: false,
-                targetPeer: clientId
-            });
+                pubsub.publish(VideoCharEvents.addPeer, {
+                    peerId: authUser.id,
+                    createOffer: false,
+                    targetPeer: clientId
+                });
+            }
         });
     
         return true;
@@ -65,8 +66,14 @@ export default {
 
         const peerIndex = videoRoom.users.findIndex(userId => userId == authUser.id);
         videoRoom.users.splice(peerIndex, 1);
-        await videoRoom.save();
         const roomPeers = videoRoom.users;
+
+        if(!videoRoom.users.length)
+            await videoRoom.destroy();
+        else
+            await videoRoom.update({
+                users: videoRoom.users
+            });
 
         roomPeers.forEach(clientId => {
             pubsub.publish(VideoCharEvents.removePeer, {

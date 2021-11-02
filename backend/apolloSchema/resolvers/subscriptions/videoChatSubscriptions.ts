@@ -3,18 +3,23 @@ import pubsub, {VideoCharEvents} from "../../../apolloSchema/PubSub";
 import type { ISubscriptionsContext } from "types/ISubscriptionsContext";
 
 
+type addVideoPeerPayload = {targetPeer: number, createOffer: boolean, peerId: number};
+type removeVideoPeerPayload = {targetPeer: number, peerId: number};
+type icecandidatePayload = {targetPeer: number, iceCandidate: Object, peerId: number};
+type sessionDescriptionPayload = {targetPeer: number, sessionDescription: Object, peerId: number};
+
 export default {
     addVideoPeer: {
         subscribe: withFilter(
             () => pubsub.asyncIterator([VideoCharEvents.addPeer]),
-            async ({targetPeer}: {targetPeer: number, createOffer: boolean, peerId: number}, _: any, {authUser}: ISubscriptionsContext) => {
+            async ({targetPeer}: addVideoPeerPayload, _: any, {authUser}: ISubscriptionsContext) => {
                 if(!authUser) return false;
                 if(authUser.id != targetPeer) return false;
 
                 return true;
             }
         ),
-        resolve: (payload: {targetPeer: number, createOffer: boolean, peerId: number}) => {
+        resolve: (payload: addVideoPeerPayload) => {
             return {
                 createOffer: payload.createOffer,
                 peerId: payload.peerId
@@ -25,14 +30,14 @@ export default {
     removeVideoPeer: {
         subscribe: withFilter(
             () => pubsub.asyncIterator([VideoCharEvents.removePeer]),
-            async ({targetPeer}: {targetPeer: number, peerId: number}, _: any, {authUser}: ISubscriptionsContext) => {
+            async ({targetPeer}: removeVideoPeerPayload, _: any, {authUser}: ISubscriptionsContext) => {
                 if(!authUser) return false;
                 if(authUser.id != targetPeer) return false;
 
                 return true;
             }
         ),
-        resolve: (payload: {targetPeer: number, peerId: number}) => {
+        resolve: (payload: removeVideoPeerPayload) => {
             return {
                 peerId: payload.peerId
             };
@@ -42,16 +47,17 @@ export default {
     sessionDescription: {
         subscribe: withFilter(
             () => pubsub.asyncIterator([VideoCharEvents.sessionDescription]),
-            async ({targetPeer}: {targetPeer: number, sessionDescription: Object}, _: any, {authUser}: ISubscriptionsContext) => {
+            async ({targetPeer}: sessionDescriptionPayload, _: any, {authUser}: ISubscriptionsContext) => {
                 if(!authUser) return false;
                 if(authUser.id != targetPeer) return false;
 
                 return true;
             }
         ),
-        resolve: (payload: {targetPeer: number, sessionDescription: Object}) => {
+        resolve: ({sessionDescription, peerId}: sessionDescriptionPayload) => {
             return {
-                sessionDescription: payload.sessionDescription
+                sessionDescription,
+                peerId
             };
         }
     },
@@ -59,16 +65,17 @@ export default {
     iceCandidate: {
         subscribe: withFilter(
             () => pubsub.asyncIterator([VideoCharEvents.iceCandidate]),
-            async ({targetPeer}: {targetPeer: number, iceCandidate: Object}, _: any, {authUser}: ISubscriptionsContext) => {
+            async ({targetPeer}: icecandidatePayload, _: any, {authUser}: ISubscriptionsContext) => {
                 if(!authUser) return false;
                 if(authUser.id != targetPeer) return false;
 
                 return true;
             }
         ),
-        resolve: (payload: {targetPeer: number, iceCandidate: Object}) => {
+        resolve: ({iceCandidate, peerId}: icecandidatePayload) => {
             return {
-                iceCandidate: payload.iceCandidate
+                iceCandidate,
+                peerId
             };
         }
     }
