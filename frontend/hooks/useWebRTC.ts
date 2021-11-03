@@ -49,7 +49,7 @@ const useWebRTC = (roomId: number, authUserId: number): [typeof clients, typeof 
             }
         }
 
-        apolloClient.subscribe<sessionDescription_Subscription>({
+        const subscriptionObj = apolloClient.subscribe<sessionDescription_Subscription>({
             query: sessionDescription
         }).subscribe({
             next(data){
@@ -57,11 +57,15 @@ const useWebRTC = (roomId: number, authUserId: number): [typeof clients, typeof 
                     setRemoteMedia(data.data.sessionDescription.peerId, data.data.sessionDescription.sessionDescription)
             }
         });
+
+        return () => {
+            subscriptionObj.unsubscribe();
+        }
     }, []);
 
     //IceCandidate handler
     useEffect(() => {
-        apolloClient.subscribe<iceCandidate_Subscription>({
+        const subscriptionObj = apolloClient.subscribe<iceCandidate_Subscription>({
             query: iceCandidate
         }).subscribe({
             next(data){
@@ -73,6 +77,10 @@ const useWebRTC = (roomId: number, authUserId: number): [typeof clients, typeof 
                 }
             }
         });
+
+        return () => {
+            subscriptionObj.unsubscribe();
+        }
     }, []);
 
     //New Peer handler
@@ -98,13 +106,27 @@ const useWebRTC = (roomId: number, authUserId: number): [typeof clients, typeof 
             };
 
             let tracksCount = 0;
-            peerConnections.current[peerId].ontrack = event => {
+            peerConnections.current[peerId].ontrack = event => {        //get remote user media stream
                 ++tracksCount;
 
                 if(tracksCount == 2){
                     const remoteStream = event.streams[0];
+                    tracksCount = 0;
+
                     addNewClient(peerId, () => {
-                        peerMediaElements.current[peerId]!.srcObject = remoteStream;
+                        if(peerMediaElements.current[peerId])
+                            peerMediaElements.current[peerId]!.srcObject = remoteStream;
+                        else{
+                            let flag = false;
+                            const intervalTimer = setInterval(() => {       //wait when media element are rendered
+                                if(peerMediaElements.current[peerId]){
+                                    peerMediaElements.current[peerId]!.srcObject = remoteStream;
+                                    flag = true;
+                                }
+
+                                if(flag) clearInterval(intervalTimer);
+                            }, 500);
+                        }
                     });
                 }
             };
@@ -127,19 +149,23 @@ const useWebRTC = (roomId: number, authUserId: number): [typeof clients, typeof 
             }
         }
 
-        apolloClient.subscribe<addVideoPeer_Subscription>({
+        const subscriptionObj = apolloClient.subscribe<addVideoPeer_Subscription>({
             query: addVideoPeer
         }).subscribe({
-            next(data){console.log(data)
+            next(data){
                 if(data.data?.addVideoPeer)
                     handleNewPeer(data.data.addVideoPeer.peerId, data.data.addVideoPeer.createOffer)
             }
         });
+
+        return () => {
+            subscriptionObj.unsubscribe();
+        }
     }, []);
 
     //Remove client
     useEffect(() => {
-        apolloClient.subscribe<removeVideoPeer_Subscription>({
+        const subscriptionObj = apolloClient.subscribe<removeVideoPeer_Subscription>({
             query: removeVideoPeer
         }).subscribe({
             next(data){
@@ -151,12 +177,16 @@ const useWebRTC = (roomId: number, authUserId: number): [typeof clients, typeof 
 
                     updateClients(oldClients => {
                         const removeCandidateIndex = oldClients.findIndex(client => client === peerId);
-                        oldClients.slice(removeCandidateIndex, 1);
+                        oldClients.splice(removeCandidateIndex, 1);
                         return oldClients;
                     });
                 }
             }
         });
+
+        return () => {
+            subscriptionObj.unsubscribe();
+        }
     }, []);
 
     //Join new client

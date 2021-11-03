@@ -2,73 +2,115 @@
 
 .messenge{
     display: flex;
-    color: $contrastInonsColor;
-    padding: 10px;
-    border-radius: 13px;
+    cursor: pointer;
+    align-items: center;
+    padding: 7px;
+    border-radius: 5px;
+    position: relative;
 
-    &.existMediaContent{
-        flex-direction: column;
-
-        .messengeDate{
-            margin-top: 5px;
+    
+    &:hover{
+        &>.activeMessengeIcon{
+            opacity: 1;
         }
     }
+    &.active{
+        background-color: $inputColor;
 
+        &>.activeMessengeIcon{
+            opacity: 1;
+        }
+    }
     &:nth-of-type(n+2){
-        margin-top: 7px;
+        margin-top: 2px;
     }
     &.ours{
-        color: $contrastBackgroundColor;
-        align-self: flex-end;
-        background-image: $gradient;
-        border-end-end-radius: 0;
+        justify-content: flex-end;
+
+        &>.activeMessengeIcon{
+            margin-right: auto;
+        }
+        &>.content{
+            color: $contrastBackgroundColor;
+            background-image: $gradient;
+            border-end-end-radius: 0;
+        }
     }
     &.theirs{
-        align-self: flex-start;
-        background-color: $inputColor;
-        border-end-start-radius: 0;
+        justify-content: flex-start;
 
+        &>.activeMessengeIcon{
+            margin-left: auto;
+        }
+        &>.content{
+            background-color: $inputColor;
+            border-end-start-radius: 0;
+
+            .messengeDate{
+                color: $placeholderFontColor;
+            }
+            .messengeText{
+                color: $mainFontColor;
+                font-weight: 500;
+            }
+        }
+    }
+
+    &>.activeMessengeIcon{
+        width: 20px;
+        height: 20px;
+        color: $placeholderFontColor;
+        opacity: 0;
+        transition: all .1s;
+    }
+    &>.content{
+        display: flex;
+        width: fit-content;
+        color: $contrastInonsColor;
+        padding: 10px;
+        border-radius: 13px;
+
+        &.existMediaContent{
+            flex-direction: column;
+
+            .messengeDate{
+                margin-top: 5px;
+            }
+        }
+        
         .messengeDate{
-            color: $placeholderFontColor;
+            margin-left: 20px;
+            align-self: flex-end;
+            font-size: 11px;
         }
-        .messengeText{
-            color: $mainFontColor;
-            font-weight: 500;
-        }
-    }
-    
-    .messengeDate{
-        margin-left: 20px;
-        align-self: flex-end;
-        font-size: 11px;
-    }
-    .messengeContent{
-        .messengeText{
-            font-size: 0.9em;
-            font-weight: normal;
-        }
-
-        &>*:nth-child(n+2){
-            margin-top: 5px;
-        }
-
-        .messengeMediaContent{
+        .messengeContent{
+            .messengeText{
+                font-size: 0.9em;
+                font-weight: normal;
+            }
 
             &>*:nth-child(n+2){
                 margin-top: 5px;
             }
 
-            .graphicContent{
-                width: 100%;
-                display: flex;
-                flex-wrap: wrap;
-            }
-            .messengeFileContent{
-                padding: 0 5px;
-                width: 100%;
+            .messengeMediaContent{
 
-                :nth-child(n+2){
+                &>*:nth-child(n+2){
                     margin-top: 5px;
+                }
+
+                .graphicContent{
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+                .messengeFileContent{
+                    padding: 0 5px;
+                    width: 100%;
+
+                    :nth-child(n+2){
+                        margin-top: 5px;
+                    }
                 }
             }
         }

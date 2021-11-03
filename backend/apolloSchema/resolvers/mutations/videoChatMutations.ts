@@ -66,13 +66,13 @@ export default {
 
         const peerIndex = videoRoom.users.findIndex(userId => userId == authUser.id);
         videoRoom.users.splice(peerIndex, 1);
-        const roomPeers = videoRoom.users;
+        const roomPeers = [...videoRoom.users];
 
         if(!videoRoom.users.length)
             await videoRoom.destroy();
         else
             await videoRoom.update({
-                users: videoRoom.users
+                users: roomPeers
             });
 
         roomPeers.forEach(clientId => {

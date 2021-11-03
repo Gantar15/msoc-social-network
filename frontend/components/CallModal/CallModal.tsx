@@ -14,7 +14,7 @@ interface IProps{
 const CallModal: FC<IProps> = ({roomId}) => {
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     const [clients, provideMediaRef] = useWebRTC(roomId, authUser!.getAuthUser.id);
-    
+    console.log(clients)
     return (
         <section className={styles.callModal}>
             {

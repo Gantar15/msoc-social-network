@@ -26,7 +26,8 @@ export default {
                     [Op.or]: [
                         {authorId: authUserId, recipientId},
                         {authorId: recipientId, recipientId: authUserId}
-                    ]
+                    ],
+                    clientInvisibility: false
                 },
                 order: [
                     ["createdAt", "ASC"]

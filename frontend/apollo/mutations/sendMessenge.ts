@@ -2,22 +2,8 @@ import {gql, useMutation} from '@apollo/client';
 import getMessenges from '../queries/getMessenges';
 
 const sendMessenge = gql`
-    mutation sendMessenge($recipientId: Int!, $messenge: String!, $imgs: [Upload!], $videos: [Upload!], $documents: [Upload!], $audios: [Upload!]){
-        sendMessenge(recipientId: $recipientId, messenge: $messenge, imgs: $imgs, videos: $videos, documents: $documents, audios: $audios){
-            id,
-            text,
-            createdAt,
-            updatedAt,
-            recipientId,
-            authorId,
-            imgs,
-            videos,
-            documents{
-                filename,
-                codedFilename
-            },
-            audios
-        }
+    mutation sendMessenge($recipientId: Int!, $messenge: String, $imgs: [Upload!], $videos: [Upload!], $documents: [Upload!], $audios: [Upload!]){
+        sendMessenge(recipientId: $recipientId, messenge: $messenge, imgs: $imgs, videos: $videos, documents: $documents, audios: $audios)
     }
 `;
 

@@ -176,7 +176,9 @@ export default gql`
         dislikePost(postId: Int!): Boolean!
 
         #Messenges
-        sendMessenge(recipientId: Int!, messenge: String!, imgs: [Upload!], videos: [Upload!], documents: [Upload!], audios: [Upload!]): Messenge!
+        sendMessenge(recipientId: Int!, messenge: String, imgs: [Upload!], videos: [Upload!], documents: [Upload!], audios: [Upload!]): Boolean!
+        removeMessenge(messengeId: Int!, clientInvisibility: Boolean!): Boolean!
+        editMessenge(messengeId: Int!, messenge: String, imgs: [Upload!], videos: [Upload!], documents: [Upload!], audios: [Upload!]): Boolean!
 
         #Video chat
         joinVideoRoom(roomId: Int!): Boolean!
@@ -187,7 +189,7 @@ export default gql`
 
     #Subscriptions
     type Subscription{
-        watchMessenge(recipientId: Int!): Messenge!
+        watchMessenge(recipientId: Int!): Int!
 
         #Video chat
         addVideoPeer: AddPeerOut!

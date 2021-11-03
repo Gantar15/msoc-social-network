@@ -3,7 +3,8 @@ import sequelize from "../db";
 import { DataTypes, Optional, 
     Model,
     HasManyCreateAssociationMixin,
-    HasManyGetAssociationsMixin} from "sequelize";
+    HasManyGetAssociationsMixin,
+    HasManySetAssociationsMixin} from "sequelize";
 import AccordFile from "./AccordFile";
 
 
@@ -15,10 +16,11 @@ interface IMessenge{
     imgs: string[];
     videos: string[];
     audios: string[];
+    clientInvisibility: boolean;
 }
 export type {IMessenge};
 
-interface TokenCreationAttributes extends Optional<IMessenge, "id"> {}
+interface TokenCreationAttributes extends Optional<IMessenge, "id" | "clientInvisibility"> {}
 class Messenge extends Model<IMessenge, TokenCreationAttributes> implements IMessenge {
     public id!: number;
     public authorId!: number;
@@ -27,9 +29,11 @@ class Messenge extends Model<IMessenge, TokenCreationAttributes> implements IMes
     public imgs!: string[];
     public videos!: string[];
     public audios!: string[];
+    public clientInvisibility!: boolean;
     
     public getAccordFiles!: HasManyGetAssociationsMixin<AccordFile>;
     public createAccordFile!: HasManyCreateAssociationMixin<AccordFile>;
+    public setAccordFiles!: HasManySetAssociationsMixin<AccordFile, 'MessengeId'>;
 }
 Messenge.init({
     authorId: DataTypes.INTEGER,
@@ -46,6 +50,10 @@ Messenge.init({
     audios: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: []
+    },
+    clientInvisibility: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 },{
     sequelize
