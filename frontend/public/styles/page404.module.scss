@@ -1,0 +1,35 @@
+
+@import './variables.scss';
+
+.page404{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $mainFontColor;
+
+    .image{
+        margin-right: 35px;
+    }
+    &>div{
+        max-width: 280px;
+
+        h1{
+            font-size: 28px;
+            margin: 0;
+            margin-bottom: 30px;
+        }
+        p{
+            font-size: 16px;
+            word-break: break-all;
+        }
+        a{
+            display: inline-block;
+            font-weight: 500;
+            margin-top: 5px;
+            font-size: 17px;
+            color: $logoColorDark;
+        }
+    }
+}

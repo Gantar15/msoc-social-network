@@ -10,16 +10,16 @@ const useStateWithCallback = <T = any>(initState: T): [T, typeof updateState] =>
     const updateState = useCallback((newState: setStateFncType|T, callback?: callbackType) => {
         if(callback)
             callbackRef.current = callback;
-            
         //@ts-expect-error
-        setState(() => typeof newState == 'function' ? newState(state) : newState);
+        setState((oldState) => typeof newState == 'function' ? newState(oldState) : newState);
     }, []);
 
     useEffect(() => {
-        if(callbackRef.current)
+        if(callbackRef.current){
             callbackRef.current(state);
             callbackRef.current = null;
-    }, [state])
+        }
+    }, [state]);
 
     return [state, updateState];
 };

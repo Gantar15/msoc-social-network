@@ -20,11 +20,13 @@
     }
 
     .icon{
-        font-size: 32px;
+        width: 35px;
+        height: 35px;
+        margin-bottom: -3px;
         color: $contrastBackgroundColor;
     }
     .description{
-        margin-left: 10px;
+        margin-left: 5px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -33,9 +35,13 @@
             font-size: 13px;
             font-weight: 500;
             color: $inputColor;
+
+            &:hover{
+                text-decoration: underline;
+            }
         }
         .filesize{
-            margin-top: 5px;
+            margin-top: 2px;
             font-size: 11px;
             color: #e7e7e7;
         }

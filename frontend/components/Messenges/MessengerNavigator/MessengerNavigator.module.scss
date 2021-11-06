@@ -1,7 +1,7 @@
 @import '../../../public/styles/variables.scss';
 
 .messengerNavigator{
-    flex: 2.5;
+    flex: 2;
     border-radius: 10px;
     box-shadow: $boxShadow;
     display: flex;
@@ -83,7 +83,7 @@
         .noInnterlocutorsText{
             color: $mainFontColor;
             font-size: .9em;
-            margin: auto;
+            margin-top: 20px;
             text-align: center;
         }
     }

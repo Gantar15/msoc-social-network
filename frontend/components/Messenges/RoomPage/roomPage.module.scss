@@ -13,6 +13,29 @@
     border-radius: 10px;
     height: 80vh;
 
+    .notFoundInterlocutor{
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: $mainFontColor;
+
+        .icon{
+            margin-bottom: 15px;
+            width: 90px;
+            height: 90px;
+        }
+        p{
+            text-align: center;
+            font-size: 15px;
+        }
+        .otherUser{
+            font-size: 15px;
+            font-weight: 500;
+            color: $logoColorDark;
+        }
+    }
+
     .roomPageHeader{
         padding: 0 20px;
         width: 100%;
@@ -146,7 +169,7 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            padding: 0 20px;
+            padding: 0 10px;
 
             .loading{
                 width: 30px;

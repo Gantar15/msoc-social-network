@@ -64,18 +64,13 @@ export default {
         });
         if(!videoRoom) return false;
 
-        const peerIndex = videoRoom.users.findIndex(userId => userId == authUser.id);
-        videoRoom.users.splice(peerIndex, 1);
-        const roomPeers = [...videoRoom.users];
+        videoRoom.users = videoRoom.users.filter(userId => userId !== authUser.id);
+        await videoRoom.save();
 
         if(!videoRoom.users.length)
             await videoRoom.destroy();
-        else
-            await videoRoom.update({
-                users: roomPeers
-            });
 
-        roomPeers.forEach(clientId => {
+        videoRoom.users.forEach(clientId => {
             pubsub.publish(VideoCharEvents.removePeer, {
                 targetPeer: clientId,
                 peerId: authUser.id

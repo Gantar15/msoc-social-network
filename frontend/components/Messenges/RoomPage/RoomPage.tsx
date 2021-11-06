@@ -1,6 +1,5 @@
 import { FC, memo, useEffect, useRef, Fragment, useState } from "react";
-import { useLazyQuery, useQuery, useSubscription } from "@apollo/client";
-import watchMessenge, {watchMessenge_Subscription} from '../../../apollo/subsciptions/watchMessenge';
+import { useLazyQuery, useQuery } from "@apollo/client";
 import getMessenges, {getMessenges_Query} from "../../../apollo/queries/getMessenges";
 import Messenge from "../Messenge/Messenge";
 import getAuthUser from '../../../apollo/queries/getAuthUser';
@@ -9,17 +8,17 @@ import getUser, { getUser_Query } from "../../../apollo/queries/getUser";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import A from '../../A/A';
 import MessengeSender from "../MessengeSender/MessengeSender";
-import useApollo from '../../../apollo/client';
 import { IMessenge } from "../../../models/messenge";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import ClearIcon from '@material-ui/icons/Clear';
 import useRemoveMessenge from "../../../apollo/mutations/removeMessenge";
+import useWatchMessenge from "../../../apollo/subsciptions/watchMessenge";
 
 import styles from './roomPage.module.scss';
 
 
 interface IProps{
-    interlocutorRoom: number | undefined;
+    interlocutorRoom: number;
 }
 interface IMessengeExt extends IMessenge{
     isOurs: boolean;
@@ -29,17 +28,12 @@ export type {IMessengeExt};
 const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     const [activeMessenges, setActiveMessenges] = useState<IMessengeExt[]>([]);
     const [getMessengesExecute, {data: messenges, loading: getMessengesLoading}] = useLazyQuery<getMessenges_Query>(getMessenges, {fetchPolicy: 'cache-and-network'});
-    const {data: newMessenge} = useSubscription<watchMessenge_Subscription>(watchMessenge, {
-      variables: {
-        recipientId: interlocutorRoom
-      }
-    });
+    useWatchMessenge(interlocutorRoom);
     const {removeMessenge: removeMessengeExecute} = useRemoveMessenge();
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     const [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
-    const [getInterlocutorData, {data: interlocutorData}] = useLazyQuery<getUser_Query>(getUser);
+    const [getInterlocutorData, {data: interlocutorData, error: getInterlocuterError}] = useLazyQuery<getUser_Query>(getUser);
     const messengesBlockRef = useRef<HTMLDivElement | null>(null);
-    const apolloClient = useApollo();
     
     useEffect(() => {
         if(authUser?.getAuthUser)
@@ -74,11 +68,6 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
         }, 100);
     }, [interlocutorRoom, messenges])
 
-    useEffect(() => {
-        if(newMessenge?.watchMessenge)
-            apolloClient.refetchQueries({include: [getMessenges]});
-    }, [newMessenge]);
-
     function clearActiveMessenges(){
         setActiveMessenges([]);
     }
@@ -96,6 +85,19 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
         clearActiveMessenges();
     }
         
+    if(getInterlocuterError){
+        return (
+            <section className={styles.roomPage}>
+                <div className={styles.notFoundInterlocutor}>
+                    <img src={"/imgs/not-found.png"} className={styles.icon}/>
+                    <p>Пользователь не найден</p>
+                    <A href="/friends" className={styles.otherUser}>
+                        <span>Поищите другого</span>
+                    </A>
+                </div>
+            </section>
+        );
+    }
     return (
         <section className={styles.roomPage}>
             <header className={styles.roomPageHeader}>

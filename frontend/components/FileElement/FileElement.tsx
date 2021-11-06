@@ -1,5 +1,5 @@
 import {FC, memo, useEffect, useState} from 'react';
-import CloudDownload from '@material-ui/icons/CloudDownload';
+import DescriptionIcon from '@material-ui/icons/Description';
 
 import styles from './fileElement.module.scss';
 
@@ -27,8 +27,8 @@ const AudioElement: FC<IProps> = ({src, filename, isOurs}) => {
 
     return (
         <section className={styles.fileElement + (isOurs ? ' ' + styles.ours : ' ' + styles.theirs)}>
-            <a target='_blank' href={src}>
-                <CloudDownload className={styles.icon}/>
+            <a target='_blank' href={src} className={styles.fileDownloadIconBlock}>
+                <DescriptionIcon className={styles.icon}/>
             </a>
             <div className={styles.description}>
                 <a target='_blank' href={src} className={styles.filename}>

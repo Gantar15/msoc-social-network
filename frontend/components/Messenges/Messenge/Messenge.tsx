@@ -1,4 +1,4 @@
-import React, {FC, memo} from 'react'
+import React, {FC, memo, MouseEvent, MouseEventHandler} from 'react'
 import { IMessenge } from '../../../models/messenge';
 import getAuthUser from '../../../apollo/queries/getAuthUser';
 import type { IAuthUser } from "../../../models/user";
@@ -9,6 +9,7 @@ import AudioElement from '../../AudioElement/AudioElement';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import FileElement from '../../FileElement/FileElement';
 import type {IMessengeExt} from '../RoomPage/RoomPage';
+import EditOutlined from '@material-ui/icons/EditOutlined';
 
 import styles from './messenge.module.scss';
 
@@ -29,75 +30,86 @@ const Messenge: FC<IProps> = ({messenge, setActiveMessenges, activeMessenges}) =
     function isExistMediaContent(){
         return messenge.imgs.length + messenge.videos.length + messenge.audios.length + messenge.documents.length != 0;
     }
-    function activeHandler(){
+    function activeHandler(ev: any){
+        const allowedClasses = [styles.messenge, styles.content, styles.messengeText, styles.contentBlock, styles.messengeDate];
+        if(allowedClasses.every(className => !ev.target.classList.contains(className)) && !ev.target.closest('.'+styles.activeMessengeIcon)) return;
+
         if(isActive())
             setActiveMessenges((oldMessenges: any) => oldMessenges.filter((oldMessenge: any) => oldMessenge.id != messenge.id));
         else
             setActiveMessenges((oldMessenges: any) => [...oldMessenges, {...messenge, isOurs}]);
     }
+    function editHandler(){
+        
+    }
 
     return (
         <section onClick={activeHandler} className={styles.messenge + (isOurs ? ' ' + styles.ours : ' ' + styles.theirs) + (isActive() ? ' '+styles.active : '')}>
-            <CheckCircleIcon className={styles.activeMessengeIcon}/>
-            <div className={styles.content + (isExistMediaContent() ? ' ' + styles.existMediaContent : '')}>
-                <div className={styles.messengeContent}>
-                    {   messenge.text ? 
-                        <p className={styles.messengeText}>
-                            {
-                                messenge.text
-                            }
-                        </p>
-                        : null
-                    }
-                    {
-                        isExistMediaContent() ?
-                        (<div className={styles.messengeMediaContent}>
-                            <div className={styles.graphicContent}>
+            <div className={styles.messengeActions}>
+                <EditOutlined className={styles.actionIcon} onClick={editHandler}/>
+            </div>
+            <div className={styles.contentBlock}>
+                <CheckCircleIcon className={styles.activeMessengeIcon}/>
+                <div className={styles.content + (isExistMediaContent() ? ' ' + styles.existMediaContent : '')}>
+                    <div className={styles.messengeContent}>
+                        {   messenge.text ? 
+                            <p className={styles.messengeText}>
                                 {
-                                    messenge.imgs.map((img, index) => {
-                                        return (
-                                            <ImageElement key={index} src={img}/>
-                                        );
-                                    })
+                                    messenge.text
                                 }
-                                {
-                                    messenge.videos.map((video, index) => {
-                                        return (
-                                            <PreloadVideo key={index} src={video}/>
-                                        );
-                                    })
-                                }
-                            </div>
-                            {   messenge.audios.length + messenge.documents.length ?
-                                <div className={styles.messengeFileContent}>
+                            </p>
+                            : null
+                        }
+                        {
+                            isExistMediaContent() ?
+                            (<div className={styles.messengeMediaContent}>
+                                <div className={styles.graphicContent}>
                                     {
-                                        messenge.audios.map((audio, index) => {
+                                        messenge.imgs.map((img, index) => {
                                             return (
-                                                <AudioElement key={index} src={audio}/>
+                                                <ImageElement key={index} src={img}/>
                                             );
                                         })
                                     }
                                     {
-                                        messenge.documents.map((file, index) => {
+                                        messenge.videos.map((video, index) => {
                                             return (
-                                                <FileElement isOurs={isOurs} filename={file.filename} src={file.codedFilename} key={index}/>
+                                                <PreloadVideo key={index} src={video}/>
                                             );
                                         })
                                     }
-                                </div> 
-                                : null
-                            }
-                        </div>)
-                    : null 
-                    }
+                                </div>
+                                {   messenge.audios.length + messenge.documents.length ?
+                                    <div className={styles.messengeFileContent}>
+                                        {
+                                            messenge.audios.map((audio, index) => {
+                                                return (
+                                                    <AudioElement key={index} src={audio}/>
+                                                );
+                                            })
+                                        }
+                                        {
+                                            messenge.documents.map((file, index) => {
+                                                return (
+                                                    <FileElement isOurs={isOurs} filename={file.filename} src={file.codedFilename} key={index}/>
+                                                );
+                                            })
+                                        }
+                                    </div> 
+                                    : null
+                                }
+                            </div>)
+                        : null 
+                        }
+                    </div>
+                    <span className={styles.messengeDate}>
+                        {
+                            new Date(+messenge.createdAt).toLocaleString('ru', {
+                                hour: '2-digit', minute: '2-digit'
+                            })
+                        }
+                    </span>
                 </div>
-                <span className={styles.messengeDate}>
-                    {
-                        new Date(+messenge.createdAt).toLocaleString('ru', {
-                            hour: '2-digit', minute: '2-digit'
-                        })
-                    }
-                </span>
             </div>
         </section>
     )

@@ -2,5 +2,14 @@
 @import '../../public/styles/variables.scss';
 
 .callModal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    .peerVideoBlock{
+        video{
+            width: 400px;
+            height: 320px;
+        }
+    }
 }

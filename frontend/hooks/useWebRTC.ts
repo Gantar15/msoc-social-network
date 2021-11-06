@@ -198,6 +198,7 @@ const useWebRTC = (roomId: number, authUserId: number): [typeof clients, typeof 
                     width: 1280,
                     height: 720
                 },
+                
             });
 
             addNewClient(authUserId, () => {

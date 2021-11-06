@@ -1,0 +1,38 @@
+
+@import '../../public/styles/variables.scss';
+
+.modalWindow{
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    &.hidden{
+        z-index: -1;
+
+        &>div{
+            background-color: transparent;
+
+            .window{
+                top: 0;
+                transform: translateX(-50%) translateY(-100%);
+            }
+        }
+    }
+    &>div{
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        background-color: #eff0f3c4;
+        transition: background-color .2s ease-in;
+
+        .window{
+            z-index: 1000;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            transition: all .3s ease-in;
+        }
+    }
+}
