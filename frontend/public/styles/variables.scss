@@ -9,6 +9,7 @@ $activeIconColor: #7692ac;
 $contrastFontColor: #184883;
 $placeholderFontColor: #9ca9bb;
 $contrastInonsColor: #192c44;
+$darkBackgroundColor: #222222;
 $logoColorLight: #33a4f5;
 $logoColorMiddle: #2E97EE;
 $logoColorDark: #2574db;
@@ -16,6 +17,8 @@ $gradient: linear-gradient(90deg, $logoColorLight 0%, $logoColorDark 100%);
 $boxShadow: 0 0 5px 3px rgba(228, 233, 238, 0.267);
 $border: #f0f2fa;
 $greenOnline: #1ED760;
+$redLeave: #e64646;
+$halfBlack: rgba(0, 0, 0, 0.56);
 
 @keyframes GradientAnimation {
     0%{background-position:0% 0%}

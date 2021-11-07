@@ -3,13 +3,86 @@
 
 .callModal{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 920px;
+    height: 552px;
+    background-color: $darkBackgroundColor;
+    border-radius: 10px;
 
-    .peerVideoBlock{
-        video{
-            width: 400px;
-            height: 320px;
+    .peersBlock{
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        .peerVideoBlock{
+            border-radius: 10px;
+            flex: 0 1;
+            // width: 620px;
+            // height: 252px;
+
+            video{
+                border-radius: 10px;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+    &.active > .commandPanel{
+        transform: translateY(0);
+    }
+    .commandPanel{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 10px;
+        background-color: rgba(74, 75, 80, 0.236);
+        transition: transform .3s;
+        transform: translateY(0);
+        border-radius: 0 0 10px 10px;
+
+        &>div:nth-child(n+2){
+            margin-left: 40px;
+        }
+        .mainCommands{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .commandFunction{
+                padding: 8px;
+                border-radius: 100px;
+                cursor: pointer;
+                background-color: $halfBlack;
+                transition: transform .1s ease-out;
+
+                &:nth-of-type(n+2){
+                    margin-left: 25px;
+                }   
+                &:hover{
+                    transform: scale(1.1);
+
+                    .icon{
+                        opacity: 1;
+                    }
+                }
+                .icon{
+                    width: 30px;
+                    height: 30px;
+                    margin-bottom: -4px;
+                    object-fit: contain;
+                    color: $contrastBackgroundColor;
+                    opacity: .9;
+                    transition: opacity .1s ease-out;
+                }
+
+                &.leaveFunction{
+                    background-color: $redLeave;
+                }
+            }
         }
     }
 }

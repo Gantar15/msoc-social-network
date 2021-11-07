@@ -126,14 +126,22 @@
                     }
                 }
             }
-            .roomSettings{
+            .userActionsElement{
                 cursor: pointer;
-                color: $placeholderFontColor;
-                font-size: 27px;
                 transition: color .2s;
+                color: $placeholderFontColor;
 
                 &:hover{
                     color: $contrastFontColor;
+                }
+                &:nth-of-type(n+2){
+                    margin-left: 15px;
+                }
+                &.roomSettings{
+                    font-size: 27px;
+                }
+                &.audioCall, &.videoCall{
+                    font-size: 23px;
                 }
             }
         }

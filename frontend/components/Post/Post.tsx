@@ -73,7 +73,7 @@ const Post: FC<{post: IPost}> = ({post}) => {
         setIsDisliked(isDisliked => !isDisliked);
         setIsLiked(false);
     }
-    console.log(post)
+    
     return (
         <section className={styles.post}>
             <header>

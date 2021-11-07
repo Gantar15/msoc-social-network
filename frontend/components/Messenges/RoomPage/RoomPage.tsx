@@ -13,6 +13,8 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import ClearIcon from '@material-ui/icons/Clear';
 import useRemoveMessenge from "../../../apollo/mutations/removeMessenge";
 import useWatchMessenge from "../../../apollo/subsciptions/watchMessenge";
+import VideocamOutlinedIcon from '@material-ui/icons/VideocamOutlined';
+import LocalPhoneOutlinedIcon from '@material-ui/icons/LocalPhoneOutlined';
 
 import styles from './roomPage.module.scss';
 
@@ -134,7 +136,11 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
                                         </span>
                                     </div>
                                 </div>
-                                <MoreHorizIcon className={styles.roomSettings}/>
+                                <div className={styles.userActions}>
+                                    <LocalPhoneOutlinedIcon className={styles.userActionsElement + ' ' + styles.audioCall}/>
+                                    <VideocamOutlinedIcon className={styles.userActionsElement + ' ' + styles.videoCall}/>
+                                    <MoreHorizIcon className={styles.userActionsElement + ' ' + styles.roomSettings}/>
+                                </div>
                             </>
                         )
                     }

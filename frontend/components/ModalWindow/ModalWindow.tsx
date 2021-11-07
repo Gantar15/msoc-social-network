@@ -4,16 +4,16 @@ import styles from './modalWindow.module.scss';
 
 
 interface IProps{
-    isHidden: boolean;
-    setIsHidden: Function;
+    isShow: boolean;
+    setIsShow: Function;
     children: any;
 }
 
-const ModalWindow: FC<IProps> = ({children, isHidden, setIsHidden}) => {
+const ModalWindow: FC<IProps> = ({children, isShow, setIsShow}) => {
     useEffect(() => {
         const escHandler = (ev: KeyboardEvent) => {
             if(ev.key != 'Escape') return;
-            setIsHidden(true);
+            setIsShow(false);
         };
         window.addEventListener('keydown', escHandler);
 
@@ -23,7 +23,7 @@ const ModalWindow: FC<IProps> = ({children, isHidden, setIsHidden}) => {
     }, []);
 
     return (
-        <section className={styles.modalWindow + (isHidden ? ' '+styles.hidden : '')}>
+        <section className={styles.modalWindow + (!isShow ? ' '+styles.hidden : '')}>
             <div>
                 <div className={styles.window}>
                     {children}

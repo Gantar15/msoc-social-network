@@ -12,7 +12,7 @@ import removeVideoPeer, { removeVideoPeer_Subscription } from "../apollo/subscip
 const freeice = require('freeice');
 
 
-const useWebRTC = (roomId: number, authUserId: number): [typeof clients, typeof provideMediaRef] => {
+const useWebRTC = (roomId: number, authUserId: number, isAudio: boolean, isVideo: boolean): [typeof clients, typeof provideMediaRef] => {
     const [clients, updateClients] = useStateWithCallback<number[]>([]);
     const apolloClient = useApollo();
 
@@ -193,12 +193,11 @@ const useWebRTC = (roomId: number, authUserId: number): [typeof clients, typeof 
     useEffect(() => {
         async function startCapture(){
             localMediaStream.current = await navigator.mediaDevices.getUserMedia({
-                audio: true, 
-                video: {
+                audio: isAudio, 
+                video: isVideo ? {
                     width: 1280,
                     height: 720
-                },
-                
+                } : false
             });
 
             addNewClient(authUserId, () => {

@@ -78,7 +78,7 @@ const Profile: NextPage = () => {
         <MainContainer activePage={1} title="Profile">
             <main className={styles.profile}>
                 {
-                    isShowCallModal ? <CallModal roomId={profileUserId}/> : null
+                    isShowCallModal ? <CallModal roomId={profileUserId} isShowCallModal={isShowCallModal} setIsShowCallModal={setIsShowCallModal}/> : null
                 }
                 <ProfileHeader userId={profileUserId} setIsShowCallModal={setIsShowCallModal}/>
                 <section className={styles.mainContent}>
