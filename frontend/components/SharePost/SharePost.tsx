@@ -13,7 +13,11 @@ import useAddPost from '../../apollo/mutations/addPost';
 import styles from './sharePost.module.scss';
 
 
-const SharePost: FC = () => {
+interface IProps{
+    limit: number;
+}
+
+const SharePost: FC<IProps> = ({limit}) => {
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     let [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
     const [photo, setPhoto] = useState<null | FileList>(null);
@@ -77,7 +81,7 @@ const SharePost: FC = () => {
             if(imgsLength + videosLength + audiosLength > 10)
                 return setError('Нельзя прикрепить больше десяти файлов');
 
-            addPost(desc, imgs, videos, audios);
+            addPost(limit, desc, imgs, videos, audios);
 
             descRef.current!.value = '';
             photoRef.current!.value = '';

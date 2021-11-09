@@ -1,6 +1,6 @@
 import { FC, memo, useEffect, useRef, Fragment, useState } from "react";
 import { useLazyQuery, useQuery } from "@apollo/client";
-import getMessenges, {getMessenges_Query} from "../../../apollo/queries/getMessenges";
+import { useGetMessenges } from "../../../apollo/queries/getMessenges";
 import Messenge from "../Messenge/Messenge";
 import getAuthUser from '../../../apollo/queries/getAuthUser';
 import type { IAuthUser } from "../../../models/user";
@@ -29,9 +29,9 @@ export type {IMessengeExt};
 
 const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     const [activeMessenges, setActiveMessenges] = useState<IMessengeExt[]>([]);
-    const [getMessengesExecute, {data: messenges, loading: getMessengesLoading}] = useLazyQuery<getMessenges_Query>(getMessenges, {fetchPolicy: 'cache-and-network'});
-    useWatchMessenge(interlocutorRoom);
-    const {removeMessenge: removeMessengeExecute} = useRemoveMessenge();
+    const {getMessengesExecute, getMessengesData: messenges, getMessengesLoading} = useGetMessenges();
+    useWatchMessenge();
+    const {removeMessenge: removeMessengeExecute} = useRemoveMessenge(interlocutorRoom);
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     const [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
     const [getInterlocutorData, {data: interlocutorData, error: getInterlocuterError}] = useLazyQuery<getUser_Query>(getUser);

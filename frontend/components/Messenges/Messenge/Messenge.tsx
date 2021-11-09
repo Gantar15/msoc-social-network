@@ -1,4 +1,4 @@
-import React, {FC, memo, MouseEvent, MouseEventHandler} from 'react'
+import React, {FC, memo} from 'react'
 import { IMessenge } from '../../../models/messenge';
 import getAuthUser from '../../../apollo/queries/getAuthUser';
 import type { IAuthUser } from "../../../models/user";
@@ -27,6 +27,7 @@ const Messenge: FC<IProps> = ({messenge, setActiveMessenges, activeMessenges}) =
     function isActive(){
         return activeMessenges.some(mess => mess.id == messenge.id);
     }
+    
     function isExistMediaContent(){
         return messenge.imgs.length + messenge.videos.length + messenge.audios.length + messenge.documents.length != 0;
     }

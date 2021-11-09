@@ -59,10 +59,11 @@ const uploadLink = createUploadLink({
           options.headers.authorization = `Bearer ${accessToken}`;
 
           return fetch(uri, options);
-      } catch(err){
-        logout(API_URL+'/graphql');
-        if(isBrowser())
-          location.href = '/login';
+      } catch(err: any){
+        console.log(err.message + '-loagout')
+        // logout(API_URL+'/graphql');
+        // if(isBrowser())
+        //   location.href = '/login';
       };
     }
 

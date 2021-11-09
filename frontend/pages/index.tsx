@@ -9,21 +9,20 @@ import validateRefreshToken from '../utils/validateRefreshToken';
 import getAllPosts from '../apollo/queries/getAllPosts';
 import type {IGetAllPosts} from '../apollo/queries/getAllPosts';
 import apolloClient from '../apollo/client';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import styles from '../public/styles/home.module.scss';
 
 
 const Home: NextPage = () => {
   const postsLimit = 20;
-  const [nextPostsLimit, setNextPostsLimit] = useState(20);
-  const {data: posts, loading: postsLoading} = useQuery<IGetAllPosts>(getAllPosts, {
+  const [postsOffset, setPostsOffset] = useState(0);
+  const {data: posts, loading: postsLoading, fetchMore: fetchMorePosts} = useQuery<IGetAllPosts>(getAllPosts, {
     variables: {
       limit: postsLimit,
       offset: 0
     }
   });
-  const [fetchMorePosts, {data: nextPosts, loading: nextPostsLoading}] = useLazyQuery<IGetAllPosts>(getAllPosts);
   
   const {refresh} = useRefresh();
 
@@ -33,11 +32,10 @@ const Home: NextPage = () => {
       if(window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 200){
         fetchMorePosts({
           variables: {
-            limit: nextPostsLimit,
-            offset: postsLimit
+            limit: postsLimit,
+            offset: postsOffset
           }
         });
-        setNextPostsLimit(currentLimit => currentLimit+postsLimit);
       }
     };
 
@@ -47,12 +45,17 @@ const Home: NextPage = () => {
       window.removeEventListener('scroll', scrollHandler);
     };
   }, []);
+
+  useEffect(() => {
+    if(posts?.getTimelinePosts)
+      setPostsOffset(currentOffset => currentOffset + posts.getTimelinePosts.length);
+  }, [posts]);
   
   return (
     <MainContainer activePage={2} title="Home">
       <main className={styles.homepage}>
         <section className={styles.news}>
-          <SharePost/>
+          <SharePost limit={postsLimit}/>
           <section className={styles.posts}>
             {postsLoading ? 'Загрузка...' 
               : posts?.getTimelinePosts.length ? 
@@ -63,14 +66,8 @@ const Home: NextPage = () => {
                 }) :
                 <p className={styles.noposts}>Постов нет</p>
             }
-            {nextPostsLoading ? 'Загрузка...' 
-              : nextPosts?.getTimelinePosts.length ? 
-                nextPosts.getTimelinePosts.map(post => {
-                  return (
-                    <Post key={post.id} post={post}/>
-                  )
-                }) :
-                null
+            {
+              postsLoading ? 'Загрузка...' : null
             }
           </section>
         </section>

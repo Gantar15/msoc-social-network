@@ -25,7 +25,7 @@ const CallModal: FC<IProps> = ({roomId, isShowCallModal, setIsShowCallModal}) =>
     const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
     const [clients, provideMediaRef] = useWebRTC(roomId, authUser!.getAuthUser.id, isAudio, isVideo);
 
-    if(!isShowCallModal) return null; 
+    if(!isShowCallModal) return null;
     return (
         <ModalWindow isShow={isShowCallModal} setIsShow={setIsShowCallModal}>
             <section className={styles.callModal}>

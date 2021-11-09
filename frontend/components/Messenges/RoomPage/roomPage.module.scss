@@ -180,8 +180,9 @@
             padding: 0 10px;
 
             .loading{
-                width: 30px;
-                height: 30px;
+                position: absolute;
+                right: 20px;
+                bottom: 5px;
                 margin-left: auto;
             }
 

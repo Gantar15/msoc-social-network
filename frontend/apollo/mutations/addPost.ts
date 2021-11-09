@@ -1,8 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
 import getAllPosts from "../queries/getAllPosts";
-import getUserPosts from "../queries/getUserPosts";
-import {useApollo} from "../client";
-import getUserPostsCount from "../queries/getUserPostsCount";
 import getAllPostsCount from "../queries/getAllPostsCount";
 
 const addPost = gql`
@@ -43,15 +40,33 @@ interface IAddPost{
 
 const useAddPost = () => {
     const [add, {data: addData, loading: addLoading}] = useMutation<IAddPost>(addPost);
-    const client = useApollo();
 
-    const mutate = (desc: string|null, imgs: FileList|null, videos: FileList|null, audios: FileList|null) => {add({
+    const mutate = (limit: number, desc: string|null, imgs: FileList|null, videos: FileList|null, audios: FileList|null) => {add({
         variables: {
             desc, imgs, videos, audios
         },
         update: (cache, data) => {
-            client.refetchQueries({include: [getUserPosts, getAllPosts, getUserPostsCount, getAllPostsCount]});
-        }
+            const oldData: {getTimelinePosts: any[]}|null = cache.readQuery({
+                query: getAllPosts,
+                variables: {
+                    offset: 0,
+                    limit
+                }
+            });
+
+            if(oldData && data.data)
+                cache.writeQuery({
+                    query: getAllPosts,
+                    variables: {
+                        offset: 0,
+                        limit
+                    },
+                    data: {
+                        getTimelinePosts: [data.data.createPost, ...oldData.getTimelinePosts]
+                    }
+                });
+        },
+        refetchQueries: [getAllPostsCount]
     })};
     return {addPost: mutate, data: addData, loading: addLoading};
 };

@@ -8,6 +8,7 @@ import User from "../../../models/User";
 import { FileUpload } from "graphql-upload";
 import saveFilesFromStream from "../../../lib/saveFilesFromStream";
 import AccordFile from "../../../models/AccordFile";
+import provideMessengeDocuments from '../../../lib/provideMessengeDocuments';
 
 
 interface IInputMessenge{
@@ -62,22 +63,29 @@ export default {
                 audios: audiosPath
             });
 
+            const documentsObjects = [];
             if(documents?.length && documentsPath.length){
                 let index = 0;
                 for await (const document of documents) {
-                    await messengeObj.createAccordFile({
+                    const documentObj = {
                         filename: document.filename,
                         codedFilename: documentsPath[index++]
-                    });
+                    }
+                    await messengeObj.createAccordFile(documentObj);
+                    documentsObjects.push(documentObj);
                 }
             }
 
+            //@ts-expect-error
+            messengeObj.documents = documentsObjects;
+
             pubsub.publish(MessengesEvents.messengeSend, {
-                messengeId: messengeObj.id,
-                recipientId: messengeObj.recipientId
+                messenge: messengeObj,
+                recipientId: messengeObj.recipientId,
+                operationType: MessengesEvents.messengeSend
             });
             
-            return true;
+            return messengeObj;
         } catch(err: any){
             errorHandler(err);
         }
@@ -88,8 +96,7 @@ export default {
             checkAuth(resp);
 
             const messenge = await Messenge.findByPk(messengeId);
-            if(!messenge)
-                return false;
+            if(!messenge) throw ApiError.badRequest('Сообщение не найдено');
 
             if(clientInvisibility)
                 await messenge.update({
@@ -98,12 +105,15 @@ export default {
             else
                 await messenge.destroy();
 
+            await provideMessengeDocuments(messenge);
+
             pubsub.publish(MessengesEvents.messengeRemove, {
-                messengeId: messenge.id,
-                recipientId: messenge.recipientId
+                messenge: messenge,
+                recipientId: messenge.recipientId,
+                operationType: MessengesEvents.messengeRemove
             });
 
-            return true;
+            return messenge;
         } 
         catch(err: any){
             errorHandler(err);
@@ -156,15 +166,18 @@ export default {
                     newFiles.push(newFile);
                 }
             }
-            const oldFiles = (await messenge.getAccordFiles()).map(accordFile => accordFile);
+            const oldFiles = await messenge.getAccordFiles();
             await messenge.setAccordFiles([...newFiles, ...oldFiles]);
 
+            await provideMessengeDocuments(messenge);
+            
             pubsub.publish(MessengesEvents.messengeEdit, {
-                messengeId: messenge.id,
-                recipientId: messenge.recipientId
+                messengeId: messenge,
+                recipientId: messenge.recipientId,
+                operationType: MessengesEvents.messengeEdit
             });
 
-            return true;
+            return messenge;
         } 
         catch(err: any){
             errorHandler(err);

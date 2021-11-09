@@ -84,7 +84,7 @@ const Profile: NextPage = () => {
                 <section className={styles.mainContent}>
                     <section>
                         { authUser?.getAuthUser?.id ?
-                            authUser.getAuthUser.id == profileUserId ? <SharePost/> : null
+                            authUser.getAuthUser.id == profileUserId ? <SharePost limit={postsLimit}/> : null
                             : null
                         }
                         <div className={styles.postsBlock}>

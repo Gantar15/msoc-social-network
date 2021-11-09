@@ -7,6 +7,7 @@ import {literal, Op} from 'sequelize';
 import ApiError from "../../../lib/ApiError";
 import tokenService from "../../../services/tokenService";
 import AccordFile from "../../../models/AccordFile";
+import provideMessengeDocuments from "../../../lib/provideMessengeDocuments";
 
 
 export default {
@@ -36,9 +37,7 @@ export default {
 
             for (let index = 0; index < messenges.length; index++) {
                 const messenge = messenges[index];
-
-                //@ts-ignore
-                messenge.documents = (await messenge?.getAccordFiles()).map(({filename, codedFilename}) => ({filename, codedFilename}));
+                await provideMessengeDocuments(messenge);
             }
             return messenges;
         } catch(err: any){
@@ -66,6 +65,7 @@ export default {
 
             let newestInterlocutorsIds = newestFromAuthUserMessenges.map(({recipientId}) => recipientId).
                 concat(newestToAuthUserMessenges.map(({authorId}) => authorId));
+
             newestInterlocutorsIds = newestInterlocutorsIds.reduce((all: number[], id) => {
                 if(!all.includes(id))
                     all.push(id);
@@ -104,6 +104,7 @@ export default {
             
             let newestInterlocutorsIds = newestFromAuthUserMessenges.map(({recipientId}) => recipientId).
                 concat(newestToAuthUserMessenges.map(({authorId}) => authorId));
+
             newestInterlocutorsIds = newestInterlocutorsIds.reduce((all: number[], id) => {
                 if(!all.includes(id))
                     all.push(id);
@@ -136,8 +137,8 @@ export default {
 
             newestMessenges = newestMessenges.filter(el => !!el);
             newestMessenges.forEach(async (newestMessenge) => {
-                //@ts-ignore
-                newestMessenge.documents = (await newestMessenge?.getAccordFiles()).map(({filename, codedFilename}) => ({filename, codedFilename}));
+                if(newestMessenge)
+                    await provideMessengeDocuments(newestMessenge);
             });
             return newestMessenges;
         } catch(err: any){
