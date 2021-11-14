@@ -1,9 +1,9 @@
 import {gql, useMutation} from '@apollo/client';
-import {useApollo} from '../client';
+import useAuthUser from '../../hooks/useAuthUser';
 import getFollowers, {getFollowers_Query} from '../queries/getFollowers';
-import getFollowersCount from '../queries/getFollowersCount';
-import getFollowinsCount from '../queries/getFollowinsCount';
-import getFollowins from '../queries/getFollowins';
+import getFollowersCount, {getFollowersCount_Query} from '../queries/getFollowersCount';
+import getFollowins, { getFollowins_Query } from '../queries/getFollowins';
+import getFollowinsCount, { getFollowinsCount_Query } from '../queries/getFollowinsCount';
 
 const unfollowUser = gql`
     mutation unfollowUser($userId: Int!){
@@ -14,27 +14,95 @@ const unfollowUser = gql`
 `;
 
 const useUnfollowUser = (userId: number) => {
-    const client = useApollo();
+    const {authUser} = useAuthUser();
     const [unfollow] = useMutation(unfollowUser, {
         variables: {
             userId
         },
         update: (cache) => {
+            //followers edit
             const oldFollowers = cache.readQuery<getFollowers_Query>({
                 query: getFollowers,
-                variables: {userId, offset: 0, limit: 20}
+                variables: {
+                    limit: 5,
+                    offset: 0,
+                    userId
+                }
             });
-            if(oldFollowers){
-                const followers = oldFollowers.getFollowers.filter((follower: any) => follower.id != userId);
+            if(oldFollowers?.getFollowers){
+                const followers = oldFollowers.getFollowers.filter(follower => follower.id !== authUser!.getAuthUser?.id);
                 cache.writeQuery({
                     query: getFollowers,
-                    data: {getFollowers: followers},
                     variables: {
-                        limit: 20, offset: 0, userId
+                        limit: 5,
+                        offset: 0,
+                        userId
+                    },
+                    data: {
+                        getFollowers: followers
                     }
                 });
             }
-            client.refetchQueries({include: [getFollowers, getFollowersCount, getFollowins, getFollowinsCount]});
+
+            const oldFollowersCount = cache.readQuery<getFollowersCount_Query>({
+                query: getFollowersCount,
+                variables: {
+                    userId
+                }
+            });
+            if(oldFollowersCount?.getFollowersCount){
+                cache.writeQuery({
+                    query: getFollowersCount,
+                    variables: {
+                        userId
+                    },
+                    data: {
+                        getFollowersCount: oldFollowersCount.getFollowersCount-1
+                    }
+                });
+            }
+
+            //followins edit
+            const oldFollowins = cache.readQuery<getFollowins_Query>({
+                query: getFollowins,
+                variables: {
+                    limit: 5,
+                    offset: 0,
+                    userId: authUser!.getAuthUser?.id
+                }
+            });
+            if(oldFollowins?.getFollowins){
+                const followins = oldFollowins.getFollowins.filter(followin => followin.id != userId);
+                cache.writeQuery({
+                    query: getFollowins,
+                    variables: {
+                        limit: 5,
+                        offset: 0,
+                        userId: authUser!.getAuthUser?.id
+                    },
+                    data: {
+                        getFollowins: followins
+                    }
+                });
+            }
+
+            const oldFollowinsCount = cache.readQuery<getFollowinsCount_Query>({
+                query: getFollowinsCount,
+                variables: {
+                    userId: authUser!.getAuthUser?.id
+                }
+            });
+            if(oldFollowinsCount?.getFollowinsCount){
+                cache.writeQuery({
+                    query: getFollowinsCount,
+                    variables: {
+                        userId: authUser!.getAuthUser?.id
+                    },
+                    data: {
+                        getFollowinsCount: oldFollowinsCount.getFollowinsCount-1
+                    }
+                });
+            }
         }
     });
 

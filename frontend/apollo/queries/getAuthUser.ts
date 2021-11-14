@@ -4,10 +4,18 @@ import { gql } from "@apollo/client";
 const getAuthUser = gql`
     query {
         getAuthUser @client{
-            id,
             name,
             email,
-            isActivated
+            profilePicture,
+            followers,
+            followins,
+            role,
+            id,
+            isActivated,
+            desc,
+            city,
+            from,
+            relationship
         }
     }
 `;

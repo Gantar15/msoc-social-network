@@ -1,9 +1,7 @@
-import { useQuery } from '@apollo/client';
 import { FC } from 'react';
-import getAuthUser from '../../../apollo/queries/getAuthUser';
 import { IInterlocutor } from '../../../apollo/queries/getNewestInterlocutors';
+import useAuthUser from '../../../hooks/useAuthUser';
 import { IMessenge } from '../../../models/messenge';
-import { IAuthUser } from '../../../models/user';
 
 import styles from './interlocuter.module.scss';
 
@@ -16,7 +14,7 @@ interface IProps{
 }
 
 const Interlocuter: FC<IProps> = ({interlocutor, lastMessenge, setInterlocutorRoom, isActive}) => {
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+    const {authUser} = useAuthUser();
     let lastMessengeContent: string = '';
     if(lastMessenge.text){
         lastMessengeContent = lastMessenge.text;

@@ -22,7 +22,7 @@ const editMessenge = gql`
     }
 `;
 
-const useEditMessenge = () => {
+const useEditMessenge = (recipientId: number) => {
     const [editMessengeExecute, {data: response}] = useMutation(editMessenge);
 
     return {editMessenge: (messengeId: number, messenge: string|null, imgs: FileList|null, videos: FileList|null, documents: FileList|null, audios: FileList|null) => {
@@ -37,20 +37,24 @@ const useEditMessenge = () => {
             },
             update(cache, data) {
                 const newMess: IMessenge = data.data.editMessenge;
-                const oldMessenges: IMessenge[]|null = cache.readQuery({
-                    query: getMessenges
+                const oldMessenges: {getMessenges: IMessenge[]} | null = cache.readQuery({
+                    query: getMessenges,
+                    variables: {
+                        recipientId
+                    }
                 });
 
-                if(oldMessenges){
-                    for (let i = 0; i < oldMessenges.length; i++) {
-                        if(oldMessenges[i].id == newMess.id)
-                            oldMessenges[i] = newMess;
+                if(oldMessenges?.getMessenges && newMess){
+                    for (let i = 0; i < oldMessenges.getMessenges.length; i++) {
+                        if(oldMessenges.getMessenges[i].id == newMess.id)
+                            oldMessenges.getMessenges[i] = newMess;
                     }
                     cache.writeQuery({
                         query: getMessenges,
-                        data: {
-                            getMessenges: oldMessenges
-                        }
+                        variables: {
+                            recipientId
+                        },
+                        data: oldMessenges
                     });
                 }
             }

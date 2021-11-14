@@ -4,7 +4,6 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import UserMicroInf from '../../UserMicroInf/UserMicroInf';
 import { IUser } from '../../../models/user';
-import { useQuery } from '@apollo/client';
 
 import styles from './profileUserRightbar.module.scss';
 
@@ -16,7 +15,6 @@ interface IProps{
 }
 
 const ProfileUserRightbar: FC<IProps> = ({count, title, users}) => {
-
     return (
         <div className={styles.profileUserRightbar}>
             <header className={styles.titleBlock}>

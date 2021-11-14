@@ -1,9 +1,9 @@
 
 import { InMemoryCache, makeVar } from "@apollo/client";
-import { IAuthUser } from "../models/user";
+import type { IUser } from "../models/user";
 
 
-export const authUserVar = makeVar<IAuthUser | null>(null);
+export const authUserVar = makeVar<IUser | null>(null);
 
 export default new InMemoryCache({
     typePolicies: {
@@ -13,7 +13,17 @@ export default new InMemoryCache({
                     read(){
                         return authUserVar();
                     }
-                }
+                },
+                // getFollowers: {
+                //     merge(existing = [], incoming: any) {
+                //         return { ...existing, ...incoming };
+                //     }
+                // },
+                // getFollowins: {
+                //     merge(existing = [], incoming: any) {
+                //         return { ...existing, ...incoming };
+                //     }
+                // }
             }
         }
     }

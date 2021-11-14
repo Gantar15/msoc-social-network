@@ -8,9 +8,7 @@ import CallToActionIcon from '@material-ui/icons/CallToAction';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
-import type { IAuthUser } from '../../models/user';
-import {useQuery} from '@apollo/client';
-import getAuthUser from '../../apollo/queries/getAuthUser';
+import useAuthUser from '../../hooks/useAuthUser';
 
 import styles from './sidevar.module.scss';
 
@@ -20,7 +18,7 @@ interface IProps {
 };
 
 const Sidebar: FC<IProps> = ({activePage}) => {
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+    const {authUser} = useAuthUser();
 
     function isActivePage(id: number){
         return activePage === id ? styles.active : '';
@@ -35,7 +33,7 @@ const Sidebar: FC<IProps> = ({activePage}) => {
                 </section>
             </A>
             <nav className={styles.navBlock}>
-                <A href={`/profile/${authUser?.getAuthUser?.id}`} className={`${styles.navItem} ${isActivePage(1)}`}>
+                <A href={`/profile/${authUser?.getAuthUser ? authUser.getAuthUser.id : ''}`} className={`${styles.navItem} ${isActivePage(1)}`}>
                     <AccountCircleIcon className={styles.navIcon}/>
                     <span>Моя страница</span>
                 </A>

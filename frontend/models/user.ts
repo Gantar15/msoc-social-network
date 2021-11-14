@@ -1,12 +1,4 @@
 
-interface IAuthUser{
-    id: number;
-    name: string;
-    email: string;
-    isActivated: boolean;
-}
-export type {IAuthUser};
-
 interface IUser{
     name: string,
     email: string,

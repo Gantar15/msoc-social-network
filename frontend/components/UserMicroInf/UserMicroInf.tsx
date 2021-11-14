@@ -3,15 +3,14 @@ import {memo} from 'react';
 import A from '../../components/A/A';
 import Image from 'next/image';
 import Subscribe from '../Subscribe/Subscribe';
-import { IAuthUser, IUser } from '../../models/user';
-import { useQuery } from '@apollo/client';
-import getAuthUser from '../../apollo/queries/getAuthUser';
+import type { IUser } from '../../models/user';
+import useAuthUser from '../../hooks/useAuthUser';
 
 import styles from './userMicroInf.module.scss';
 
 
 const UserMicroInf: FC<{user: IUser}> = ({user}) => {
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+    const {authUser} = useAuthUser();
     const isAuthUser = authUser?.getAuthUser?.id == user.id;
     
     return (

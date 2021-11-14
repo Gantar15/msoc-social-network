@@ -1,14 +1,12 @@
-import { useQuery } from '@apollo/client';
 import { FC, memo, useState } from 'react';
-import getAuthUser from '../../apollo/queries/getAuthUser';
 import useWebRTC from '../../hooks/useWebRTC';
-import { IAuthUser } from '../../models/user';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import MicOffOutlinedIcon from '@material-ui/icons/MicOffOutlined';
 import VideocamOffOutlinedIcon from '@material-ui/icons/VideocamOffOutlined';
 import MicNoneOutlinedIcon from '@material-ui/icons/MicNoneOutlined';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import VideocamOutlinedIcon from '@material-ui/icons/VideocamOutlined';
+import useAuthUser from '../../hooks/useAuthUser';
 
 import styles from './callModal.module.scss';
 
@@ -22,8 +20,8 @@ interface IProps{
 const CallModal: FC<IProps> = ({roomId, isShowCallModal, setIsShowCallModal}) => {
     const [isAudio, setIsAudio] = useState(true);
     const [isVideo, setIsVideo] = useState(true);
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
-    const [clients, provideMediaRef] = useWebRTC(roomId, authUser!.getAuthUser.id, isAudio, isVideo);
+    const {authUser} = useAuthUser();
+    const [clients, provideMediaRef] = useWebRTC(roomId, authUser?.getAuthUser?.id, isAudio, isVideo);
 
     if(!isShowCallModal) return null;
     return (

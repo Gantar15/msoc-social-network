@@ -4,14 +4,13 @@ import EditIcon from '@material-ui/icons/Edit';
 import SettingsIcon from '@material-ui/icons/Settings';
 import GavelIcon from '@material-ui/icons/Gavel';
 import { useQuery } from '@apollo/client';
-import { IAuthUser } from '../../../models/user';
-import getAuthUser from '../../../apollo/queries/getAuthUser';
-import getUser, {getUser_Query} from '../../../apollo/queries/getUser';
+import getUser, { getUser_Query } from '../../../apollo/queries/getUser';
 import useUnfollowUser from '../../../apollo/mutations/unfollowUser';
 import useFollowUser from '../../../apollo/mutations/followUser';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import A from '../../A/A';
 import ArrowBackIosSharp from '@material-ui/icons/ArrowBackIosSharp';
+import useAuthUser from '../../../hooks/useAuthUser';
 
 import styles from './profileHeader.module.scss';
 
@@ -23,7 +22,7 @@ interface IProps{
 
 const ProfileHeader: FC<IProps> = ({userId, setIsShowCallModal}) => {
     const [isSubscribe, setIsSubscribe] = useState(false);
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+    const {authUser} = useAuthUser();
     let {data: userData} = useQuery<getUser_Query>(getUser, {
         variables: {
             userId: userId
@@ -31,7 +30,7 @@ const ProfileHeader: FC<IProps> = ({userId, setIsShowCallModal}) => {
     });
     const {followUser} = useFollowUser(userId);
     const {unfollowUser} = useUnfollowUser(userId);
-    const isAuthUserProfile = userData?.getUser && authUser?.getAuthUser && userData?.getUser.id == authUser?.getAuthUser.id;
+    const isAuthUserProfile = userData?.getUser && authUser?.getAuthUser && userData?.getUser.id === authUser?.getAuthUser?.id;
 
     useEffect(() => {
         if(userData?.getUser && authUser?.getAuthUser){

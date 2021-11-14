@@ -4,11 +4,8 @@ import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import MovieIcon from '@material-ui/icons/Movie';
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
 import AudiotrackIcon from '@material-ui/icons/Audiotrack';
-import { useLazyQuery, useQuery } from '@apollo/client';
-import { IAuthUser } from '../../models/user';
-import getAuthUser from '../../apollo/queries/getAuthUser';
-import getUser, {getUser_Query} from '../../apollo/queries/getUser';
 import useAddPost from '../../apollo/mutations/addPost';
+import useAuthUser from '../../hooks/useAuthUser';
 
 import styles from './sharePost.module.scss';
 
@@ -18,8 +15,7 @@ interface IProps{
 }
 
 const SharePost: FC<IProps> = ({limit}) => {
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
-    let [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
+    const {authUser} = useAuthUser();
     const [photo, setPhoto] = useState<null | FileList>(null);
     const [video, setVideo] = useState<null | FileList>(null);
     const [audio, setAudio] = useState<null | FileList>(null);
@@ -29,15 +25,6 @@ const SharePost: FC<IProps> = ({limit}) => {
     const audioRef = useRef<HTMLInputElement | null>(null);
     const {addPost} = useAddPost();
     let [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        if(authUser?.getAuthUser)
-            getUserQuery({
-                variables: {
-                    userId: authUser.getAuthUser.id
-                }
-            });
-    }, [authUser]);
 
     useEffect(() => {
         if(error)
@@ -96,15 +83,19 @@ const SharePost: FC<IProps> = ({limit}) => {
                 error ? <p>{error}</p> : null
             }
             <div className={styles.shareTop}>
-                <A href={`/profile/${authUser?.getAuthUser?.id}`}>
-                    <img className={styles.shareUserLogo} width="40" height="40" src={
-                            authUserData?.getUser.profilePicture ? authUserData.getUser.profilePicture
-                            : '/imgs/default_user_logo.jpg'
-                    }/>
-                </A>
+                {
+                    authUser?.getAuthUser ? 
+                        <A href={`/profile/${authUser!.getAuthUser.id}`}>
+                            <img className={styles.shareUserLogo} width="40" height="40" src={
+                                    authUser!.getAuthUser.profilePicture ? authUser!.getAuthUser.profilePicture
+                                    : '/imgs/default_user_logo.jpg'
+                            }/>
+                        </A>
+                    : null
+                 }
                 <textarea ref={descRef} placeholder={
-                    authUserData?.getUser ?
-                    `Что нового, ${authUserData.getUser.name} ?`
+                    authUser?.getAuthUser ?
+                    `Что нового, ${authUser.getAuthUser.name}?`
                     : "Что нового ?"
                 }></textarea>
             </div>

@@ -1,9 +1,8 @@
 import {FC, useEffect, useState, memo} from 'react';
 import useUnfollowUser from '../../apollo/mutations/unfollowUser';
 import useFollowUser from '../../apollo/mutations/followUser';
-import { IAuthUser, IUser } from '../../models/user';
-import { useQuery } from '@apollo/client';
-import getAuthUser from '../../apollo/queries/getAuthUser';
+import type { IUser } from '../../models/user';
+import useAuthUser from '../../hooks/useAuthUser';
 
 import styles from './subscribe.module.scss';
 
@@ -16,7 +15,7 @@ const Subscribe: FC<IProps> = ({user}) => {
         return user.followers?.some(id => +id === authUser?.getAuthUser?.id);
     }
 
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+    const {authUser} = useAuthUser();
 
     const [subscribeFlag, setSubscribeFlag] = useState(isUserSubscribed());
     const {followUser} = useFollowUser(user.id);

@@ -1,7 +1,7 @@
 
-import { IAuthUser } from "../../models/user";
+import type { IUser } from "../../models/user";
 import { authUserVar } from "../cache";
 
-export default function setAuthUser(user: IAuthUser | null){
+export default function setAuthUser(user: IUser | null){
     authUserVar(user);
 }

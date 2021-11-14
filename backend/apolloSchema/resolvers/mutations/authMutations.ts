@@ -1,10 +1,10 @@
-
-import { Response } from 'express';
+import type { Response } from 'express';
 import type {IApolloContext} from '../../../types/IApolloContext';
 import AuthValidator from '../../../lib/authValidator';
 import userService from '../../../services/userService';
 import errorHandler from '../../../lib/errorHandler';
 import ApiError from '../../../lib/ApiError';
+import User from '../../../models/User';
 
 
 function setCookieToken(resp: Response, refreshToken: string){
@@ -45,7 +45,13 @@ export default {
             else{
                 setCookieToken(resp, userData.refreshToken);
             }
-            return userData;
+            
+            const user = await User.findByPk(userData.user.id);
+            return {
+                user,
+                refreshToken: userData.refreshToken,
+                accessToken: userData.accessToken
+            };
         } catch(err: any){
             errorHandler(err);
         }
@@ -69,7 +75,13 @@ export default {
             const {refreshToken} = req.cookies;
             const userData = await userService.refresh(refreshToken);
             setCookieToken(resp, userData.refreshToken);
-            return userData;
+
+            const user = await User.findByPk(userData.user.id);
+            return {
+                user,
+                refreshToken: userData.refreshToken,
+                accessToken: userData.accessToken
+            };
         } catch(err: any){
             errorHandler(err);
         }

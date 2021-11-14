@@ -31,13 +31,13 @@ const watchMessenge = gql`
 interface watchMessenge_Subscription{
     watchMessenge: {
         messenge: IMessenge,
-        operationType: 'edit' | 'remove' | 'send'
+        operationType: 'MESSENGE_SEND' | 'MESSENGE_REMOVE' | 'MESSENGE_EDIT'
     }
 }
 export type {watchMessenge_Subscription};
 
 
-const useWatchMessenge = () => {
+const useWatchMessenge = (recipientId: number) => {
     const apolloClient = useApollo();
     const {data: newMessengeData} = useSubscription<watchMessenge_Subscription>(watchMessenge);
 
@@ -45,56 +45,72 @@ const useWatchMessenge = () => {
         if(newMessengeData?.watchMessenge){
             const {messenge, operationType} = newMessengeData.watchMessenge;
             switch(operationType){
-                case 'edit': {
+                case 'MESSENGE_EDIT': {
                     const newMess: IMessenge = messenge;
-                    const oldMessenges: IMessenge[]|null = apolloClient.readQuery({
-                        query: getMessenges
+                    const oldMessenges: {getMessenges: IMessenge[]} | null = apolloClient.readQuery({
+                        query: getMessenges,
+                        variables: {
+                            recipientId
+                        }
                     });
-
-                    if(oldMessenges){
-                        for (let i = 0; i < oldMessenges.length; i++) {
-                            if(oldMessenges[i].id == newMess.id)
-                                oldMessenges[i] = newMess;
+    
+                    if(oldMessenges?.getMessenges && newMess){
+                        for (let i = 0; i < oldMessenges.getMessenges.length; i++) {
+                            if(oldMessenges.getMessenges[i].id == newMess.id)
+                                oldMessenges.getMessenges[i] = newMess;
                         }
                         apolloClient.writeQuery({
                             query: getMessenges,
-                            data: {
-                                getMessenges: oldMessenges
-                            }
+                            variables: {
+                                recipientId
+                            },
+                            data: oldMessenges
                         });
                     }
                     break;
                 }
 
-                case 'remove': {
+                case 'MESSENGE_REMOVE': {
                     const messToDel: IMessenge = messenge;
-                    let oldMessenges: IMessenge[]|null = apolloClient.readQuery({
-                        query: getMessenges
+                    let oldMessenges: {getMessenges: IMessenge[]} | null = apolloClient.readQuery({
+                        query: getMessenges,
+                        variables: {
+                            recipientId
+                        }
                     });
-    
-                    if(oldMessenges){
-                        oldMessenges = oldMessenges.filter(el => el.id != messToDel.id);
+                    
+                    if(oldMessenges?.getMessenges && messToDel){
+                        const updatedMessenges = oldMessenges.getMessenges.filter(el => el.id != messToDel.id);
                         apolloClient.writeQuery({
                             query: getMessenges,
+                            variables: {
+                                recipientId
+                            },
                             data: {
-                                getMessenges: oldMessenges
+                                getMessenges: updatedMessenges
                             }
                         });
                     }
                     break;
                 }
 
-                case 'send': {
+                case 'MESSENGE_SEND': {
                     const newMess: IMessenge = messenge;
-                    const oldMessenges: IMessenge[]|null = apolloClient.readQuery({
-                        query: getMessenges
+                    const oldMessenges: {getMessenges: IMessenge[]}|null = apolloClient.readQuery({
+                        query: getMessenges,
+                        variables: {
+                            recipientId
+                        }
                     });
-    
-                    if(oldMessenges){
+                    
+                    if(oldMessenges?.getMessenges && newMess){
                         apolloClient.writeQuery({
                             query: getMessenges,
+                            variables: {
+                                recipientId
+                            },
                             data: {
-                                getMessenges: [...oldMessenges, newMess]
+                                getMessenges: [...oldMessenges.getMessenges, newMess]
                             }
                         });
                     }

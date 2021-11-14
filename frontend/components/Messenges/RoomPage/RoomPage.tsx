@@ -1,9 +1,7 @@
 import { FC, memo, useEffect, useRef, Fragment, useState } from "react";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { useGetMessenges } from "../../../apollo/queries/getMessenges";
 import Messenge from "../Messenge/Messenge";
-import getAuthUser from '../../../apollo/queries/getAuthUser';
-import type { IAuthUser } from "../../../models/user";
 import getUser, { getUser_Query } from "../../../apollo/queries/getUser";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import A from '../../A/A';
@@ -15,6 +13,7 @@ import useRemoveMessenge from "../../../apollo/mutations/removeMessenge";
 import useWatchMessenge from "../../../apollo/subsciptions/watchMessenge";
 import VideocamOutlinedIcon from '@material-ui/icons/VideocamOutlined';
 import LocalPhoneOutlinedIcon from '@material-ui/icons/LocalPhoneOutlined';
+import useAuthUser from "../../../hooks/useAuthUser";
 
 import styles from './roomPage.module.scss';
 
@@ -30,21 +29,11 @@ export type {IMessengeExt};
 const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     const [activeMessenges, setActiveMessenges] = useState<IMessengeExt[]>([]);
     const {getMessengesExecute, getMessengesData: messenges, getMessengesLoading} = useGetMessenges();
-    useWatchMessenge();
+    useWatchMessenge(interlocutorRoom);
     const {removeMessenge: removeMessengeExecute} = useRemoveMessenge(interlocutorRoom);
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
-    const [getUserQuery, {data: authUserData}] = useLazyQuery<getUser_Query>(getUser);
+    const {authUser} = useAuthUser();
     const [getInterlocutorData, {data: interlocutorData, error: getInterlocuterError}] = useLazyQuery<getUser_Query>(getUser);
     const messengesBlockRef = useRef<HTMLDivElement | null>(null);
-    
-    useEffect(() => {
-        if(authUser?.getAuthUser)
-            getUserQuery({
-                variables: {
-                    userId: authUser.getAuthUser.id
-                }
-            });
-    }, [authUser]);
 
     useEffect(() => {
         if(interlocutorRoom){
@@ -74,8 +63,8 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
         setActiveMessenges([]);
     }
     function deleteMessengesHandler(){
-        if(!authUser) return;
-        if(activeMessenges.every(mess => mess.authorId == authUser.getAuthUser.id))
+        if(!authUser?.getAuthUser) return;
+        if(activeMessenges.every(mess => mess.authorId === authUser?.getAuthUser?.id))
             activeMessenges.forEach(mess => {
                 removeMessengeExecute(mess.id, false);
             });
@@ -121,7 +110,7 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
                             <>
                                 <div className={styles.profileBlock}>
                                     <A href={`/profile/${interlocutorRoom}`} className={styles.profilePicture}>
-                                        <img src={authUserData?.getUser.profilePicture ? authUserData?.getUser.profilePicture : '/imgs/default_user_logo.jpg'}/>
+                                        <img src={authUser?.getAuthUser?.profilePicture ? authUser.getAuthUser.profilePicture : '/imgs/default_user_logo.jpg'}/>
                                     </A>
                                     <div className={styles.nameBlock}>
                                         <A href={`/profile/${interlocutorRoom}`} className={styles.name}>

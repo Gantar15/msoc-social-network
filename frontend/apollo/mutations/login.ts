@@ -10,8 +10,16 @@ const login = gql`
             user{
                 name,
                 email,
+                profilePicture,
+                followers,
+                followins,
+                role,
                 id,
-                isActivated
+                isActivated,
+                desc,
+                city,
+                from,
+                relationship
             }
         }
     }

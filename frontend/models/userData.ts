@@ -1,10 +1,10 @@
 
-import {IAuthUser} from './user';
+import type {IUser} from './user';
 
 interface IUserData{
     refreshToken: string,
     accessToken: string,
-    user: IAuthUser
+    user: IUser
 }
 
 export type {IUserData};

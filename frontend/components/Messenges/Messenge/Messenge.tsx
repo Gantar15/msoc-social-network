@@ -1,8 +1,5 @@
 import React, {FC, memo} from 'react'
 import { IMessenge } from '../../../models/messenge';
-import getAuthUser from '../../../apollo/queries/getAuthUser';
-import type { IAuthUser } from "../../../models/user";
-import { useQuery } from '@apollo/client';
 import PreloadVideo from '../../PreloadVideo/PreloadVideo';
 import ImageElement from '../../ImageElement/ImageElement';
 import AudioElement from '../../AudioElement/AudioElement';
@@ -10,6 +7,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import FileElement from '../../FileElement/FileElement';
 import type {IMessengeExt} from '../RoomPage/RoomPage';
 import EditOutlined from '@material-ui/icons/EditOutlined';
+import useAuthUser from '../../../hooks/useAuthUser';
 
 import styles from './messenge.module.scss';
 
@@ -21,11 +19,11 @@ interface IProps {
 }
 
 const Messenge: FC<IProps> = ({messenge, setActiveMessenges, activeMessenges}) => {
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
-    const isOurs = authUser?.getAuthUser.id == messenge.authorId;
+    const {authUser} = useAuthUser();
+    const isOurs = authUser?.getAuthUser?.id === messenge.authorId;
     
     function isActive(){
-        return activeMessenges.some(mess => mess.id == messenge.id);
+        return activeMessenges.some(mess => mess.id === messenge.id);
     }
     
     function isExistMediaContent(){
@@ -47,7 +45,9 @@ const Messenge: FC<IProps> = ({messenge, setActiveMessenges, activeMessenges}) =
     return (
         <section onClick={activeHandler} className={styles.messenge + (isOurs ? ' ' + styles.ours : ' ' + styles.theirs) + (isActive() ? ' '+styles.active : '')}>
             <div className={styles.messengeActions}>
-                <EditOutlined className={styles.actionIcon} onClick={editHandler}/>
+                {
+                    isOurs ? <EditOutlined className={styles.actionIcon} onClick={editHandler}/> : false
+                }
             </div>
             <div className={styles.contentBlock}>
                 <CheckCircleIcon className={styles.activeMessengeIcon}/>

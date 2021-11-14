@@ -34,16 +34,10 @@ export default gql`
         from: String
         relationship: Int
     }
-    type UserDto{
-        name: String!
-        email: String!
-        id: Int!
-        isActivated: Boolean!
-    }
     type UserData{
         refreshToken: String!
         accessToken: String!
-        user: UserDto!
+        user: User!
     }
 
     #post
@@ -90,9 +84,9 @@ export default gql`
         profilePicture: String!
     }
     enum OperationType{
-        edit
-        send
-        remove
+        MESSENGE_SEND
+        MESSENGE_EDIT
+        MESSENGE_REMOVE
     }
     type watchMessengeOut{
         messenge: Messenge!

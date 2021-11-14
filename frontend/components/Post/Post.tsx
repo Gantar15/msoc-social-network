@@ -13,24 +13,22 @@ import A from '../A/A';
 import PreloadVideo from '../PreloadVideo/PreloadVideo';
 import moment from 'moment';
 import 'moment/locale/ru';
-import type { IAuthUser } from '../../models/user';
-import {useQuery} from '@apollo/client';
-import getAuthUser from '../../apollo/queries/getAuthUser';
 import ImageElement from '../ImageElement/ImageElement';
 import AudioElement from '../AudioElement/AudioElement';
+import useAuthUser from '../../hooks/useAuthUser';
 
 import styles from './post.module.scss';
 
 
 const Post: FC<{post: IPost}> = ({post}) => {
-    const {data: authUser} = useQuery<{getAuthUser: IAuthUser}>(getAuthUser);
+    const {authUser} = useAuthUser();
 
     const descriptionRef = useRef<HTMLParagraphElement>(null);
     const showMoreRef = useRef<HTMLDivElement>(null);
     const [like, setLike] = useState(post.likes.length);
     const [dislike, setDislike] = useState(post.dislikes.length);
-    const [isLiked, setIsLiked] = useState(post.likes.some(userId => userId == authUser?.getAuthUser?.id));
-    const [isDisliked, setIsDisliked] = useState(post.dislikes.some(userId => userId == authUser?.getAuthUser?.id));
+    const [isLiked, setIsLiked] = useState(post.likes.some(userId => userId === authUser?.getAuthUser?.id));
+    const [isDisliked, setIsDisliked] = useState(post.dislikes.some(userId => userId === authUser?.getAuthUser?.id));
     const {likePost} = useLikePost(post.id);
     const {dislikePost} = useDislikePost(post.id);
 
