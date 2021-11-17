@@ -11,28 +11,34 @@ interface IProps{
 }
 
 const Subscribe: FC<IProps> = ({user}) => {
-    function isUserSubscribed(){
-        return user.followers?.some(id => +id === authUser?.getAuthUser?.id);
-    }
-
     const {authUser} = useAuthUser();
-
-    const [subscribeFlag, setSubscribeFlag] = useState(isUserSubscribed());
+    const [subscribeFlag, setSubscribeFlag] = useState<boolean | null>(null);
     const {followUser} = useFollowUser(user.id);
     const {unfollowUser} = useUnfollowUser(user.id);
+    
+    function isUserSubscribed(){
+        if(authUser?.getAuthUser?.id)
+            return user.followers?.some(id => +id === authUser!.getAuthUser!.id);
+        return null;
+    }
 
     useEffect(() => {
         setSubscribeFlag(isUserSubscribed());
-    }, [user]);
+    }, [user, authUser]);
     const followHandler = () => {
+        if(!subscribeFlag)
+            setSubscribeFlag(true);
         followUser();
-        setSubscribeFlag(false);
     };
     const unfollowHandler = () => {
-        unfollowUser();
-        setSubscribeFlag(true);
+        if(subscribeFlag)
+            unfollowUser();
+        setSubscribeFlag(false);
     };
 
+    if(subscribeFlag === null){
+        return <button className={styles.subscribe}></button>;
+    }
     if(!subscribeFlag){
         return (
             <button onClick={followHandler} className={styles.subscribe+' '+styles.subscribe_button}>

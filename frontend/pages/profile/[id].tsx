@@ -73,7 +73,7 @@ const Profile: NextPage = () => {
         }
     });
     const [isShowCallModal, setIsShowCallModal] = useState(false);
-    
+    console.log(followersData, followinsData)
     return (
         <MainContainer activePage={1} title="Profile">
             <main className={styles.profile}>

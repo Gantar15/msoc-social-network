@@ -17,7 +17,7 @@ interface IMessenge{
     videos: string[];
     audios: string[];
     clientInvisibility: boolean;
-    isChecked: boolean;
+    // isChecked: boolean;
 }
 export type {IMessenge};
 
@@ -31,7 +31,7 @@ class Messenge extends Model<IMessenge, TokenCreationAttributes> implements IMes
     public videos!: string[];
     public audios!: string[];
     public clientInvisibility!: boolean;
-    public isChecked!: boolean;
+    // public isChecked!: boolean;
     
     public getAccordFiles!: HasManyGetAssociationsMixin<AccordFile>;
     public createAccordFile!: HasManyCreateAssociationMixin<AccordFile>;
@@ -57,10 +57,10 @@ Messenge.init({
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
-    isChecked: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-    },
+    // isChecked: {
+    //     type: DataTypes.BOOLEAN,
+    //     defaultValue: false
+    // },
 },{
     sequelize
 });
