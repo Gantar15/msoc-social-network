@@ -16,12 +16,17 @@ export default new InMemoryCache({
                     }
                 },
                 getFollowers: {
-                    merge(existing: mergeList[] = [], incoming: mergeList[]) {
+                    merge(_: any, incoming: mergeList[]) {
                         return incoming;
                     }
                 },
                 getFollowins: {
-                    merge(existing: mergeList[] = [], incoming: mergeList[]) {
+                    merge(_: any, incoming: mergeList[]) {
+                        return incoming;
+                    }
+                },
+                getMessenges: {
+                    merge(_: any, incoming: mergeList[]){
                         return incoming;
                     }
                 }

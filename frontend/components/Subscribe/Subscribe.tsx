@@ -5,20 +5,23 @@ import type { IUser } from '../../models/user';
 import useAuthUser from '../../hooks/useAuthUser';
 
 import styles from './subscribe.module.scss';
+import { useRouter } from 'next/router';
 
 interface IProps{
     user: IUser;
 }
 
 const Subscribe: FC<IProps> = ({user}) => {
+    const router = useRouter();
+    const profileUserId = +router.query.id!;
     const {authUser} = useAuthUser();
     const [subscribeFlag, setSubscribeFlag] = useState<boolean | null>(null);
-    const {followUser} = useFollowUser(user.id);
-    const {unfollowUser} = useUnfollowUser(user.id);
+    const {followUser} = useFollowUser(user.id, profileUserId);
+    const {unfollowUser} = useUnfollowUser(user.id, profileUserId);
     
     function isUserSubscribed(){
         if(authUser?.getAuthUser?.id)
-            return user.followers?.some(id => +id === authUser!.getAuthUser!.id);
+            return authUser!.getAuthUser.followins.some(id => id === user.id);
         return null;
     }
 
@@ -26,14 +29,12 @@ const Subscribe: FC<IProps> = ({user}) => {
         setSubscribeFlag(isUserSubscribed());
     }, [user, authUser]);
     const followHandler = () => {
-        if(!subscribeFlag)
-            setSubscribeFlag(true);
+        setSubscribeFlag(true);
         followUser();
     };
     const unfollowHandler = () => {
-        if(subscribeFlag)
-            unfollowUser();
         setSubscribeFlag(false);
+        unfollowUser();
     };
 
     if(subscribeFlag === null){

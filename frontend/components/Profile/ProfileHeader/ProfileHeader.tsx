@@ -11,6 +11,7 @@ import TelegramIcon from '@material-ui/icons/Telegram';
 import A from '../../A/A';
 import ArrowBackIosSharp from '@material-ui/icons/ArrowBackIosSharp';
 import useAuthUser from '../../../hooks/useAuthUser';
+import { useRouter } from 'next/router';
 
 import styles from './profileHeader.module.scss';
 
@@ -21,6 +22,8 @@ interface IProps{
 }
 
 const ProfileHeader: FC<IProps> = ({userId, setIsShowCallModal}) => {
+    const router = useRouter();
+    const profileUserId = +router.query.id!;
     const [isSubscribe, setIsSubscribe] = useState(false);
     const {authUser} = useAuthUser();
     let {data: userData} = useQuery<getUser_Query>(getUser, {
@@ -28,13 +31,13 @@ const ProfileHeader: FC<IProps> = ({userId, setIsShowCallModal}) => {
             userId: userId
         }
     });
-    const {followUser} = useFollowUser(userId);
-    const {unfollowUser} = useUnfollowUser(userId);
-    const isAuthUserProfile = userData?.getUser && authUser?.getAuthUser && userData?.getUser.id === authUser?.getAuthUser?.id;
+    const {followUser} = useFollowUser(userId, profileUserId);
+    const {unfollowUser} = useUnfollowUser(userId, profileUserId);
+    const isAuthUserProfile = userData?.getUser && authUser?.getAuthUser && userData.getUser.id === authUser.getAuthUser.id;
 
     useEffect(() => {
         if(userData?.getUser && authUser?.getAuthUser){
-            setIsSubscribe(userData.getUser.followers.includes(authUser.getAuthUser.id.toString()))
+            setIsSubscribe(userData.getUser.followers.includes(authUser.getAuthUser.id))
         }
     }, [authUser, userData]);
 

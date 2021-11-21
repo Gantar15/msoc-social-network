@@ -24,8 +24,8 @@ export default gql`
         name: String!
         email: String!
         profilePicture: String
-        followers: [String]
-        followins: [String]
+        followers: [Int]
+        followins: [Int]
         role: Role
         id: Int
         isActivated: Boolean

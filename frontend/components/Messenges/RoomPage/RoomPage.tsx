@@ -20,13 +20,14 @@ import styles from './roomPage.module.scss';
 
 interface IProps{
     interlocutorRoom: number;
+    setInterlocutorRoom: (val: Function | undefined | boolean) => void;
 }
 interface IMessengeExt extends IMessenge{
     isOurs: boolean;
 }
 export type {IMessengeExt};
 
-const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
+const RoomPage: FC<IProps> = ({interlocutorRoom, setInterlocutorRoom}) => {
     const [activeMessenges, setActiveMessenges] = useState<IMessengeExt[]>([]);
     const {getMessengesExecute, getMessengesData: messenges, getMessengesLoading} = useGetMessenges();
     useWatchMessenge(interlocutorRoom);
@@ -35,6 +36,17 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     const [getInterlocutorData, {data: interlocutorData, error: getInterlocuterError}] = useLazyQuery<getUser_Query>(getUser);
     const messengesBlockRef = useRef<HTMLDivElement | null>(null);
 
+    useEffect(() => {
+        const escHandler = (ev: KeyboardEvent) => {
+            if(ev.key == "Escape")
+            setInterlocutorRoom(undefined);
+        };
+        window.addEventListener('keydown', escHandler);
+
+        return () => {
+            window.removeEventListener('keydown', escHandler);
+        };
+    }, []);
     useEffect(() => {
         if(interlocutorRoom){
             getMessengesExecute({
@@ -62,20 +74,44 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
     function clearActiveMessenges(){
         setActiveMessenges([]);
     }
+
     function deleteMessengesHandler(){
         if(!authUser?.getAuthUser) return;
-        if(activeMessenges.every(mess => mess.authorId === authUser?.getAuthUser?.id))
+
+        if(activeMessenges.every(mess => mess.authorId === authUser?.getAuthUser?.id)){
             activeMessenges.forEach(mess => {
                 removeMessengeExecute(mess.id, false);
             });
-        else
+        }
+        else{
             activeMessenges.forEach(mess => {
                 removeMessengeExecute(mess.id, true);
             });
+        }
 
         clearActiveMessenges();
     }
-        
+
+    function getMessengeDate(messenge: IMessenge, index: number){
+        if(!messenges?.getMessenges) return null;
+
+        if(index == 0 || index-1 >= 0 && new Date(+messenge.createdAt).getDate() > new Date(+messenges.getMessenges[index-1].createdAt).getDate()){
+            const date = new Date(+messenge.createdAt);
+            const currentDate = new Date();
+
+            if(Math.abs(currentDate.getFullYear() - date.getFullYear()) < 1)
+                return date.toLocaleString('ru', {
+                        month: 'long', day: '2-digit'
+                    });
+            else
+                return date.toLocaleString('ru', {
+                    month: 'long', day: '2-digit', year: 'numeric'
+                });
+        }
+
+        return null;
+    }
+
     if(getInterlocuterError){
         return (
             <section className={styles.roomPage}>
@@ -154,13 +190,13 @@ const RoomPage: FC<IProps> = ({interlocutorRoom}) => {
                     }
                     {
                         messenges?.getMessenges ? messenges.getMessenges.map((messenge, index) => {
-                            let dateEl: any = null;
-                            if(index == 0 || index-1 >= 0 && new Date(+messenge.createdAt).getDate() > new Date(+messenges.getMessenges[index-1].createdAt).getDate())
-                                dateEl = <p className={styles.dateMark}>{new Date(+messenge.createdAt).toLocaleString('ru', {month: 'long', day: '2-digit'})}</p>;
-                            
                             return (
                                 <Fragment key={messenge.id}>
-                                    {dateEl}
+                                    {
+                                        getMessengeDate(messenge, index) ?
+                                            <p className={styles.dateMark}>{getMessengeDate(messenge, index)}</p>
+                                            : null
+                                    }
                                     <Messenge setActiveMessenges={setActiveMessenges} activeMessenges={activeMessenges} messenge={messenge}/>
                                 </Fragment>
                             );

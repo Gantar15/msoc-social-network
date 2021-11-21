@@ -27,7 +27,7 @@ const useWebRTC = (roomId: number, authUserId: number | undefined, isAudio: bool
     const addNewClient = useCallback((newClient: number, callback: (state: typeof clients) => any) => {
         if(!clients.includes(newClient))
             updateClients(oldClients => [...oldClients, newClient], callback);
-    }, [clients, updateClients]);
+    }, [clients]);
     
     
     //SessionDescription handler
@@ -63,7 +63,7 @@ const useWebRTC = (roomId: number, authUserId: number | undefined, isAudio: bool
         return () => {
             subscriptionObj.unsubscribe();
         }
-    }, []);
+    }, [isAudio, isVideo]);
 
     //IceCandidate handler
     useEffect(() => {
@@ -83,7 +83,7 @@ const useWebRTC = (roomId: number, authUserId: number | undefined, isAudio: bool
         return () => {
             subscriptionObj.unsubscribe();
         }
-    }, []);
+    }, [isAudio, isVideo]);
 
     //New Peer handler
     useEffect(() => {
@@ -163,7 +163,7 @@ const useWebRTC = (roomId: number, authUserId: number | undefined, isAudio: bool
         return () => {
             subscriptionObj.unsubscribe();
         }
-    }, []);
+    }, [isAudio, isVideo]);
 
     //Remove client
     useEffect(() => {
@@ -189,7 +189,7 @@ const useWebRTC = (roomId: number, authUserId: number | undefined, isAudio: bool
         return () => {
             subscriptionObj.unsubscribe();
         }
-    }, []);
+    }, [isAudio, isVideo]);
 
     //Join new client
     useEffect(() => {
@@ -202,7 +202,7 @@ const useWebRTC = (roomId: number, authUserId: number | undefined, isAudio: bool
                 } : false
             });
 
-            addNewClient(authUserId, () => {
+            addNewClient(authUserId!, () => {
                 const localVideoElement = peerMediaElements.current[authUserId!];
 
                 if(!localVideoElement) return;
@@ -227,7 +227,7 @@ const useWebRTC = (roomId: number, authUserId: number | undefined, isAudio: bool
                 mutation: leaveVideoRoom
             });
         });
-    }, [roomId]);
+    }, [roomId, isAudio, isVideo]);
 
 
     const provideMediaRef = useCallback((clientId: number, node: HTMLMediaElement|null) => {

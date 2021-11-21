@@ -73,7 +73,7 @@ const Profile: NextPage = () => {
         }
     });
     const [isShowCallModal, setIsShowCallModal] = useState(false);
-    console.log(followersData, followinsData)
+    
     return (
         <MainContainer activePage={1} title="Profile">
             <main className={styles.profile}>
@@ -194,7 +194,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, query}) => {
             limit: 20
         }
     });
-
+    
     return {
       props: {
         apolloState: client.cache.extract()

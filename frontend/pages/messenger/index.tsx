@@ -23,7 +23,7 @@ const Messenger: NextPage = () => {
         <MessengerNavigator setInterlocutorRoom={setInterlocutorRoom} interlocutorRoom={interlocutorRoom}/>
         { 
           interlocutorRoom ?
-            <RoomPage interlocutorRoom={interlocutorRoom}/>
+            <RoomPage interlocutorRoom={interlocutorRoom} setInterlocutorRoom={setInterlocutorRoom}/>
             : (
               <div className={styles.roomPage + ' ' + styles.noInterlocutor}>
                 <img className={styles.messImgs} src="/imgs/comments.svg"/>

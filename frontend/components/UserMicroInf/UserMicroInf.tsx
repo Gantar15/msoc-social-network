@@ -1,5 +1,6 @@
-import type {FC} from 'react';
+import {FC, useState} from 'react';
 import {memo} from 'react';
+import { useRouter } from 'next/router';
 import A from '../../components/A/A';
 import Image from 'next/image';
 import Subscribe from '../Subscribe/Subscribe';
@@ -11,7 +12,7 @@ import styles from './userMicroInf.module.scss';
 
 const UserMicroInf: FC<{user: IUser}> = ({user}) => {
     const {authUser} = useAuthUser();
-    const isAuthUser = authUser?.getAuthUser?.id == user.id;
+    const isAuthUser = authUser?.getAuthUser?.id === user.id;
     
     return (
         <div className={styles.userMicroInf}>

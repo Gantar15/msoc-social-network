@@ -27,8 +27,8 @@ const Post: FC<{post: IPost}> = ({post}) => {
     const showMoreRef = useRef<HTMLDivElement>(null);
     const [like, setLike] = useState(post.likes.length);
     const [dislike, setDislike] = useState(post.dislikes.length);
-    const [isLiked, setIsLiked] = useState(post.likes.some(userId => userId === authUser?.getAuthUser?.id));
-    const [isDisliked, setIsDisliked] = useState(post.dislikes.some(userId => userId === authUser?.getAuthUser?.id));
+    const [isLiked, setIsLiked] = useState(false);
+    const [isDisliked, setIsDisliked] = useState(false);
     const {likePost} = useLikePost(post.id);
     const {dislikePost} = useDislikePost(post.id);
 
@@ -39,6 +39,13 @@ const Post: FC<{post: IPost}> = ({post}) => {
         }
     };
 
+    useEffect(() => {
+        if(!authUser?.getAuthUser) return;
+
+        setIsLiked(post.likes.some(userId => userId === authUser?.getAuthUser?.id));
+        setIsDisliked(post.dislikes.some(userId => userId === authUser?.getAuthUser?.id));
+    }, [authUser]);
+    
     useEffect(() => {
         if(descriptionRef?.current && showMoreRef?.current){
             descriptionRef.current.style.webkitLineClamp = 'unset';
