@@ -7,7 +7,7 @@ const dislikePost = gql`
     }
 `;
 
-const useDislikePost = (postId: number) => {
+const useDislikePost = (postId: number, postsLimit: number, postsOffset: number) => {
     const [dislike] = useMutation(dislikePost, {
         variables: {
             postId

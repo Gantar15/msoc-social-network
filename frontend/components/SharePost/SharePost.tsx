@@ -39,7 +39,7 @@ const SharePost: FC<IProps> = ({limit}) => {
             const desc = descRef.current.value;
 
             if(!videos && !imgs && !desc && !audios)
-                return setError('Нельзя опубликовать пустой пост')
+                return;
             if(videos){
                 for (let i = 0; i < videos.length; i++) {
                     const video = videos[i];

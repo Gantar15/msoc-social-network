@@ -61,7 +61,7 @@ const Home: NextPage = () => {
               : posts?.getTimelinePosts.length ? 
                 posts.getTimelinePosts.map(post => {
                   return (
-                    <Post key={post.id} post={post}/>
+                    <Post key={post.id} post={post} postsOffset={postsOffset} postsLimit={postsLimit}/>
                   )
                 }) :
                 <p className={styles.noposts}>Постов нет</p>
@@ -94,8 +94,7 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
     query: getAllPosts,
     variables: {
       limit: 20,
-      offset: 0,
-      refreshToken: req.cookies.refreshToken
+      offset: 0
     }
   });
 

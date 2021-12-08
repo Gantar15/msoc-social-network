@@ -6,7 +6,7 @@ import { IUser } from '../../models/user';
 import useAuthUser from '../../hooks/useAuthUser';
 import getAuthUser from '../queries/getAuthUser';
 import getFollowins, { getFollowins_Query } from '../queries/getFollowins';
-import setAuthUser from './setAuthUser';
+import setAuthUser from '../setters/setAuthUser';
 
 const followUser = gql`
     mutation followUser($userId: Int!){

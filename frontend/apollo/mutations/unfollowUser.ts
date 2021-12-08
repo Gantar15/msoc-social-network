@@ -5,7 +5,7 @@ import getFollowers, {getFollowers_Query} from '../queries/getFollowers';
 import getFollowersCount, {getFollowersCount_Query} from '../queries/getFollowersCount';
 import getFollowins, { getFollowins_Query } from '../queries/getFollowins';
 import getFollowinsCount, { getFollowinsCount_Query } from '../queries/getFollowinsCount';
-import setAuthUser from './setAuthUser';
+import setAuthUser from '../setters/setAuthUser';
 
 const unfollowUser = gql`
     mutation unfollowUser($userId: Int!){

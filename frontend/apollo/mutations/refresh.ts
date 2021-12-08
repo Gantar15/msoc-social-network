@@ -2,7 +2,7 @@
 import { gql, useMutation } from "@apollo/client";
 import { useEffect } from "react";
 import {useLogout} from './logout';
-import setAuthUser from "./setAuthUser";
+import setAuthUser from "../setters/setAuthUser";
 
 const refresh = gql`
     mutation refresh{

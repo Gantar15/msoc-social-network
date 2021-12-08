@@ -20,7 +20,13 @@ import useAuthUser from '../../hooks/useAuthUser';
 import styles from './post.module.scss';
 
 
-const Post: FC<{post: IPost}> = ({post}) => {
+interface IProps {
+    post: IPost;
+    postsOffset: number;
+    postsLimit: number;
+};
+
+const Post: FC<IProps> = ({post, postsLimit, postsOffset}) => {
     const {authUser} = useAuthUser();
 
     const descriptionRef = useRef<HTMLParagraphElement>(null);
@@ -29,8 +35,8 @@ const Post: FC<{post: IPost}> = ({post}) => {
     const [dislike, setDislike] = useState(post.dislikes.length);
     const [isLiked, setIsLiked] = useState(false);
     const [isDisliked, setIsDisliked] = useState(false);
-    const {likePost} = useLikePost(post.id);
-    const {dislikePost} = useDislikePost(post.id);
+    const {likePost} = useLikePost(post.id, postsLimit, postsOffset);
+    const {dislikePost} = useDislikePost(post.id, postsLimit, postsOffset);
 
     const showMoreHandler = () => {
         if(descriptionRef.current && showMoreRef.current){

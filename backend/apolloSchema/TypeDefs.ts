@@ -143,7 +143,7 @@ export default gql`
         getPost(postId: Int!): Post!
         getUserPosts(userId: Int!, limit: Int!, offset: Int!): [Post!]!
         getUserPostsCount(userId: Int!): Int!
-        getTimelinePosts(limit: Int!, offset: Int!, refreshToken: String): [Post!]!
+        getTimelinePosts(limit: Int!, offset: Int!): [Post!]!
         getTimelinePostsCount: Int!
 
         #User
@@ -154,7 +154,7 @@ export default gql`
         getFollowinsCount(userId: Int!): Int!
 
         #Messenges
-        getMessenges(recipientId: Int!, refreshToken: String): [Messenge!]!
+        getMessenges(recipientId: Int!): [Messenge!]!
         getNewestInterlocutors: [Interlocutor!]!
         getNewestMessenges: [Messenge!]!
     }

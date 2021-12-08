@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useRef, Fragment, useState } from "react";
+import { FC, memo, useEffect, useRef, Fragment, useState, Dispatch, SetStateAction } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { useGetMessenges } from "../../../apollo/queries/getMessenges";
 import Messenge from "../Messenge/Messenge";
@@ -19,8 +19,8 @@ import styles from './roomPage.module.scss';
 
 
 interface IProps{
-    interlocutorRoom: number;
-    setInterlocutorRoom: (val: Function | undefined | boolean) => void;
+    interlocutorRoom: number|undefined;
+    setInterlocutorRoom: Dispatch<SetStateAction<number|undefined>>;
 }
 interface IMessengeExt extends IMessenge{
     isOurs: boolean;
@@ -39,7 +39,7 @@ const RoomPage: FC<IProps> = ({interlocutorRoom, setInterlocutorRoom}) => {
     useEffect(() => {
         const escHandler = (ev: KeyboardEvent) => {
             if(ev.key == "Escape")
-            setInterlocutorRoom(undefined);
+                setInterlocutorRoom(undefined);
         };
         window.addEventListener('keydown', escHandler);
 

@@ -11,11 +11,10 @@ import provideMessengeDocuments from "../../../lib/provideMessengeDocuments";
 
 
 export default {
-    async getMessenges(_: any, {recipientId, refreshToken}: {recipientId: number, refreshToken?: string}, {req}: IApolloContext){
+    async getMessenges(_: any, {recipientId}: {recipientId: number}, {req}: IApolloContext){
         try{
-            let refreshTokenStr = refreshToken ?? req.cookies.refreshToken;
-
-            const authUserData = tokenService.validateRefreshToken(refreshTokenStr);
+            const accessTokenStr = req.headers.authorization!;
+            const authUserData = tokenService.validateAccessToken(accessTokenStr);
             if(!authUserData) throw ApiError.unauthorizedError();
 
             const authUserId = authUserData.id;

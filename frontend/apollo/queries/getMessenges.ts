@@ -5,8 +5,8 @@ import { IMessenge } from "../../models/messenge";
 import { useApollo } from '../client';
 
 const getMessenges = gql`
-    query getMessenges($recipientId: Int!, $refreshToken: String){
-        getMessenges(recipientId: $recipientId, refreshToken: $refreshToken){
+    query getMessenges($recipientId: Int!){
+        getMessenges(recipientId: $recipientId){
             id,
             text,
             createdAt,
@@ -35,25 +35,22 @@ const useGetMessenges = () => {
     const apolloClient = useApollo();
     const [getMessengesExecute, {data: getMessengesData, loading: getMessengesLoading}] = useLazyQuery<getMessenges_Query>(getMessenges);
     let recipientId: number;
-    let refreshToken: string | undefined;
 
     useEffect(() => {
         if(getMessengesData?.getMessenges){
                 apolloClient.writeQuery({
                     query: getMessenges,
                     variables: {
-                        recipientId,
-                        refreshToken
+                        recipientId
                     },
                     data: getMessengesData
                 });
         }
     }, [getMessengesData]);
 
-    const modGetMessengesExecute = (options?: QueryLazyOptions<{recipientId: number, refreshToken?: string}>) => {
+    const modGetMessengesExecute = (options?: QueryLazyOptions<{recipientId: number}>) => {
         if(options?.variables){
             recipientId = options.variables.recipientId;
-            refreshToken = options.variables.refreshToken;
         }
         getMessengesExecute(options);
     };

@@ -14,7 +14,7 @@ import styles from '/public/styles/messenger.module.scss';
 
 const Messenger: NextPage = () => {
     const router = useRouter();
-  const [interlocutorRoom, setInterlocutorRoom] = useState<number>(+router.query!.roomId!);
+  const [interlocutorRoom, setInterlocutorRoom] = useState<number | undefined>(+router.query!.roomId!);
   const {refresh} = useRefresh();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const Messenger: NextPage = () => {
     <MainContainer activePage={3} title="Messenger">
       <main className={styles.messenger}>
         <MessengerNavigator setInterlocutorRoom={setInterlocutorRoom} interlocutorRoom={interlocutorRoom}/>
-        <RoomPage interlocutorRoom={interlocutorRoom}/>
+        <RoomPage interlocutorRoom={interlocutorRoom} setInterlocutorRoom={setInterlocutorRoom}/>
       </main>
     </MainContainer>
   );
@@ -47,8 +47,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, params}) => {
   await client.query({
     query: getMessenges,
     variables: {
-      recipientId: +params!.roomId!,
-      refreshToken: req.cookies.refreshToken
+      recipientId: +params!.roomId!
     }
   });
 

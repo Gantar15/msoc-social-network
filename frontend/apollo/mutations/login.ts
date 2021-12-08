@@ -1,7 +1,8 @@
 
 import { gql, useMutation } from "@apollo/client";
 import { useState, useEffect } from "react";
-import setAuthUser from "./setAuthUser";
+import setAuthUser from "../setters/setAuthUser";
+import setRefreshToken from "../setters/setRefreshToken";
 
 const login = gql`
     mutation login($email: String!, $password: String!, $isSession: Boolean!){
@@ -34,6 +35,7 @@ export const useLogin = () => {
         if(loginData?.login){
             localStorage.setItem('accessToken', loginData.login.accessToken);
             setAuthUser(loginData.login.user);
+            setRefreshToken(loginData.login.accessToken);
         }
     }, [loginData]);
 

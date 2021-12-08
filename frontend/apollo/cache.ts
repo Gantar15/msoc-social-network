@@ -4,6 +4,7 @@ import type { IUser } from "../models/user";
 
 
 export const authUserVar = makeVar<IUser | null>(null);
+export const refreshTokenVar = makeVar<string | null>(null);
 
 type mergeList = {ref: string};
 export default new InMemoryCache({
@@ -15,6 +16,12 @@ export default new InMemoryCache({
                         return authUserVar();
                     }
                 },
+                getRefreshToken: {
+                    read(){
+                        return refreshTokenVar();
+                    }
+                },
+
                 getFollowers: {
                     merge(_: any, incoming: mergeList[]) {
                         return incoming;

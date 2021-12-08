@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { IUser } from "../../models/user";
 
 
 const getAuthUser = gql`
@@ -19,4 +20,9 @@ const getAuthUser = gql`
         }
     }
 `;
+
+export interface getAuthUser_Query{
+    getAuthUser: IUser|null;
+}
+
 export default getAuthUser;

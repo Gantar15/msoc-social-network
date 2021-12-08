@@ -11,6 +11,7 @@ import { split } from '@apollo/client';
 import {WebSocketLink} from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import typeDefs from './typeDefs';
+import getRefreshToken, { getRefreshToken_Query } from './queries/getRefreshToken';
 const wsImpl = require('ws');
 
 
@@ -21,7 +22,15 @@ const CLIENT_URL = 'http://localhost:3000';
 
 let token: string | null = '';
 if(isBrowser())
- token = localStorage.getItem('accessToken');
+  token = localStorage.getItem('accessToken');
+else{
+  const tokenData = cache.readQuery<getRefreshToken_Query>({
+    query: getRefreshToken
+  });
+  console.log(tokenData)
+  if(tokenData)
+    token = tokenData.getRefreshToken;
+}
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {

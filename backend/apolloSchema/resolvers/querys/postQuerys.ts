@@ -20,11 +20,11 @@ export default {
         }
     },
     
-    async getTimelinePosts(_: any, {limit, offset, refreshToken}: {limit: number, offset: number, refreshToken?: string}, {req}: IApolloContext){
+    async getTimelinePosts(_: any, {limit, offset}: {limit: number, offset: number}, {req}: IApolloContext){
         try{
-            let refreshTokenStr = refreshToken ?? req.cookies.refreshToken;
-
-            const authUserData = tokenService.validateRefreshToken(refreshTokenStr);
+            const accessTokenStr = req.headers.authorization!;
+            console.log(req.headers.authorization)
+            const authUserData = tokenService.validateAccessToken(accessTokenStr);
             if(!authUserData) throw ApiError.unauthorizedError();
 
             const userId = authUserData.id;
