@@ -1,0 +1,3 @@
+# msoc-social-network
+
+This project is a social network with the ability to publish posts, communicate with other network users (both in a regular chat and via video, audio). The backend is written in node.js (express). The frontend uses Next.js for SSR, ISR page generation, rendering optimization and SEO. GraphQL (apollo client, apollo server) is also used for server interaction with the client part of the application. And with the help of the p2p protocol WebRTC, the transfer of video information and audio information between users is implemented. Authorization is implemented using a JWT token. PostgreSQL is used to store information along with sequelize ORM .
